@@ -18,9 +18,9 @@ typedef enum {
 /* Codigos de error que puede devolver parse_regex. */
 typedef enum {
     REGEX_OK = 0,
-    REGEX_ERR_UNBALANCED,   /
+    REGEX_ERR_UNBALANCED,   /* parentesis sin cerrar: "(a|b" */
     REGEX_ERR_BAD_OPERATOR, /* operador sin operando: "*a" */
-    REGEX_ERR_EMPTY,        
+    REGEX_ERR_EMPTY,        /* expresion vacia */
     REGEX_ERR_MEMORY        /* fallo de malloc             */
 } regex_error;
 
