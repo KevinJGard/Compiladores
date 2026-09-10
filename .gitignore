@@ -4,3 +4,10 @@ cmake_install.cmake
 Makefile
 regex_to_nfa
 *.o
+*.aux
+*.log
+*.out
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.pdf
