@@ -64,13 +64,24 @@
 
 \subsection*{Validación:}
 
-\textbf{Escobar Gonzalez Isaac Giovani:}
+\noindent\textbf{Escobar Gonzalez Isaac Giovani:}
 
 \begin{center}
-    {\includegraphics[height=14.5cm]{images/isaac.jpeg}}
+    {\includegraphics[height=17cm]{images/isaac.jpeg}}
 \end{center}
+\newpage
+\noindent\textbf{Garduño Escobar Kevin Jonathan:}
 
-\textbf{Zaldivar Alanis Rodrigo:}
+\begin{center}
+    {\includegraphics[height=17cm]{images/kjge.jpeg}}
+\end{center}
+\newpage
+\noindent\textbf{González Gutiérrez Antonio Tonatiuh:}
+
+
+
+\newpage
+\noindent\textbf{Zaldivar Alanis Rodrigo:}
 
 \begin{center}
     {\includegraphics[height=14.5cm]{images/zar1.jpeg}}
@@ -82,11 +93,12 @@
 
 \subsection*{Descripción de la implementación}
 
-Para nuestra implementación dividimos el trabajo en partes iguales que se comunican a través de dos interfaces que antes de comenzar a programar acordamos que sería 
+\noindent Para nuestra implementación dividimos el trabajo en partes iguales que se comunican a través de dos interfaces que antes de comenzar a programar acordamos que sería 
 regex.h y nfa.h en general el flujo que seguimos es el siguiente: tenemos una expresión regular en notación infija primero la analizamos y reordenamos la expresión después 
 se construye el autómata y por último se simula sobre las cadenas de entrada. \\
 
-\section{Análisis y transformación de la expresión regular} Aquí se recibe la expresión regular
+\section{Análisis y transformación de la expresión regular} 
+\noindent Aquí se recibe la expresión regular
 tal como la escribe el usuario y la deja lista para que el constructor del
 autómata la pueda leer de corrido, sin brincos. El trabajo se dividió en tres
 etapas.
@@ -107,7 +119,7 @@ Para esta etapa consideramos cuando alguien escribe \texttt{ab} que recordemos q
 usamos después necesita ver todos los operadores de forma explícita, así que
 hay que insertarlos nosotros.
 
-La regla a la que llegamos es sencilla: recorremos los tokens de dos en dos y
+\noindent La regla a la que llegamos es sencilla: recorremos los tokens de dos en dos y
 nos preguntamos si el de la izquierda ya cierra una expresión completa y si el
 de la derecha abre una nueva. Si ambas condiciones se cumplen, ahí va un
 operador de concatenación. Por ejemplo, entre \texttt{a} y \texttt{b} sí,
@@ -129,7 +141,8 @@ vacía todo lo que había encima de él. Ninguno de los dos aparece en el
 resultado, y esa es justamente la gracia de la notación postfija: la jerarquía
 queda guardada en el orden de los símbolos y no en signos de agrupación. \\
 
-\section{NFA} Para la construcción de los NFA's, se optó por el enfoque orientado a objetos y modelar sus propiedades. Se creó un tipo struct nfa en el que los estados de estos están representados por números enteros, típicamente enumerados del cero (es el estado de inicio) al número de estados totales del nfa menos uno, que es el estado de aceptación. Aunque realmente, nfa solo da acceso a los estados de inicio y el de aceptación. Los demás estados son alcanzados mediante la lista de transiciones, un arreglo de structs de transición que guardan estado origen, estado destino y el carácter que se lee para la transición. En la implementación, este arreglo es realmente un apuntador al inicio de la memoria.\\
+\section{NFA} 
+\noindent Para la construcción de los NFA's, se optó por el enfoque orientado a objetos y modelar sus propiedades. Se creó un tipo struct nfa en el que los estados de estos están representados por números enteros, típicamente enumerados del cero (es el estado de inicio) al número de estados totales del nfa menos uno, que es el estado de aceptación. Aunque realmente, nfa solo da acceso a los estados de inicio y el de aceptación. Los demás estados son alcanzados mediante la lista de transiciones, un arreglo de structs de transición que guardan estado origen, estado destino y el carácter que se lee para la transición. En la implementación, este arreglo es realmente un apuntador al inicio de la memoria.\\
 Nuestra implementación del algoritmo de Ken Thompson para construir un nfa dada una expresión regex en notación post-fija, consiste en crear un arreglo de nfas (Lo creamos del tamaño de la expresión regex para asegurarnos de que sea suficiente y realmente se le da uso de pila). Posteriormente, procedemos a leer la regex postfija. Si encuentra un símbolo plano, no operador, se crea un autómata simple de dos estados que tiene una transición entre estos dos con el símbolo y se inserta en la pila. En caso de leer un operador binario, se obtienen los dos nfas en el tope de la pila y se construye uno nuevo.\\
 Se hace un renombramiento de los estados de los nfas (particularmente de los estados de aceptación e inicio de los autómatas recibidos, y en las listas de transiciones) mediante un desplazamiento numérico basado en el número de nuevos estados, y, en el caso de la concatenación, basado en el tamaño del autómata prefijo. Análogamente para operadores unarios, se extrae el autómata en el tope de la pila. Cabe notar que para crear un nuevo autómata que recibe otro(s) y es/son operados por una operación, este autómata, así como su lista de transiciones, son creados en memoria desde cero y copian los valores de los autómatas según sea el caso y finalmente, una vez copiado lo que se necesitaba de los autómatas operandos, se liberan estos del espacio de memoria mediante la función nfa\_free. Además, si por alguna razón, falla la creación de alguna lista de transición, se regresa el autómata en estado de error también.
 \begin{itemize}
@@ -141,11 +154,12 @@ Se hace un renombramiento de los estados de los nfas (particularmente de los est
 \end{itemize}
 Cuando se acaba de leer la regex, se regresa el autómata en el fondo de la pila si es el único elemento que queda en esto. En caso contrario, se devuelve un autómata en estado de error. \\
 
-\section{Simulador de NFA} Para nuestro simulador de NFA, se decidió por un enfoque en donde manejábamos conjuntos de estados, lo que nos permitió evitar el uso de recursión y backtracking. Esto nos permite mantener en todo momento el conjunto de estados en los que el autómata podría encontrarse después de procesar cada carácter de la cadena de entrada.\\
+\section{Simulador de NFA} 
+\noindent Para nuestro simulador de NFA, se decidió por un enfoque en donde manejábamos conjuntos de estados, lo que nos permitió evitar el uso de recursión y backtracking. Esto nos permite mantener en todo momento el conjunto de estados en los que el autómata podría encontrarse después de procesar cada carácter de la cadena de entrada.\\
 
-Dado que en la etapa anterior de construcción del NFA, los estados se modelaron como índices enteros continuos, pudimos modelar el conjunto de estados activos en un momento dado mediante el uso de arreglos dinámicos de enteros; estos se inicializan en cero mediante la función \texttt{calloc}.\\
+\noindent Dado que en la etapa anterior de construcción del NFA, los estados se modelaron como índices enteros continuos, pudimos modelar el conjunto de estados activos en un momento dado mediante el uso de arreglos dinámicos de enteros; estos se inicializan en cero mediante la función \texttt{calloc}.\\
 
-Ahora bien, nuestro simulador de NFA opera en tres fases: inicialización, transiciones y aceptación: 
+\noindent Ahora bien, nuestro simulador de NFA opera en tres fases: inicialización, transiciones y aceptación: 
 
 \begin{enumerate}
     \item \textbf{Inicialización:} Durante esta primera fase, se activa el índice correspondiente al estado de inicio (\texttt{n.start}) dentro del arreglo de estados y se calcula su cerradura épsilon inicial. Para esto hacemos uso de una función llamada \texttt{epsilon\_closure} que recorre sobre las transiciones del autómata hasta que no se puedan agregar más estados nuevos al conjunto de estados activos. Esta función modifica directamente en memoria el arreglo que representa el conjunto de estados activos, marcando como activos aquellos estados alcanzables mediante transiciones épsilon desde los estados ya activos.
@@ -157,10 +171,10 @@ Ahora bien, nuestro simulador de NFA opera en tres fases: inicialización, trans
     \item \textbf{Aceptación:} Una vez consumida toda la cadena de entrada, se verifica si la casilla correspondiente al estado de aceptación (\texttt{n.accept}) se encuentra marcada como activa. Si es así, el autómata acepta la cadena y la función retorna \texttt{1}; en caso contrario, retorna \texttt{0}.
 \end{enumerate}
 
-Dicho lo anterior, es importante mencionar que nuestro simulador de NFA tiene una complejidad temporal de $O(n \cdot m)$, donde $n$ es la longitud de la cadena de entrada y $m$ es el número total de transiciones en el autómata. Esto se debe a que para cada carácter de la cadena, se evalúan todas las transiciones posibles desde los estados activos actuales.
+\noindent Dicho lo anterior, es importante mencionar que nuestro simulador de NFA tiene una complejidad temporal de $O(n \cdot m)$, donde $n$ es la longitud de la cadena de entrada y $m$ es el número total de transiciones en el autómata. Esto se debe a que para cada carácter de la cadena, se evalúan todas las transiciones posibles desde los estados activos actuales.
 
 \subsection*{Dificultades encontradas}
-La principal dificultad fue trabajar en C. No teníamos mucha experiencia con el
+\noindent La principal dificultad fue trabajar en C. No teníamos mucha experiencia con el
 lenguaje y la gestión manual de memoria resultó ser el obstáculo más grande:
 varios del equipo no estábamos familiarizados con \texttt{malloc} ni con la
 disciplina de liberar todo lo que se reserva. Nos tomó tiempo entender que la
@@ -171,15 +185,15 @@ acordando que cada módulo libera lo que reserva. Aun así, al final detectamos
 fugas en el manejo del resultado dentro de \texttt{main.c}, que corregimos
 agregando las llamadas de liberación correspondientes.
 
-Una segunda dificultad, menor, fue volver a familiarizarnos con Docker: la
+\noindent Una segunda dificultad, menor, fue volver a familiarizarnos con Docker: la
 configuración del contenedor y del sistema de construcción nos costó algunos
 intentos antes de lograr una compilación limpia.
 
-Para la elaboración de nfas, uno de los principales obstáculos que se encontraron, fue el cómo hacer el algoritmo eficiente. Ya que si ya teníamos autómatas construidos, podríamos simplemente añadir estados y conectarlos con transiciones, dependiendo del símbolo leído. Sin embargo, dada la implementación y representación que elegimos, resultó más conveniente simplemente copiar las transiciones y ajustarlas. Ya que gracias a nuestra implementación, nos ahorramos tener en memoria todos y cada uno de los estados. Además, de que al tener direcciones de memoria contigua tanto para los nfa como para las transiciones, nos ahorramos el tener que reservar memoria por cada nodo o transición creada y no están dispersos.
+\noindent Para la elaboración de nfas, uno de los principales obstáculos que se encontraron, fue el cómo hacer el algoritmo eficiente. Ya que si ya teníamos autómatas construidos, podríamos simplemente añadir estados y conectarlos con transiciones, dependiendo del símbolo leído. Sin embargo, dada la implementación y representación que elegimos, resultó más conveniente simplemente copiar las transiciones y ajustarlas. Ya que gracias a nuestra implementación, nos ahorramos tener en memoria todos y cada uno de los estados. Además, de que al tener direcciones de memoria contigua tanto para los nfa como para las transiciones, nos ahorramos el tener que reservar memoria por cada nodo o transición creada y no están dispersos.
 
-Para la parte del módulo de simulación del NFA, la principal dificultad fue el cálculo iterativo de la cerradura épsilon y el manejo seguro de la memoria. Lo primero, se resolvió encapsulando la búsqueda dentro de un ciclo iterativo controlado por una variable/bandera (\texttt{changed}), el cual nos avisa si se descubrieron nuevos estados y no termina hasta que el conjunto se estabiliza (o bien, no se descubren nuevos estados), garantizando que las transiciones épsilon en cadena se propaguen completamente, es decir, que si un estado vacío lleva a otro estado y este, a su vez, a otro, se descubran todos los estados alcanzables. Lo segundo, al nosotros usar arreglos dinámicos para representar los conjuntos de estados, era importante evitar fugas de memoria o cuellos de botella derivados de reservar espacio durante el procesamiento de cada carácter. Por ello, se decidió inicializar únicamente dos arreglos al principio de la simulación e intercambiar sus punteros. Esta decisión mantuvo una complejidad espacial de $O(\lvert Q\rvert)$ y permitió liberar los recursos utilizados de manera adecuada antes de retornar el veredicto. Hacemos uso de funciones de la librería estándar de C como \texttt{calloc} y \texttt{free} para manejar la memoria de manera segura y eficiente. Cabe mencionar que tuvimos que aprender esto sobre la marcha, ya que no teníamos experiencia previa con la gestión de memoria en C.
+\noindent Para la parte del módulo de simulación del NFA, la principal dificultad fue el cálculo iterativo de la cerradura épsilon y el manejo seguro de la memoria. Lo primero, se resolvió encapsulando la búsqueda dentro de un ciclo iterativo controlado por una variable/bandera (\texttt{changed}), el cual nos avisa si se descubrieron nuevos estados y no termina hasta que el conjunto se estabiliza (o bien, no se descubren nuevos estados), garantizando que las transiciones épsilon en cadena se propaguen completamente, es decir, que si un estado vacío lleva a otro estado y este, a su vez, a otro, se descubran todos los estados alcanzables. Lo segundo, al nosotros usar arreglos dinámicos para representar los conjuntos de estados, era importante evitar fugas de memoria o cuellos de botella derivados de reservar espacio durante el procesamiento de cada carácter. Por ello, se decidió inicializar únicamente dos arreglos al principio de la simulación e intercambiar sus punteros. Esta decisión mantuvo una complejidad espacial de $O(\lvert Q\rvert)$ y permitió liberar los recursos utilizados de manera adecuada antes de retornar el veredicto. Hacemos uso de funciones de la librería estándar de C como \texttt{calloc} y \texttt{free} para manejar la memoria de manera segura y eficiente. Cabe mencionar que tuvimos que aprender esto sobre la marcha, ya que no teníamos experiencia previa con la gestión de memoria en C.
 
-Por último, la coordinación entre cuatro personas también presentó retos. Lo
+\noindent Por último, la coordinación entre cuatro personas también presentó retos. Lo
 mitigamos acordando las interfaces (\texttt{regex.h} y \texttt{nfa.h}) antes de
 escribir cualquier línea de código, de modo que cada quien pudiera trabajar en
 paralelo contra las mismas firmas sin depender de que los demás terminaran
