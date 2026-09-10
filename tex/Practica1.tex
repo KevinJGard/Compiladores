@@ -64,6 +64,54 @@
 
 \subsection*{Validación:}
 \subsection*{Descripción de la implementación}
+
+Para nuestra implementacion dividimos el trabajo en partes iguales que se comunincan a travez de dos interfaces que antes de comnezar a programar acordamos que seria 
+regex.h y nfa.h en general el flujo que seguimos es el siguiete: tenemos una expresion regular en notacion infija primero la analizamos y roedenamos la expresion depsues 
+se construye el automata y por ultimo se simula sobre las cadenas de entrada. 
+
+\textbf{Análisis y transformación de la expresión regular:} Aqui se recibe la expresión regular
+tal como la escribe el usuario y la deja lista para que el constructor del
+autómata la pueda leer de corrido, sin brincos. El trabajo se dividió en tres
+etapas.
+
+\paragraph{Etapa 1: partir la cadena en tokens.}
+
+Recorremos la expresión carácter por carácter y a cada uno le ponemos una
+etiqueta según lo que sea: unión, cerradura, paréntesis o símbolo del alfabeto.
+Guardamos las dos cosas, la etiqueta y el carácter original, porque más
+adelante necesitamos saber la categoría (para las reglas de los algoritmos) y
+también el valor concreto (para imprimirlo y para construir las transiciones
+del autómata).
+
+\paragraph{Etapa 2: escribir la concatenación que no está escrita.}
+
+Para esta etapa consdieramos c uando alguien escribe \texttt{ab} que recordemos que como vimos en la teoria quiere decir ``una \texttt{a} seguida de una
+\texttt{b}'', pero ese ``seguida de'' no aparece en el texto y es importante porque el algoritmo que
+usamos después necesita ver todos los operadores de forma explícita, así que
+hay que insertarlos nosotros.
+
+La regla a la que llegamos es sencilla: recorremos los tokens de dos en dos y
+nos preguntamos si el de la izquierda ya cierra una expresión completa y si el
+de la derecha abre una nueva. Si ambas condiciones se cumplen, ahí va un
+operador de concatenación. Por ejemplo, entre \texttt{a} y \texttt{b} sí,
+porque las dos son expresiones por sí solas; pero entre \texttt{a} y
+\texttt{|} no, porque la unión no arranca nada: necesita algo de ambos lados.
+Los operadores \texttt{*}, \texttt{+} y \texttt{?} cierran pero no abren,
+porque se aplican a lo que viene antes de ellos. Implementamos esta condición como dos predicados independientes en lugar de una
+sola comprobación conjunta. Así son siete casos en total en vez de tener que
+enumerar todas las combinaciones posibles de pares, y si más adelante se agrega
+un operador nuevo basta con decidir en cuál de las dos listas entra.
+
+\paragraph{Etapa 3: reordenar a notación postfija.}
+Aquí entra el algoritmo de Shunting-Yard, que trabaja con una pila de
+operadores. Los símbolos salen directo a la salida, porque no esperan a nada.
+Los operadores se quedan esperando en la pila hasta que llega otro que pega
+igual o más fuerte, y en ese momento salen. Los paréntesis funcionan como
+barrera: el que abre se mete y se queda ahí, y cuando llega el que cierra se
+vacía todo lo que había encima de él. Ninguno de los dos aparece en el
+resultado, y esa es justamente la gracia de la notación postfija: la jerarquía
+queda guardada en el orden de los símbolos y no en signos de agrupación.
+
 \textbf{Nfa:} Para la construcción de los nfa, se optó por el enfoque orientado a objetos y modelar sus propiedades. Se creó un tipo struct nfa en el que los estados de estos están representados por números enteros, típicamente enumerados del cero (es el estado de inicio) al número de estados totales del nfa menos uno, que es el estado de aceptación. Aunque realmente, nfa solo da acceso a los estados de inicio y el de aceptación. Los demás estados son alcanzados mediante la lista de transiciones, un arreglo de structs de transicion que guardan estado origen, estado destino y el caracter que se lee para la transición. En la implementación, este arreglo es realmente un apuntador al inicio de la memoria.\\
 Nuestra implementación del algoritmo de Ken Thompson para construir un nfa dada una expresión regex en notación post-fija, consiste en crear un arreglo de nfas (Lo creamos del tamaño de la expresión regex para asegurarnos de que sea suficiente y realmente se le da uso de pila). Posteriormente, procedemos a leer la regex postfija. Si encuentra un símbolo plano, no operador, se crea un autómata simple de dos estados que tiene una transición entre estos dos con el símbolo y se inserta en la pila. En caso de leer un operador binario, se obtienen los dos nfas en el tope de la pila y se construye uno nuevo.\\
 Se hace un renombramiento de los estados de los nfas (particularmente de los estados de aceptación e inicio de los autómatas recibidos, y en las listas de transiciones) mediante un desplazamiento numérico basado en el número de nuevos estados, y, en el caso de la concatenación, basado en el tamaño del autómata prefijo. Análogamente para operadores unarios, se extrae el autómata en el tope de la pila. Cabe notar que para crear un nuevo autómata que recibe otro(s) y es/son operados por una operación, este autómata, así como su lista de transiciones, son creados en memoria desde cero y copian los valores de los autómatas según sea el caso y finalmente, una vez copiado lo que se necesitaba de los autómatas operandos, se liberan estos del espacio de memoria mediante la función nfa\_free. Además, si por alguna razón, falla la creación de alguna lista de transición, se regresa el autómata en estado de error también.
@@ -76,7 +124,28 @@ Se hace un renombramiento de los estados de los nfas (particularmente de los est
 \end{itemize}
 Cuando se acaba de leer la regex, se regresa el autómata en el fondo de la pila si es el único elemento que queda en esto. En caso contrario, se devuelve un autómata en estado de error.
 \subsection*{Dificultades encontradas}
+La principal dificultad fue trabajar en C. No teníamos mucha experiencia con el
+lenguaje y la gestión manual de memoria resultó ser el obstáculo más grande:
+varios del equipo no estábamos familiarizados con \texttt{malloc} ni con la
+disciplina de liberar todo lo que se reserva. Nos tomó tiempo entender que la
+memoria pedida de esa forma sobrevive a la función que la solicitó, y que por
+eso hay que devolverla explícitamente. Lo resolvimos definiendo desde el inicio
+funciones dedicadas a liberar (\texttt{regex\_free} y \texttt{nfa\_free}) y
+acordando que cada módulo libera lo que reserva. Aun así, al final detectamos
+fugas en el manejo del resultado dentro de \texttt{main.c}, que corregimos
+agregando las llamadas de liberación correspondientes.
+
+Una segunda dificultad, menor, fue volver a familiarizarnos con Docker: la
+configuración del contenedor y del sistema de construcción nos costó algunos
+intentos antes de lograr una compilación limpia.
+
 Para la elaboración de nfas, uno de los principales obstáculos que se encontraron, fue el cómo hacer el algoritmo eficiente. Ya que si ya teníamos autómatas construidos, podríamos simplemente añadir estados y conectarlos con transiciones, dependiendo del símbolo leído. Sin embargo, dada la implementación y representación que elegimos, resultó más conveniente simplemente copiar las transiciones y ajustarlas. Ya que gracias a nuestra implementación, nos ahorramos tener en memoria todos y cada uno de los estados. Además, de que al tener direcciones de memoria contigua tanto para los nfa como para las transiciones, nos ahorramos el tener que reservar memoria por cada nodo o transición creada y no están dispersos.
+
+Por último, la coordinación entre cuatro personas también presentó retos. Lo
+mitigamos acordando las interfaces (\texttt{regex.h} y \texttt{nfa.h}) antes de
+escribir cualquier línea de código, de modo que cada quien pudiera trabajar en
+paralelo contra las mismas firmas sin depender de que los demás terminaran
+primero.
 
 \subsection*{Resultados obtenidos.}
 
