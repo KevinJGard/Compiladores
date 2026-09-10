@@ -10,5 +10,8 @@ WORKDIR /app
 # Copy the source code into the container
 COPY . .
 
+# Give execute permissions to the validator script
+RUN chmod +x ./validator
+
 # Container starts by compiling the code and running the validator
 CMD ["sh", "-c", "cmake . && make && ./validator"]
