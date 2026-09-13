@@ -1,0 +1,258 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{amsmath, amssymb, amsthm, bm}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+%% Sets page size and margins
+\usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{gensymb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{Compiladores}
+\fancyhead[C]{Tarea 1}
+\fancyhead[R]{Facultad de Ciencias UNAM}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace{2cm}
+    {\includegraphics[height=3.2cm]{images/Logo_UNAM.png}}
+    \hfill
+    {\includegraphics[height=3.2cm]{images/Logo_FC.png}\par}
+    \vspace{0.5cm}
+    {\scshape\LARGE \textbf{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO} \par}
+    \vspace{0.5cm}
+    {\scshape\LARGE FACULTAD DE CIENCIAS \par}
+    {\scshape\Large Ciencias de la Computación \par}
+    \vspace{0.5cm}
+    {\scshape\Huge Compiladores \par}
+    {\scshape\Huge Semestre 2027-1 \par}
+    \vspace{0.8cm}
+    {\scshape\Huge \textbf{Tarea 1} \par}
+    {\scshape\Huge \textbf{Introducción y análisis léxico} \par}
+    \vspace{0.8cm}
+    {\Large Integrantes: \par}
+    \vspace{0.5cm}
+    \noindent\begin{tabular}{p{10cm}p{3.5cm}}
+    \toprule
+    \Large
+    Escobar Gonzalez Isaac Giovani & \Large 321336400 \\
+    \Large
+    Garduño Escobar Kevin Jonathan & \Large 321070629 \\
+    \Large
+    González Gutiérrez Antonio Tonatiuh & \Large 321195476 \\
+    \Large
+    Zaldivar Alanis Rodrigo & \Large 424029605 \\
+    \bottomrule
+    \end{tabular}\\
+    \vspace{0.8cm}
+    {\itshape\Large Fecha de entrega: 13 de Septiembre de 2026 \par}
+\end{titlepage}
+
+\begin{enumerate}
+    \item Indica los valores asignados a $w, x, y$ y $z$ en los siguientes dos códigos estructurados por bloques.
+    Muestra la tabla de símbolos en cada bloque con una implementación imperativa en cada caso:\\
+    
+    \begin{minipage}{0.5\textwidth}
+        \footnotesize
+        \begin{verbatim}
+    int w, x, y, z;
+    int i = 4; int j = 5;
+    { 
+        int j = 7;
+        i = 6;
+        w = i + j; 
+    } 
+    x = i + j;
+    {
+        int i = 8;
+        y = i + j;
+    } 
+    z = i + j;
+        \end{verbatim}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \footnotesize
+        \begin{verbatim}
+    int w, x, y, z;
+    int i = 3; int j = 4;
+    {
+        int i = 5;
+        w = i + j;
+    }
+    x = i + j;
+    {
+        int j = 6;
+        i = 7;
+        y = i + j;
+    }
+    z = i + j;
+        \end{verbatim}
+    \end{minipage}
+
+    \item Divide el siguiente programa en C++ en lexemas y genera los tokens correspondientes:
+    {\footnotesize \begin{verbatim}
+        float limitedSquare(x) float x; {
+            /* returns x-squared, but never more than 100 */
+            return (x<=-10.0||x>=10.0)?100:x*x;
+        }
+    \end{verbatim}}
+    
+    \item Define una función recursiva que compute los prefijos de una una expresión regular. 
+    La base de tal función recursiva es:
+    \begin{align*}
+        prefix(\epsilon) &= \epsilon \\
+        prefix(a) &= a?
+    \end{align*}
+    Completa la definición.
+    \item Para las siguientes expresiones regulares, da el lenguaje que definen:
+    \begin{enumerate}
+        \item $[ab][cd\epsilon]$
+        \item $[a-zA-Z]^*at^*$
+        \item $ca[tr]$
+    \end{enumerate}
+    \item Para el siguiente autómata finito no determinista, construye el autómata finito determinista:
+    \begin{center}
+        \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto, >=Stealth]
+            \node[state, initial, initial text=start, accepting] (0) {0};
+            \node[state] (1) [right=of 0] {1};
+            \node[state] (2) [right=of 1] {2};
+            \node[state] (3) [right=of 2] {3};
+
+            \path[->]
+            (0) edge node {a} (1)
+            (1) edge node {a} (2)
+            (2) edge node {a} (3)
+            (1) edge [bend left] node {b} (0)
+            (2) edge [bend left] node {b} (1)
+            (3) edge [bend left] node {a} (2)
+            (3) edge [bend right=35] node[swap] {$\bm{\varepsilon}$} (0);
+        \end{tikzpicture}
+    \end{center}
+    \item Para los siguientes DFA obten el DFA mínimo:
+    \begin{enumerate}
+        \item 
+        \begin{tikzpicture}[shorten >=1pt, auto, >=Stealth]
+            \node[state, initial above, initial text=, accepting] (0) at (0,0) {0};
+            \node[state] (1) at (2.5, -1.5) {1};
+            \node[state] (2) at (1.5, -4) {2};
+            \node[state] (3) at (-1.5, -4) {3};
+            \node[state] (4) at (-2.5, -1.5) {4};
+
+            \path[->]
+            (0) edge node {a} (1)
+            (0) edge node[swap] {b} (2)
+            (1) edge node {a} (2)
+            (2) edge node {a} (3)
+            (3) edge node {b} (0)
+            (4) edge node {b} (0)
+            
+            (3) edge [bend left] node {a} (4)
+            (4) edge [bend left] node {a} (3);
+        \end{tikzpicture}
+        \item 
+        \begin{tikzpicture}[shorten >=1pt, auto, >=Stealth, node distance=2cm]
+            \node[state, initial, initial text=] (0) {0};
+            \node[state] (1) [right=of 0] {1};
+            \node[state] (2) [right=of 1] {2};
+            
+            \node[state] (3) [below=of 0] {3};
+            \node[state, accepting] (4) [below=of 1] {4};
+            \node[state] (5) [below=of 2] {5};
+
+            \path[->]
+            (0) edge node {b} (1)
+            (0) edge node[swap] {a} (3)
+            (1) edge node {a} (2)
+            (3) edge node {b} (4)
+            (4) edge node {b} (5)
+            
+            (1) edge [bend right] node[swap] {b} (4)
+            (4) edge [bend right] node[swap] {a} (1)
+            
+            (2) edge [bend right] node[swap] {b} (5)
+            (5) edge [bend right] node[swap] {b} (2)
+            
+            (2) edge [out=90, in=0, loop] node {a} (2)
+            (5) edge [out=270, in=0, loop] node {a} (5);
+        \end{tikzpicture}
+    \end{enumerate}
+    \item Convierte las siguientes expresiones regulares en autómatas finitos deterministas (DFA):
+    \begin{enumerate}
+        \item $[ab]^*$
+        \item $(a?b^*)^*$
+        \item $[ab]^*abb[ab]^*$
+    \end{enumerate}
+    \item Utiliza el algoritmo de simulación de NFA para simular los siguientes NFAs en la entrada $aabb$:
+    \begin{enumerate}
+        \item 
+        \begin{tikzpicture}[shorten >=1pt, node distance=2cm, auto, >=Stealth]
+            \node[state, initial, initial text=start] (0) {0};
+            \node[state] (1) [right=of 0] {1};
+            \node[state] (2) [right=of 1] {2};
+            \node[state, accepting] (3) [right=of 2] {3};
+
+            \path[->]
+            (0) edge node {$\bm{a}$} (1)
+            (1) edge node {$\bm{a}$} (2)
+            (2) edge node {$\bm{b}$} (3)
+            
+            (0) edge [out=335, in=205, loop] node {$\bm{a, b}$} (0)
+            (1) edge [out=335, in=205, loop] node {$\bm{a, b}$} (1)
+            (2) edge [out=335, in=205, loop] node {$\bm{a, b}$} (2)
+            
+            (2) edge [bend right=45] node[above] {$\bm{\varepsilon}$} (0);
+        \end{tikzpicture}
+        \item a
+        \begin{tikzpicture}[shorten >=1pt, node distance=2cm, auto, >=Stealth]
+            \node[state, initial, initial text=start] (0) {0};
+            \node[state] (1) [right=of 0] {1};
+            \node[state] (2) [right=of 1] {2};
+            \node[state, accepting] (3) [right=of 2] {3};
+
+            \path[->]
+            (0) edge node {$\bm{a}$} (1)
+            (1) edge node {$\bm{b}$} (2)
+            (2) edge node {$\bm{b}$} (3)
+            
+            (0) edge [bend left=37] node[above] {$\bm{\varepsilon}$} (3)
+            
+            (1) edge [bend left] node[above] {$\bm{\varepsilon}$} (0)
+            (2) edge [bend left] node[above] {$\bm{\varepsilon}$} (1)
+            (3) edge [bend left] node[above] {$\bm{\varepsilon}$} (2)
+            
+            (3) edge [bend left=37] node[below] {$\bm{a}$} (0);
+        \end{tikzpicture}
+    \end{enumerate}
+    \item Define un lexer para las expresiones booleanas que considere los siguientes puntos:
+    \begin{enumerate}
+        \item Que considere las constantes \texttt{True} y \texttt{False} como tokens \texttt{const}.
+        \item Que considere las variables \texttt{(var)} $x, y, z, p, q, r,$ etc.
+        \item Que considere los operadores binarios \texttt{(binop)} básicos: $\land$, $\lor$ y $\neg$..
+        \item Define las regex de este para este lexer.
+    \end{enumerate}
+    \item Del ejercicio anterior, utiliza las regex de las expresiones booleanas para definir el AF, comviértelo en
+    AFD y redúcelo. Pruébalo con las siguientes expresiones para obtener los tókens:
+    \begin{enumerate}
+        \item $p \land q$
+        \item \texttt{True} $ \land \neg(p \lor q)$
+        \item $\neg(x \land y) \lor (p \land q)$
+    \end{enumerate}
+
+\end{enumerate}
+
+\end{document}
