@@ -104,6 +104,60 @@
         \end{verbatim}
     \end{minipage}
 
+    \noindent\underline{Código izquierdo.}
+    \begin{itemize}[nosep]
+        \item Global: $i=4,\ j=5$.
+        \item Bloque 1: declara $j=7$ local; \texttt{i = 6} es asignación, así que la $i$ global pasa a $6$.
+        Entonces $w = i + j = 6 + 7 = 13$. Al salir muere el $j=7$ (vuelve a $5$), pero $i=6$ permanece.
+        \item $x = i + j = 6 + 5 = 11$.
+        \item Bloque 2: declara $i=8$ local; $y = i + j = 8 + 5 = 13$. Al salir muere el $i=8$ y $i$ vuelve a $6$.
+        \item $z = i + j = 6 + 5 = 11$.
+    \end{itemize}
+    \[ \boxed{w = 13,\quad x = 11,\quad y = 13,\quad z = 11} \]
+
+    Tabla de símbolos por bloque:
+    \begin{center}
+    \begin{tabular}{ll}
+    \toprule
+    \textbf{Activo} & \textbf{Contenido de la pila } \\
+    \midrule
+    Global            & $[\,i{=}4,\ j{=}5,\ w,\ x,\ y,\ z\,]$ \\
+    Dentro de Bloque 1 & $[\,i{=}6,\ j{=}5,\dots\,]\ [\,j{=}7\,]$ \\
+    Tras salir de B1   & $[\,i{=}6,\ j{=}5,\dots\,]$ \\
+    Dentro de Bloque 2 & $[\,i{=}6,\ j{=}5,\dots\,]\ [\,i{=}8\,]$ \\
+    Tras salir de B2   & $[\,i{=}6,\ j{=}5,\dots\,]$ \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+
+    \medskip
+    \noindent\underline{Código derecho.}
+    \begin{itemize}[nosep]
+        \item Global: $i=3,\ j=4$.
+        \item Bloque 1: declara $i=5$ local; $w = i + j = 5 + 4 = 9$. Al salir muere el $i=5$ y $i$ vuelve a $3$.
+        \item $x = i + j = 3 + 4 = 7$.
+        \item Bloque 2: declara $j=6$ local; \texttt{i = 7} es asignación, así que la $i$ global pasa a $7$.
+        Entonces $y = i + j = 7 + 6 = 13$. Al salir muere el $j=6$ (vuelve a $4$), pero $i=7$ permanece.
+        \item $z = i + j = 7 + 4 = 11$.
+    \end{itemize}
+    \[ \boxed{w = 9,\quad x = 7,\quad y = 13,\quad z = 11} \]
+
+    Tabla de símbolos por bloque:
+    \begin{center}
+    \begin{tabular}{ll}
+    \toprule
+    \textbf{Activo} & \textbf{Contenido de la pila} \\
+    \midrule
+    Global            & $[\,i{=}3,\ j{=}4,\ w,\ x,\ y,\ z\,]$ \\
+    Dentro de Bloque 1 & $[\,i{=}3,\ j{=}4,\dots\,]\ [\,i{=}5\,]$ \\
+    Tras salir de B1   & $[\,i{=}3,\ j{=}4,\dots\,]$ \\
+    Dentro de Bloque 2 & $[\,i{=}7,\ j{=}4,\dots\,]\ [\,j{=}6\,]$ \\
+    Tras salir de B2   & $[\,i{=}7,\ j{=}4,\dots\,]$ \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+
+
     \item Divide el siguiente programa en C++ en lexemas y genera los tokens correspondientes:
     {\footnotesize \begin{verbatim}
         float limitedSquare(x) float x; {
@@ -111,7 +165,54 @@
             return (x<=-10.0||x>=10.0)?100:x*x;
         }
     \end{verbatim}}
-    
+
+    \bigskip
+    \noindent\textbf{Solución.} El analizador léxico primero elimina el comentario
+        , ya que no produce ningún token. Después separa la entrada en
+    lexemas y de ahi cada lexema genera un token de la forma (nombre, atributo); los identificadores
+    llevan como atributo un apuntador a la tabla de símbolos.
+
+    \begin{center}
+    \begin{tabular}{ll}
+    \toprule
+    \textbf{Lexema} & \textbf{Token} \\
+    \midrule
+    \texttt{float}          & \texttt{(keyword, float)} \\
+    \texttt{limitedSquare}  & \texttt{(identificador, ->tabla)} \\
+    \texttt{(}              & \texttt{(puntuacion, "(")} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{)}              & \texttt{(puntuacion, ")")} \\
+    \texttt{float}          & \texttt{(keyword, float)} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{;}              & \texttt{(puntuacion, ";")} \\
+    \texttt{\{}             & \texttt{(puntuacion, "\{")} \\
+    \texttt{return}         & \texttt{(keyword, return)} \\
+    \texttt{(}              & \texttt{(puntuacion, "(")} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{<=}             & \texttt{(operador relacional, LE)} \\
+    \texttt{-}              & \texttt{(operador aritmetico, MINUS)} \\
+    \texttt{10.0}           & \texttt{(constante, 10.0)} \\
+    \texttt{||}             & \texttt{(operador logico, OR)} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{>=}             & \texttt{(operador relacional, GE)} \\
+    \texttt{10.0}           & \texttt{(constante, 10.0)} \\
+    \texttt{)}              & \texttt{(puntuacion, ")")} \\
+    \texttt{?}              & \texttt{(puntuacion, "?")} \\
+    \texttt{100}            & \texttt{(constante, 100)} \\
+    \texttt{:}              & \texttt{(puntuacion, ":")} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{*}              & \texttt{(operador aritmetico, MULT)} \\
+    \texttt{x}              & \texttt{(identificador, ->tabla)} \\
+    \texttt{;}              & \texttt{(puntuacion, ";")} \\
+    \texttt{\}}             & \texttt{(puntuacion, "\}")} \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+
+
+
+
+
     \item Define una función recursiva que compute los prefijos de una una expresión regular. 
     La base de tal función recursiva es:
     \begin{align*}
@@ -119,6 +220,32 @@
         prefix(a) &= a?
     \end{align*}
     Completa la definición.
+
+    \bigskip
+    \noindent\textbf{Solución.} 
+
+    \begin{align*}
+        prefix(\epsilon) &= \epsilon \\
+        prefix(a) &= a? \\
+        prefix(r \mid s) &= prefix(r) \mid prefix(s) \\
+        prefix(r\,s) &= prefix(r) \mid r\cdot prefix(s) \\
+        prefix(r^{*}) &= r^{*}\cdot prefix(r)
+    \end{align*}
+
+    \noindent Justificación de cada caso:
+    \begin{itemize}[nosep]
+        \item \textbf{Unión.} Una cadena de $r\mid s$ proviene de $r$ o de $s$, así que sus
+        prefijos son los de $r$ o los de $s$.
+        \item \textbf{Concatenación.} Un prefijo de $r\,s$ o bien se queda dentro de la
+        primera parte (un prefijo de $r$), o bien atraviesa $r$ completo y se detiene dentro
+        de la segunda (por eso aparece $r$ entero seguido de un prefijo de $s$). Por ejemplo,
+        con $r=ab$ y $s=cd$, los prefijos de $abcd$ son $\{\epsilon, a, ab\}$ (prefijos de
+        $r$) junto con $\{abc, abcd\}$ ($r$ completo más un prefijo de $s$).
+        \item \textbf{Estrella.} Un prefijo de $r^{*}$ consta de cero o más repeticiones
+        completas de $r$ (esto es $r^{*}$) seguidas de un prefijo de una repetición más
+        ($prefix(r)$).
+    \end{itemize}
+
     \item Para las siguientes expresiones regulares, da el lenguaje que definen:
     \begin{enumerate}
         \item $[ab][cd\epsilon]$
