@@ -248,9 +248,16 @@
 
     \item Para las siguientes expresiones regulares, da el lenguaje que definen:
     \begin{enumerate}
-        \item $[ab][cd\epsilon]$
-        \item $[a-zA-Z]^*at^*$
-        \item $ca[tr]$
+        \item $[ab][cd\epsilon]$\\
+        En este caso, el lenguaje consiste de todas las cadenas de longitud 1 o 2 que comienzan con un símbolo de $\{a,b\}$ y continúan con un símbolo de $\{c,d\}$ o terminan después del primer símbolo, ya que $\epsilon$ esta incluido en el segundo conjunto.
+        Por lo tanto, el lenguaje es:
+        \[ L = \{ac, ad, a, bc, bd, b\} \]
+        \item $[a-zA-Z]^*at^*$\\
+        El lenguaje definido por esta expresión regular consiste en todas las cadenas de letras mayúsculas o minúsculas, con la posibilidad de que sea vacía esta primera parte, seguida de la letra 'a' y seguida de cero o más letras 't'. En otras palabras, el lenguaje es:
+        \[ L = \{ w \in \{a-z, A-Z\}^* \mid w \text{ termina con 'a' seguido de cero o más 't'} \} \]
+        \item $ca[tr]$\\
+        Este lenguaje es casí como el primer caso, consiste en todas las cadenas de longitud 3 que comienzan con 'c', seguida de 'a' y terminan con un símbolo de $\{t,r\}$. Por lo tanto, el lenguaje es:
+        \[ L = \{cat, car\} \]
     \end{enumerate}
     \item Para el siguiente autómata finito no determinista, construye el autómata finito determinista:
     \begin{center}
@@ -264,10 +271,114 @@
             (0) edge node {a} (1)
             (1) edge node {a} (2)
             (2) edge node {a} (3)
-            (1) edge [bend left] node {b} (0)
-            (2) edge [bend left] node {b} (1)
-            (3) edge [bend left] node {a} (2)
+            (1) edge [bend left=35] node {b} (0)
+            (1) edge [bend right=35] node[swap] {b} (2)
+            (3) edge [bend left=35] node {a} (2)
             (3) edge [bend right=35] node[swap] {$\bm{\varepsilon}$} (0);
+        \end{tikzpicture}
+    \end{center}
+    Vamos a seguir el algoritmo de \textbf{Construcción por subconjuntos}:\\
+    Primero obtenemos la e-closure del estado inicial y de los estados destino de cada transición que no sea $\varepsilon$:
+    \begin{itemize}
+        \item e-closure(0) = \{0\}
+        \item e-closure(1) = \{1\}
+        \item e-closure(2) = \{2\}
+        \item e-closure(3) = \{0, 3\}
+    \end{itemize}
+    Ahora, comenzamos con el estado inicial del DFA, que es e-closure(0) = \{0\}. A partir de este estado, vamos a calcular las transiciones para cada símbolo del alfabeto \{a, b\}:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Estado} & \textbf{a} & \textbf{b} \\ \hline
+        \{0\}           & \{1\}      & $\emptyset$   \\ \hline
+        \end{tabular}
+    \end{table}
+    Como tenemos un estado nuevo \{1\}, calculamos sus transiciones:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Estado} & \textbf{a} & \textbf{b} \\ \hline
+        \{0\}           & \{1\}      & $\emptyset$   \\ \hline
+        \{1\}           & \{2\}      & \{0\}      \\ \hline
+        \end{tabular}
+    \end{table}
+    Vemos que tenemos un estado nuevo \{2\}, entonces también calculamos sus transiciones y esto haremos para cada estado nuevo que encontremos hasta que no haya más estados nuevos, por practicidad, omitimos los pasos intermedios y mostramos la tabla final de transiciones del DFA:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Estado} & \textbf{a}     & \textbf{b} \\ \hline
+        \{0\}           & \{1\}          & $\emptyset$   \\ \hline
+        \{1\}           & \{2\}          & \{0, 2\}   \\ \hline
+        \{2\}           & \{3, 0\}       & $\emptyset$   \\ \hline
+        \{0, 2\}        & \{1, 3, 0\}    & $\emptyset$   \\ \hline
+        \{3, 0\}        & \{2, 1\}       & $\emptyset$   \\ \hline
+        \{1, 3, 0\}     & \{2, 1\}       & \{0, 2\}   \\ \hline
+        \{2, 1\}        & \{3, 0, 2\}    & \{0, 2\}   \\ \hline
+        \{3, 0, 2\}     & \{2, 1, 3, 0\} & $\emptyset$   \\ \hline
+        \{2, 1, 3, 0\}  & \{3, 0, 2, 1\} & \{0, 2\}   \\ \hline
+        \end{tabular}
+    \end{table}
+    De este modo, obtuvimos los estados del DFA y sus transiciones. Los estados de aceptación del DFA son aquellos que contienen al menos un estado de aceptación del NFA original, que en este caso es el estado 0, el estado inicial del DFA será la e-closure del estado inicial del NFA, que es \{0\}. 
+    Renombrando los estados del DFA para simplificar y marcando los estados de aceptación e inicial, la tabla final de transiciones del DFA es:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Ini/Acept}          & \textbf{Estado} & \textbf{Renombrado} & \textbf{a}     & \textbf{b} \\ \hline
+        \textit{Inicial/Aceptación} & \{0\}           & A                   & \{1\} (B)      & $\emptyset$   \\ \hline
+        \textit{}                   & \{1\}           & B                   & \{2\} (C)      & \{0, 2\} (D) \\ \hline
+        \textit{}                   & \{2\}           & C                   & \{3, 0\} (E)   & $\emptyset$   \\ \hline
+        \textit{Aceptación}         & \{0, 2\}        & D                   & \{1, 3, 0\} (F) & $\emptyset$   \\ \hline
+        \textit{Aceptación}         & \{3, 0\}        & E                   & \{2, 1\} (G)   & $\emptyset$   \\ \hline
+        \textit{Aceptación}         & \{1, 3, 0\}     & F                   & \{2, 1\} (G)   & \{0, 2\} (D) \\ \hline
+        \textit{}                   & \{2, 1\}        & G                   & \{3, 0, 2\} (H) & \{0, 2\} (D) \\ \hline
+        \textit{Aceptación}         & \{3, 0, 2\}     & H                   & \{2, 1, 3, 0\} (I) & $\emptyset$   \\ \hline
+        \textit{Aceptación}         & \{2, 1, 3, 0\}  & I                   & \{3, 0, 2, 1\} (I) & \{0, 2\} (D) \\ \hline
+        \end{tabular}
+    \end{table}
+    Ahora podemos dibujar el DFA resultante:
+    \begin{center}
+        \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto, >=Stealth]
+            
+            % Fila superior
+            \node[state, initial, initial text=start, accepting] (A) {A};
+            \node[state] (B) [right=of A] {B};
+            \node[state] (C) [right=of B] {C};
+            \node[state, accepting] (E) [right=of C] {E};
+
+            % Fila inferior
+            \node[state, accepting] (D) [below=of B] {D};
+            \node[state, accepting] (F) [right=of D] {F};
+            \node[state] (G) [right=of F] {G};
+            \node[state, accepting] (H) [right=of G] {H};
+            \node[state, accepting] (I) [right=of H] {I};
+
+            \path[->]
+            % Transiciones horizontales (Fila superior)
+            (A) edge node {$a$} (B)
+            (B) edge node {$a$} (C)
+            (C) edge node {$a$} (E)
+            
+            % Transiciones verticales hacia la fila inferior
+            (B) edge node[swap] {$b$} (D)
+            (E) edge node {$a$} (G)
+
+            % Transiciones horizontales hacia la derecha (Fila inferior)
+            (D) edge node {$a$} (F)
+            (F) edge node {$a$} (G)
+            (G) edge node {$a$} (H)
+            (H) edge node {$a$} (I)
+            
+            % Ciclo sobre sí mismo en el estado I
+            (I) edge [out=90, in=0, loop] node {$a$} (I)
+
+            % Transiciones de regreso con 'b' hacia el estado D
+            (F) edge [bend left=40] node[below] {$b$} (D)
+            (G) edge [bend left=50] node[below] {$b$} (D)
+            (I) edge [bend left=60] node[below] {$b$} (D);
         \end{tikzpicture}
     \end{center}
     \item Para los siguientes DFA obten el DFA mínimo:
@@ -291,6 +402,104 @@
             (3) edge [bend left] node {a} (4)
             (4) edge [bend left] node {a} (3);
         \end{tikzpicture}
+
+        Primero vamos a dividir en grupos de estados finales y no finales:
+        \begin{align*}
+            G_1 &= \{0\} \\
+            G_2 &= \{1, 2, 3, 4\}
+        \end{align*}
+        Luego, tomamos a $G_1$ y por definición de grupo consistente tenemos que $G_1$ es consistente, ya que es un grupo de un solo estado, entonces marcamos $G_1$ y quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{0\} \\
+            G_2 &= \{1, 2, 3, 4\}
+        \end{align*}
+        Ahora, tomamos a $G_2$ y hacemos su tabla de estados:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_2}$ & \textbf{a} & \textbf{b} \\ \hline
+            1             & $G_2$       & -          \\ \hline
+            2             & $G_2$       & -          \\ \hline
+            3             & $G_2$       & $G_1$       \\ \hline
+            4             & $G_2$       & $G_1$       \\ \hline
+            \end{tabular}
+        \end{table}
+        $G_2$ no es consistente ya que no todas sus filas son iguales, entonces dividimos $G_2$ en dos grupos de manera que sus filas sean iguales, desmarcamos grupos y borramos a $G_2$ y nos quedan los grupos:
+        \begin{align*}
+            G_1 &= \{0\} \\
+            G_3 &= \{1, 2\} \\
+            G_4 &= \{3, 4\}
+        \end{align*}
+        Y volvemos a hacer lo mismo, tomamos a $G_1$ y como es un grupo de un solo estado, es consistente, entonces marcamos $G_1$ y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{0\} \\
+            G_3 &= \{1, 2\} \\
+            G_4 &= \{3, 4\}
+        \end{align*}
+        Ahora, tomamos a $G_3$ y hacemos su tabla de estados:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_3}$ & \textbf{a} & \textbf{b} \\ \hline
+            1             & $G_3$       & -          \\ \hline
+            2             & $G_4$       & -          \\ \hline
+            \end{tabular}
+        \end{table}
+        $G_3$ no es consistente ya que no todas sus filas son iguales, entonces dividimos $G_3$ en grupos de las filas iguales, desmarcamos grupos y borramos a $G_3$ y nos quedan los grupos:
+        \begin{align*}
+            G_1 &= \{0\} \\
+            G_4 &= \{3, 4\} \\
+            G_5 &= \{1\} \\
+            G_6 &= \{2\} 
+        \end{align*}
+        Dado que $G_1, G_5$ y $G_6$ son grupos de un solo estado, son consistentes, entonces marcamos $G_1, G_5$ y $G_6$ y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{0\} \\
+            G_4 &= \{3, 4\} \\
+            \ast G_5 &= \{1\} \\
+            \ast G_6 &= \{2\}
+        \end{align*}
+        Tomamos a $G_4$ y hacemos su tabla de estados:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_4}$ & \textbf{a} & \textbf{b} \\ \hline
+            3             & $G_4$       & $G_1$       \\ \hline
+            4             & $G_4$       & $G_1$       \\ \hline
+            \end{tabular}
+        \end{table}
+        Vemos que $G_4$ es consistente, ya que todas sus filas son iguales, entonces marcamos $G_4$ y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{0\} \\
+            \ast G_4 &= \{3, 4\} \\
+            \ast G_5 &= \{1\} \\
+            \ast G_6 &= \{2\}
+        \end{align*}
+        Todos los grupos están marcados, entonces ahora si cada grupo va a ser un estado del nuevo DFA y para las transiciones por el algoritmo tenemos que si un estado $p$ en el DFA original va a un estado $q$ por el símbolo $a$, entonces el grupo que contiene a $p$ va a ir al grupo que contiene a $q$ por el símbolo $a$.\\
+        Además, el estado inicial del nuevo DFA va a ser el grupo que contiene al estado inicial del DFA original y los estados de aceptación del nuevo DFA van a ser los grupos que contienen a los estados de aceptación del DFA original.\\
+        Por lo tanto, el DFA mínimo es:
+        \begin{center}
+            \begin{tikzpicture}[shorten >=1pt, node distance=3cm, auto, >=Stealth]
+            
+                \node[state, initial, initial text=start, accepting] (G1) {$G_1$};
+                \node[state] (G5) [right=of G1] {$G_5$};
+                \node[state] (G4) [below=of G1] {$G_4$};
+                \node[state] (G6) [below=of G5] {$G_6$};
+
+                \path[->]
+                (G1) edge node {$a$} (G5)
+                (G5) edge node {$a$} (G6)
+                (G6) edge node {$a$} (G4)
+                (G4) edge node {$b$} (G1)
+                
+                (G1) edge node [pos=0.3] {$b$} (G6)
+                
+                (G4) edge [out=270, in=180, loop] node {$a$} (G4);
+            \end{tikzpicture}
+        \end{center}
         \item 
         \begin{tikzpicture}[shorten >=1pt, auto, >=Stealth, node distance=2cm]
             \node[state, initial, initial text=] (0) {0};
@@ -317,6 +526,126 @@
             (2) edge [out=90, in=0, loop] node {a} (2)
             (5) edge [out=270, in=0, loop] node {a} (5);
         \end{tikzpicture}
+
+        % Estructura: \fcolorbox{ColorDelBorde}{ColorDelFondo}{Tu Texto}
+        \fcolorbox{red}{yellow!10}{\textbf{Nota importante:} Esta bajo revisión, tengo dudas así que no se si esta bien.}
+
+        Dividimos en grupos de estados finales y no finales:
+        \begin{align*}
+            G_1 &= \{4\} \\
+            G_2 &= \{0, 1, 2, 3, 5\}
+        \end{align*}
+        Tomamos a $G_1$ y como es un grupo de un solo estado, es consistente, entonces marcamos $G_1$ y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{4\} \\
+            G_2 &= \{0, 1, 2, 3, 5\}
+        \end{align*}
+        Ahora, tomamos a $G_2$ y hacemos su tabla de estados:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_2}$ & \textbf{a} & \textbf{b} \\ \hline
+            0             & $G_2$       & $G_2$       \\ \hline
+            1             & $G_2$       & $G_1$       \\ \hline
+            2             & $G_2$       & $G_2$       \\ \hline
+            3             & -           & $G_1$       \\ \hline
+            5             & $G_2$       & $G_2$       \\ \hline
+            \end{tabular}
+        \end{table}
+        $G_2$ no tiene todas sus filas iguales por lo que no es consistente, entonces dividimos $G_2$ en grupos con las filas iguales, desmarcamos grupos y borramos a $G_2$ y nos quedan los grupos:
+        \begin{align*}
+            G_1 &= \{4\} \\
+            G_3 &= \{0, 2, 5\} \\
+            G_4 &= \{1\} \\
+            G_5 &= \{3\}
+        \end{align*}
+        Dado que $G_1, G_4$ y $G_5$ son grupos de un solo estado, entonces son consistentes, así que marcamos $G_1, G_4$ y $G_5$ y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{4\} \\
+            G_3 &= \{0, 2, 5\} \\
+            \ast G_4 &= \{1\} \\
+            \ast G_5 &= \{3\}
+        \end{align*}
+        Ahora, tomamos a $G_3$ y hacemos su tabla de estados:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_3}$ & \textbf{a} & \textbf{b} \\ \hline
+            0             & $G_5$   & $G_4$       \\ \hline
+            2             & $G_3$   & $G_3$       \\ \hline
+            5             & $G_3$   & $G_3$       \\ \hline
+            \end{tabular}
+        \end{table}
+        $G_3$ no es consistente, entonces dividimos $G_3$ en grupos de filas iguales, desmarcamos grupos y borramos a $G_3$ y nos quedan los grupos:
+        \begin{align*}
+            G_1 &= \{4\} \\
+            G_4 &= \{1\} \\
+            G_5 &= \{3\} \\
+            G_6 &= \{0\} \\
+            G_7 &= \{2, 5\}
+        \end{align*}
+        $G_1, G_4, G_5$ y $G_6$ son grupos de un solo estado, entonces son consistentes, los marcamos y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{4\} \\
+            \ast G_4 &= \{1\} \\
+            \ast G_5 &= \{3\} \\
+            \ast G_6 &= \{0\} \\
+            G_7 &= \{2, 5\}
+        \end{align*}
+        Luego, tomamos a $G_7$ y hacemos su tabla de estados: 
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $\bm{G_7}$ & \textbf{a} & \textbf{b} \\ \hline
+            2             & $G_7$   & $G_7$       \\ \hline
+            5             & $G_7$   & $G_7$       \\ \hline
+            \end{tabular}
+        \end{table}
+        Así $G_7$ es consistente, entonces lo marcamos y nos quedan los grupos:
+        \begin{align*}
+            \ast G_1 &= \{4\} \\
+            \ast G_4 &= \{1\} \\
+            \ast G_5 &= \{3\} \\
+            \ast G_6 &= \{0\} \\
+            \ast G_7 &= \{2, 5\}
+        \end{align*}
+        Todos los grupos están marcados, entonces ahora si cada grupo va a ser un estado del nuevo DFA y hacemos lo mismo que en el ejercicio anterior para las transiciones, estado inicial y estados de aceptación.\\
+        Por lo tanto, el DFA mínimo es:
+        \begin{center}
+            \begin{tikzpicture}[shorten >=1pt, node distance=2cm, auto, >=Stealth]
+                
+                % Definición de estados y distribución espacial
+                \node[state, initial, initial text=start] (G6) {$G_6$};
+                \node[state] (G4) [right=of G6] {$G_4$};
+                \node[state, accepting] (G1) [right=of G4] {$G_1$};
+                \node[state] (G5) [above=of G4] {$G_5$};
+                
+                % G7 se desplaza en X para quedar exactamente centrado debajo de G4 y G1
+                \node[state] (G7) [below=of G4, xshift=1.5cm] {$G_7$};
+
+                \path[->]
+                % Transiciones desde el estado inicial G6
+                (G6) edge node {$a$} (G5)
+                (G6) edge node {$b$} (G4)
+                
+                % Transición superior desde G5
+                (G5) edge node {$b$} (G1)
+                
+                % Transiciones mutuas entre G4 y G1
+                (G4) edge [bend left] node {$b$} (G1)
+                (G1) edge [bend left] node {$a$} (G4)
+                
+                % Transiciones hacia el estado sumidero G7
+                (G4) edge node[swap] {$a$} (G7)
+                (G1) edge node {$b$} (G7)
+                
+                % Ciclos sobre G7 agrupados en una sola flecha
+                (G7) edge [loop below] node {$a, b$} (G7);
+            \end{tikzpicture}
+        \end{center}
     \end{enumerate}
     \item Convierte las siguientes expresiones regulares en autómatas finitos deterministas (DFA):
     \begin{enumerate}
@@ -344,7 +673,7 @@
             
             (2) edge [bend right=45] node[above] {$\bm{\varepsilon}$} (0);
         \end{tikzpicture}
-        \item a
+        \item 
         \begin{tikzpicture}[shorten >=1pt, node distance=2cm, auto, >=Stealth]
             \node[state, initial, initial text=start] (0) {0};
             \node[state] (1) [right=of 0] {1};
