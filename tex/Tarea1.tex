@@ -653,6 +653,395 @@
         \item $(a?b^*)^*$
         \item $[ab]^*abb[ab]^*$
     \end{enumerate}
+
+    \textbf{Respuesta:}
+
+    Para cada expresión regular, primero preprocesamos la expresión haciendo
+    explícitas las concatenaciones (representadas con $\cdot$). Después
+    aplicamos el algoritmo de \textbf{Shunting Yard} para convertirla a notación
+    postfija. A partir de la expresión postfija aplicamos el algoritmo de
+    construcción de \textbf{Thompson} para obtener un $\varepsilon$-NFA.
+    Finalmente, aplicamos el algoritmo de determinización
+    $\text{NFA}\rightarrow\text{DFA}$ mediante la \textbf{construcción de subconjuntos}.
+
+    En la construcción del DFA, cada nuevo estado (denotado con letras mayúsculas) 
+    representa un conjunto de estados del $\varepsilon$-NFA. Para cada conjunto $S$ y 
+    cada símbolo $a\in\Sigma$, calculamos las transiciones como:
+    \[
+        \delta_D(S,a)=EC(move(S,a)),
+    \]
+    donde $EC$ representa la cerradura-$\varepsilon$. 
+    También, recordemos que un estado del DFA es de aceptación si el subconjunto contiene al menos un estado de 
+    aceptación del NFA original.
+
+    Las precedencias (para el algoritmo de Shunting Yard) son:
+    clausuras ($*$, $?$) $>$ concatenación ($\cdot$) $>$ unión ($|$).
+
+    \begin{enumerate}
+
+        % Inciso A
+
+        \item $[ab]^*$ equivale a $(a|b)^*$
+
+        \textbf{Algoritmo de Shunting Yard}
+
+        \begin{center}
+            \small
+            \begin{tabular}{lll}
+                \toprule
+                \textbf{Token/Símbolo} & \textbf{Pila de operadores} & \textbf{Salida (Postfija)} \\
+                \midrule
+                \texttt{(} & \texttt{(} & \\
+                \texttt{a} & \texttt{(} & \texttt{a} \\
+                \texttt{|} & \texttt{( |} & \texttt{a} \\
+                \texttt{b} & \texttt{( |} & \texttt{a b} \\
+                \texttt{)} & Vacía & \texttt{a b |} \\
+                \texttt{*} & \texttt{*} & \texttt{a b |} \\
+                Fin de cadena & Vacía & \texttt{a b | *} \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+
+        Expresión postfija: $\boxed{\texttt{a b | *}}$
+
+        \textbf{Construcción de Thompson (NFA)}
+
+        Para construir el autómata a partir de la expresión postfija \texttt{a b | *}, evaluamos los operadores de izquierda a derecha. Primero, el operador de unión \texttt{|} toma los subautómatas de \texttt{a} y \texttt{b}, creando una bifurcación con transiciones $\varepsilon$ para elegir cualquiera de los dos caminos. Luego, el operador de cerradura de Kleene \texttt{*} toma todo el bloque anterior y le agrega un nuevo estado inicial y uno final, incorporando transiciones $\varepsilon$ que permiten hacer un ciclo continuo (repetición) o saltar directamente al final (aceptar la cadena vacía).
+
+        \begin{center}
+            \begin{tikzpicture}[shorten >=1pt, node distance=1.5cm, auto, >=Stealth]
+                \node[state, initial, initial text=start] (0) {0};
+                \node[state] (1) [right=of 0] {1};
+                \node[state] (2) [above right=0.5cm and 1cm of 1] {2};
+                \node[state] (3) [right=of 2] {3};
+                \node[state] (4) [below right=0.5cm and 1cm of 1] {4};
+                \node[state] (5) [right=of 4] {5};
+                \node[state] (6) [below right=0.5cm and 1cm of 3] {6};
+                \node[state, accepting] (7) [right=of 6] {7};
+
+                \path[->]
+                (0) edge node {$\varepsilon$} (1)
+                (1) edge node {$\varepsilon$} (2)
+                (1) edge node[swap] {$\varepsilon$} (4)
+                (2) edge node {$a$} (3)
+                (4) edge node[swap] {$b$} (5)
+                (3) edge node {$\varepsilon$} (6)
+                (5) edge node[swap] {$\varepsilon$} (6)
+                (6) edge node {$\varepsilon$} (7)
+                (6) edge [bend right=90] node[above] {$\varepsilon$} (1)
+                (0) edge [bend right=60] node[above] {$\varepsilon$} (7);
+            \end{tikzpicture}
+        \end{center}
+
+        \textbf{Determinización a DFA mediante construcción de subconjuntos}
+
+        Definimos los estados del DFA calculando las cerraduras-$\varepsilon$ iterativamente. El estado de aceptación del NFA es $7$:
+        \begin{align*}
+            A &= EC(\{0\}) = \{0,1,2,4,7\} \quad \text{(Aceptación)}\\
+            B &= EC(move(A, a)) = \{1,2,3,4,6,7\} \quad \text{(Aceptación)}\\
+            C &= EC(move(A, b)) = \{1,2,4,5,6,7\} \quad \text{(Aceptación)}
+        \end{align*}
+
+        Resumiendo los cálculos en su tabla de transiciones:
+        \begin{center}
+            \small
+            \begin{tabular}{c|cc}
+                \toprule
+                \textbf{Estado DFA} & \textbf{Con $a$} & \textbf{Con $b$} \\
+                \midrule
+                $\rightarrow *A$ & $B$ & $C$ \\
+                $*B$ & $B$ & $C$ \\
+                $*C$ & $B$ & $C$ \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+
+        El DFA obtenido es:
+
+        \begin{center}
+            \begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, auto, >=Stealth]
+                \node[state, initial, initial text=start, accepting] (A) {$A$};
+                \node[state, accepting] (B) [right=of A] {$B$};
+                \node[state, accepting] (C) [below=of B] {$C$};
+
+                \path[->]
+                (A) edge node {$a$} (B)
+                (A) edge node[swap] {$b$} (C)
+                (B) edge [loop above] node {$a$} (B)
+                (B) edge [bend left=15] node {$b$} (C)
+                (C) edge [bend left=15] node {$a$} (B)
+                (C) edge [loop below] node {$b$} (C);
+            \end{tikzpicture}
+        \end{center}
+
+        % Inciso B
+
+        \item $(a?b^*)^*$ equivale a $((a|\varepsilon)\cdot b^*)^*$
+
+        \textbf{Algoritmo de Shunting Yard}
+
+        \begin{center}
+            \small
+            \begin{tabular}{lll}
+                \toprule
+                \textbf{Token/Símbolo} & \textbf{Pila de operadores} & \textbf{Salida (Postfija)} \\
+                \midrule
+                \texttt{(} & \texttt{(} & \\
+                \texttt{a} & \texttt{(} & \texttt{a} \\
+                \texttt{?} & \texttt{(} & \texttt{a ?} \\
+                \texttt{$\cdot$} & \texttt{( $\cdot$} & \texttt{a ?} \\
+                \texttt{b} & \texttt{( $\cdot$} & \texttt{a ? b} \\
+                \texttt{*} & \texttt{( $\cdot$ *} & \texttt{a ? b} \\
+                \texttt{)} & Vacía & \texttt{a ? b * $\cdot$} \\
+                \texttt{*} & \texttt{*} & \texttt{a ? b * $\cdot$} \\
+                Fin de cadena & Vacía & \texttt{a ? b * $\cdot$ *} \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+
+        Expresión postfija: $\boxed{\texttt{a ? b * $\cdot$ *}}$
+
+        \textbf{Construcción de Thompson (NFA)}
+
+        Siguiendo la expresión postfija, primero se construye el bloque \texttt{a ?} (que es equivalente a $a|\varepsilon$), creando un camino para leer $a$ y otro para saltarlo mediante una transición $\varepsilon$. Posteriormente, se construye el ciclo para \texttt{b *} usando la estructura estándar de Kleene. El operador de concatenación $\cdot$ une el estado final del bloque \texttt{a ?} con el inicial de \texttt{b *} mediante una única transición $\varepsilon$. Finalmente, el operador de cerradura \texttt{*} exterior envuelve toda esta secuencia concatenada, agregando transiciones $\varepsilon$ globales para repetir todo el patrón o evadirlo por completo.
+
+        \begin{center}
+            \hspace*{-1cm} % Desplaza el autómata a la izquierda
+            \resizebox{0.95\textwidth}{!}{
+            \begin{tikzpicture}[shorten >=1pt, node distance=1.2cm, auto, >=Stealth]
+                \node[state, initial, initial text=start] (0) {0};
+                \node[state] (1) [right=of 0] {1};
+                \node[state] (2) [above right=0.5cm and 1cm of 1] {2};
+                \node[state] (3) [right=of 2] {3};
+                \node[state] (4) [below right=0.5cm and 1cm of 1] {4};
+                \node[state] (5) [right=of 4] {5};
+                \node[state] (6) [below right=0.5cm and 1cm of 3] {6};
+                \node[state] (7) [right=of 6] {7};
+                \node[state] (8) [right=of 7] {8};
+                \node[state] (9) [right=of 8] {9};
+                \node[state] (10) [right=of 9] {10};
+                \node[state] (11) [right=of 10] {11};
+                \node[state, accepting] (12) [right=of 11] {12};
+
+                \path[->]
+                (0) edge node {$\varepsilon$} (1)
+                (1) edge node {$\varepsilon$} (2)
+                (1) edge node[swap] {$\varepsilon$} (4)
+                (2) edge node {$a$} (3)
+                (4) edge node[swap] {$\varepsilon$} (5)
+                (3) edge node {$\varepsilon$} (6)
+                (5) edge node[swap] {$\varepsilon$} (6)
+                (6) edge node {$\varepsilon$} (7)
+                (7) edge node {$\varepsilon$} (8)
+                (8) edge node {$b$} (9)
+                (9) edge node {$\varepsilon$} (10)
+                (9) edge [bend right=45] node[above] {$\varepsilon$} (8)
+                (7) edge [bend right=45] node[swap] {$\varepsilon$} (10)
+                (10) edge node {$\varepsilon$} (11)
+                (11) edge node {$\varepsilon$} (12)
+                (11) edge [bend right=60] node[above] {$\varepsilon$} (1)
+                (0) edge [bend right=45] node[swap] {$\varepsilon$} (12);
+            \end{tikzpicture}
+            }
+        \end{center}
+
+        \textbf{Determinización a DFA mediante construcción de subconjuntos}
+
+        Definimos los estados del DFA calculando las cerraduras-$\varepsilon$ iterativamente. El estado de aceptación del NFA es $12$:
+        \begin{align*}
+            A &= EC(\{0\}) = \{0,1,2,4,5,6,7,8,10,11,12\} \quad \text{(Aceptación)}\\
+            B &= EC(move(A, a)) = \{1,2,3,4,5,6,7,8,10,11,12\} \quad \text{(Aceptación)}\\
+            C &= EC(move(A, b)) = \{1,2,4,5,6,7,8,9,10,11,12\} \quad \text{(Aceptación)}
+        \end{align*}
+
+        Resumiendo los cálculos en su tabla de transiciones:
+        \begin{center}
+            \small
+            \begin{tabular}{c|cc}
+                \toprule
+                \textbf{Estado DFA} & \textbf{Con $a$} & \textbf{Con $b$} \\
+                \midrule
+                $\rightarrow *A$ & $B$ & $C$ \\
+                $*B$ & $B$ & $C$ \\
+                $*C$ & $B$ & $C$ \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+
+        El DFA obtenido mediante la construcción de subconjuntos es:
+
+        \begin{center}
+            \begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, auto, >=Stealth]
+                \node[state, initial, initial text=start, accepting] (A) {$A$};
+                \node[state, accepting] (B) [right=of A] {$B$};
+                \node[state, accepting] (C) [below=of B] {$C$};
+
+                \path[->]
+                (A) edge node {$a$} (B)
+                (A) edge node[swap] {$b$} (C)
+                (B) edge [loop above] node {$a$} (B)
+                (B) edge [bend left=15] node {$b$} (C)
+                (C) edge [bend left=15] node {$a$} (B)
+                (C) edge [loop below] node {$b$} (C);
+            \end{tikzpicture}
+        \end{center}
+
+        % Inciso C
+
+        \item $[ab]^*abb[ab]^*$ equivale a $(a|b)^*\cdot a\cdot b\cdot b\cdot(a|b)^*$
+
+        \textbf{Algoritmo de Shunting Yard}
+
+        La expresión con las concatenaciones explícitas es: $(a|b)^*\cdot a\cdot b\cdot b\cdot(a|b)^*$ \\
+        Su expresión postfija es:
+        $\boxed{\texttt{a b | * a $\cdot$ b $\cdot$ b $\cdot$ a b | * $\cdot$}}$
+
+        \textbf{Construcción de Thompson (NFA)}
+
+        Al leer la postfija, ensamblamos el autómata conectando bloques secuencialmente. Ya construimos el bloque \texttt{a b | *} en el inciso A (una unión dentro de una cerradura de Kleene), por lo que lo instanciamos una vez al inicio y otra al final. En la parte intermedia, se crean simples transiciones directas para leer la secuencia exacta \texttt{a}, \texttt{b}, \texttt{b}. Cada vez que aparece el operador de concatenación $\cdot$ en la postfija, este se encarga de enlazar el estado de aceptación del bloque recién terminado con el estado inicial del bloque siguiente mediante una sola transición $\varepsilon$. Así, se forma una cadena principal que conecta todas las partes.
+
+        \begin{center}
+            \hspace*{-1cm} % Desplaza el autómata a la izquierda
+            \resizebox{0.95\textwidth}{!}{
+            \begin{tikzpicture}[shorten >=1pt, node distance=1.2cm, auto, >=Stealth]
+                \node[state, initial, initial text=start] (0) {0};
+                \node[state] (1) [right=of 0] {1};
+                \node[state] (2) [above right=0.4cm and 0.8cm of 1] {2};
+                \node[state] (3) [right=of 2] {3};
+                \node[state] (4) [below right=0.4cm and 0.8cm of 1] {4};
+                \node[state] (5) [right=of 4] {5};
+                \node[state] (6) [below right=0.4cm and 0.8cm of 3] {6};
+                \node[state] (7) [right=of 6] {7};
+                \node[state] (8) [right=of 7] {8};
+                \node[state] (9) [right=of 8] {9};
+                \node[state] (10) [right=of 9] {10};
+                \node[state] (11) [right=of 10] {11};
+                \node[state] (12) [right=of 11] {12};
+                \node[state] (13) [above right=0.4cm and 0.8cm of 12] {13};
+                \node[state] (14) [right=of 13] {14};
+                \node[state] (15) [below right=0.4cm and 0.8cm of 12] {15};
+                \node[state] (16) [right=of 15] {16};
+                \node[state] (17) [below right=0.4cm and 0.8cm of 14] {17};
+                \node[state, accepting] (18) [right=of 17] {18};
+
+                \path[->]
+                (0) edge node {$\varepsilon$} (1)
+                (1) edge node {$\varepsilon$} (2)
+                (1) edge node[swap] {$\varepsilon$} (4)
+                (2) edge node {$a$} (3)
+                (4) edge node[swap] {$b$} (5)
+                (3) edge node {$\varepsilon$} (6)
+                (5) edge node[swap] {$\varepsilon$} (6)
+                (6) edge node {$\varepsilon$} (7)
+                (6) edge [bend right=100] node[above] {$\varepsilon$} (1)
+                (0) edge [bend right=70] node[swap] {$\varepsilon$} (7)
+                (7) edge node {$a$} (8)
+                (8) edge node {$b$} (9)
+                (9) edge node {$b$} (10)
+                (10) edge node {$\varepsilon$} (11)
+                (11) edge node {$\varepsilon$} (12)
+                (12) edge node {$\varepsilon$} (13)
+                (12) edge node[swap] {$\varepsilon$} (15)
+                (13) edge node {$a$} (14)
+                (15) edge node[swap] {$b$} (16)
+                (14) edge node {$\varepsilon$} (17)
+                (16) edge node[swap] {$\varepsilon$} (17)
+                (17) edge node {$\varepsilon$} (18)
+                (17) edge [bend right=100] node[above] {$\varepsilon$} (12)
+                (11) edge [bend right=70] node[swap] {$\varepsilon$} (18);
+            \end{tikzpicture}
+            }
+        \end{center}
+
+        \textbf{Determinización a DFA mediante construcción de subconjuntos}
+
+        Definimos los estados del DFA calculando las cerraduras-$\varepsilon$ iterativamente. El estado de aceptación del NFA es $18$:
+        \begin{align*}
+            A &= EC(\{0\}) = \{0,1,2,4,7\} \\
+            B &= EC(move(A, a)) = \{1,2,3,4,6,7,8\} \\
+            C &= EC(move(A, b)) = \{1,2,4,5,6,7\} \\
+            D &= EC(move(B, b)) = \{1,2,4,5,6,7,9\} \\
+            E &= EC(move(D, b)) = \{1,2,4,5,6,7,10,11,12,13,15,18\} \quad \text{(Aceptación)}\\
+            F &= EC(move(E, a)) = \{1,2,3,4,6,7,8,12,13,14,15,17,18\} \quad \text{(Aceptación)}\\
+            G &= EC(move(E, b)) = \{1,2,4,5,6,7,12,13,15,16,17,18\} \quad \text{(Aceptación)}\\
+            H &= EC(move(F, b)) = \{1,2,4,5,6,7,9,12,13,15,16,17,18\} \quad \text{(Aceptación)}\\
+            I &= EC(move(H, b)) = \{1,2,4,5,6,7,10,11,12,13,15,16,17,18\} \quad \text{(Aceptación)}
+        \end{align*}
+
+        Resumiendo los cálculos en su tabla de transiciones:
+        \begin{center}
+            \begin{tabular}{c|cc}
+                \toprule
+                \textbf{Estado DFA} & \textbf{Con $a$} & \textbf{Con $b$} \\
+                \midrule
+                $\rightarrow A$ & $B$ & $C$ \\
+                $B$ & $B$ & $D$ \\
+                $C$ & $B$ & $C$ \\
+                $D$ & $B$ & $E$ \\
+                $*E$ & $F$ & $G$ \\
+                $*F$ & $F$ & $H$ \\
+                $*G$ & $F$ & $G$ \\
+                $*H$ & $F$ & $I$ \\
+                $*I$ & $F$ & $G$ \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+
+        Por lo tanto, el DFA obtenido directamente mediante el algoritmo
+        de determinización es:
+
+        \begin{center}
+            \hspace*{-1.5cm}
+            \begin{tikzpicture}[
+                shorten >=1pt,
+                node distance=1.7cm,
+                auto,
+                >=Stealth
+            ]
+                \node[state, initial, initial text=start] (A) {$A$};
+                \node[state] (B) [right=of A] {$B$};
+                \node[state] (C) [below=of A] {$C$};
+                \node[state] (D) [right=of C] {$D$};
+                \node[state, accepting] (E) [right=of D] {$E$};
+
+                \node[state, accepting] (F) [above right=of E] {$F$};
+                \node[state, accepting] (G) [below right=of E] {$G$};
+                \node[state, accepting] (H) [right=of G] {$H$};
+                \node[state, accepting] (I) [above right=of H] {$I$};
+
+                \path[->]
+                (A) edge node {$a$} (B)
+                (A) edge node[swap] {$b$} (C)
+
+                (B) edge [loop above] node {$a$} (B)
+                (B) edge [bend left=15] node {$b$} (D) 
+
+                (C) edge node {$a$} (B)
+                (C) edge [loop below] node {$b$} (C)
+
+                (D) edge [bend left=15] node {$a$} (B)
+                (D) edge node {$b$} (E)
+
+                (E) edge node {$a$} (F)
+                (E) edge node[swap] {$b$} (G)
+
+                (F) edge [loop above] node {$a$} (F)
+                (F) edge [bend left=15] node {$b$} (H)
+
+                (G) edge node {$a$} (F)
+                (G) edge [loop below] node {$b$} (G)
+
+                (H) edge [bend left=15] node {$a$} (F)
+                (H) edge node {$b$} (I)
+
+                (I) edge [bend right=20] node[swap] {$a$} (F)
+                (I) edge [bend left=60] node {$b$} (G);
+            \end{tikzpicture}
+        \end{center}
+
+    \end{enumerate}
+
+
     \item Utiliza el algoritmo de simulación de NFA para simular los siguientes NFAs en la entrada $aabb$:
     \begin{enumerate}
         \item 
@@ -673,7 +1062,29 @@
             
             (2) edge [bend right=45] node[above] {$\bm{\varepsilon}$} (0);
         \end{tikzpicture}
-        \item 
+
+        \textbf{Respuesta:}
+        
+        Primero obtenemos las cerraduras epsilon ($\varepsilon$-closures o $EC$) para cada estado:
+        
+        \[ EC(0) = \{0\}, \quad EC(1) = \{1\}, \quad EC(2) = \{0, 2\}, \quad EC(3) = \{3\} \]
+        
+        Evaluamos la cadena $aabb\$$ paso a paso:
+        \begin{itemize}
+            \item Estado inicial: $S = EC(0) = \{0\}$. Leemos $c = a$.
+            \[ S = EC(\delta(\{0\}, a)) = EC(\{0, 1\}) = EC(0) \cup EC(1) = \{0, 1\} \]
+            \item Estado actual: $S = \{0, 1\}$. Leemos $c = a$.
+            \[ S = EC(\delta(\{0, 1\}, a)) = EC(\{0, 1, 2\}) = EC(0) \cup EC(1) \cup EC(2) = \{0, 1, 2\} \]
+            \item Estado actual: $S = \{0, 1, 2\}$. Leemos $c = b$.
+            \[ S = EC(\delta(\{0, 1, 2\}, b)) = EC(\{0, 1, 2, 3\}) = \{0, 1, 2, 3\} \]
+            \item Estado actual: $S = \{0, 1, 2, 3\}$. Leemos $c = b$.
+            \[ S = EC(\delta(\{0, 1, 2, 3\}, b)) = EC(\{0, 1, 2, 3\}) = \{0, 1, 2, 3\} \]
+            \item Terminamos de leer la cadena. Verificamos si llegamos a un estado de aceptación ($F = \{3\}$):
+            \[ S \cap F = \{0, 1, 2, 3\} \cap \{3\} = \{3\} \neq \emptyset \]
+            Como la intersección no es vacía, el autómata \textbf{acepta} la cadena (regresa $1$).
+        \end{itemize}
+
+        \item a
         \begin{tikzpicture}[shorten >=1pt, node distance=2cm, auto, >=Stealth]
             \node[state, initial, initial text=start] (0) {0};
             \node[state] (1) [right=of 0] {1};
@@ -693,6 +1104,26 @@
             
             (3) edge [bend left=37] node[below] {$\bm{a}$} (0);
         \end{tikzpicture}
+
+        \textbf{Respuesta:}
+
+        Obtenemos las cerraduras epsilon. Debido a que los cuatro estados están fuertemente conectados a través de un ciclo continuo de transiciones $\varepsilon$ ($3 \xrightarrow{\varepsilon} 2 \xrightarrow{\varepsilon} 1 \xrightarrow{\varepsilon} 0$ y $0 \xrightarrow{\varepsilon} 3$), la cerradura de cualquier estado es el conjunto de todos los estados:
+        \[ EC(0) = EC(1) = EC(2) = EC(3) = \{0, 1, 2, 3\} \]
+
+        Evaluamos la cadena $aabb\$$ paso a paso:
+        \begin{itemize}
+            \item Estado inicial: $S = EC(0) = \{0, 1, 2, 3\}$. Leemos $c = a$.
+            \[ S = EC(\delta(\{0, 1, 2, 3\}, a)) = EC(\{0, 1\}) = \{0, 1, 2, 3\} \]
+            \item Estado actual: $S = \{0, 1, 2, 3\}$. Leemos $c = a$.
+            \[ S = EC(\delta(\{0, 1, 2, 3\}, a)) = EC(\{0, 1\}) = \{0, 1, 2, 3\} \]
+            \item Estado actual: $S = \{0, 1, 2, 3\}$. Leemos $c = b$.
+            \[ S = EC(\delta(\{0, 1, 2, 3\}, b)) = EC(\{2, 3\}) = \{0, 1, 2, 3\} \]
+            \item Estado actual: $S = \{0, 1, 2, 3\}$. Leemos $c = b$.
+            \[ S = EC(\delta(\{0, 1, 2, 3\}, b)) = EC(\{2, 3\}) = \{0, 1, 2, 3\} \]
+            \item Terminamos de leer la cadena. Estado final es $F = \{3\}$:
+            \[ S \cap F = \{0, 1, 2, 3\} \cap \{3\} = \{3\} \neq \emptyset \]
+            Como la intersección no es vacía, el autómata \textbf{acepta} la cadena (regresa $1$).
+        \end{itemize}
     \end{enumerate}
     \item Define un lexer para las expresiones booleanas que considere los siguientes puntos:
     \begin{enumerate}
