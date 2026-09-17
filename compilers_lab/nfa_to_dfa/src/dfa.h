@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <nfa.h>
+#include "nfa.h"
 
 
 #define MAX_DFA_STATES 128
