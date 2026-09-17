@@ -1,7 +1,7 @@
 \documentclass[12pt, letterpaper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
-\usepackage{amsmath, amssymb, amsthm}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{amsmath, amssymb, amsthm, bm}
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage{hyperref}
@@ -11,6 +11,8 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
 \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
@@ -89,13 +91,97 @@
 % Justificar por qué esa estructura.
 
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
-% PENDIENTE (Rol D): comandos exactos de compilación y ejecución de
-% la prueba obligatoria, más las capturas de la terminal y la
-% comparación del autómata antes/después.
+
+\noindent En esta práctica decidimos seguir usando CMake y Docker para la compilación y ejecución del código siguiendo la misma estructura de la práctica anterior.
+
+\noindent Para compilar el código y que se ejecute la prueba de conversión de NFA a DFA, primero hay que situarse en la carpeta 
+raíz del proyecto (\texttt{nfa\_to\_dfa/}) y ejecutar los siguientes comandos:
+\begin{itemize}
+    \item Construir la imagen de Docker:
+    \begin{lstlisting}[style=bashstyle]
+docker build -t nfa_to_dfa .
+    \end{lstlisting}
+    \item Ejecutar la imagen de Docker:
+    \begin{lstlisting}[style=bashstyle]
+docker run --rm nfa_to_dfa
+    \end{lstlisting}
+\end{itemize}
+Estos comandos ejecutarán el código, tomando la nfa definida en el archivo \texttt{nfa\_to\_dfa/src/main.c} y generando la salida del DFA correspondiente.
+\subsubsection*{Resultados:}
+\noindent La nfa que definimos para la prueba fue la siguiente:
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto, >=Stealth]
+    \node[state, initial, initial text=start, accepting] (0) {0};
+    \node[state] (1) [right=of 0] {1};
+    \node[state] (2) [right=of 1] {2};
+    \node[state] (3) [right=of 2] {3};
+
+    \path[->]
+    (0) edge node {a} (1)
+    (1) edge node {a} (2)
+    (2) edge node {a} (3)
+    (1) edge [bend left=35] node {b} (0)
+    (1) edge [bend right=35] node[swap] {b} (2)
+    (3) edge [bend left=35] node {a} (2)
+    (3) edge [bend right=35] node[swap] {$\bm{\varepsilon}$} (0);
+    \end{tikzpicture}
+\end{center}
+Si aplicamos el algoritmo de construcción de subconjuntos, obtenemos el siguiente DFA:
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto, >=Stealth]
+    
+        % Fila superior
+        \node[state, initial, initial text=start, accepting] (q0) {q0};
+        \node[state] (q1) [right=of q0] {q1};
+        \node[state] (q2) [right=of q1] {q2};
+        \node[state, accepting] (q4) [right=of q2] {q4};
+
+        % Fila inferior
+        \node[state, accepting] (q3) [below=of q1] {q3};
+        \node[state, accepting] (q5) [right=of q3] {q5};
+        \node[state] (q6) [right=of q5] {q6};
+        \node[state, accepting] (q7) [right=of q6] {q7};
+        \node[state, accepting] (q8) [right=of q7] {q8};
+
+        \path[->]
+        % Transiciones horizontales (Fila superior)
+        (q0) edge node {$a$} (q1)
+        (q1) edge node {$a$} (q2)
+        (q2) edge node {$a$} (q4)
+        
+        % Transiciones verticales hacia la fila inferior
+        (q1) edge node[swap] {$b$} (q3)
+        (q4) edge node {$a$} (q6)
+
+        % Transiciones horizontales hacia la derecha (Fila inferior)
+        (q3) edge node {$a$} (q5)
+        (q5) edge node {$a$} (q6)
+        (q6) edge node {$a$} (q7)
+        (q7) edge node {$a$} (q8)
+        
+        % Ciclo sobre sí mismo en el estado I
+        (q8) edge [out=90, in=0, loop] node {$a$} (q8)
+
+        % Transiciones de regreso con 'b' hacia el estado q3
+        (q5) edge [bend left=40] node[below] {$b$} (q3)
+        (q6) edge [bend left=50] node[below] {$b$} (q3)
+        (q8) edge [bend left=60] node[below] {$b$} (q3);
+    \end{tikzpicture}
+\end{center}
+Nota: Esta visualización gráfica de las automatas no las genera el código en C, las pusimos 
+aquí en el reporte para que se pueda entender mejor la entrada y salida del programa.
+
+\noindent Nuestro código muestra la siguiente salida en consola al ejecutar los comandos:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/ResultsP2.png}
+\end{figure}
+\noindent Imprime las transiciones del NFA y la tabla de transiciones del DFA resultante y como se puede ver 
+es el mismo resultado que el de las automatas que presentamos arriba.
 
 \subsection*{Bitácora de casos límite y depuración}
 
-Uno de los principales problemas estuvo en la cerradura épsilon. Cuando el NFA
+\noindent Uno de los principales problemas estuvo en la cerradura épsilon. Cuando el NFA
 tiene ciclos de transiciones $\varepsilon$ (por ejemplo, un estado que regresa
 a uno anterior sin consumir símbolo), en primera se nos ocurrio revisaría los mismos
 estados una y otra vez pero vimos que nos quedamos atrapado en un bucle infinito. Lo resolvimos
@@ -104,18 +190,18 @@ al conjunto y apilarlo para revisarlo, comprobamos que no esté ya dentro. Así
 cada estado se procesa una sola vez y la pila termina por vaciarse, rompiendo
 las dependencias cíclicas sin importar cuántos ciclos $\varepsilon$ existan. 
 
-Durante la integración enfrentamos además un problemas de compilación. El  archivo \texttt{nfa.h} no estaba presente en la carpeta de
+\noindent Durante la integración enfrentamos además un problemas de compilación. El  archivo \texttt{nfa.h} no estaba presente en la carpeta de
 esta práctica, por lo que el proyecto no enlazaba al no encontrar la definición
 del autómata; lo resolvimos copiándolo desde la práctica anterior, ya que ambas
 comparten esa misma representación del NFA. 
 
-En el algoritmo de construcción de subconjuntos, el mayor reto fue la correcta gestión de la memoria dinámica y la búsqueda de subconjuntos repetidos. Inicialmente, existía el riesgo de generar fugas de memoria al evaluar constantemente los conjuntos temporales resultantes de \textit{Move} y \textit{$\varepsilon$-Closure}. Lo diagnosticamos y resolvimos asegurándonos de liberar explícitamente los estados con \texttt{state\_free} cuando el subconjunto resultaba estar vacío, y delegando la validación a la función \texttt{dfa\_find\_or\_add\_state} cuando el estado sí contenía elementos. Esta función se encarga de descartar y liberar la copia de manera segura si el subconjunto ya existía previamente en la matriz del DFA, evitando duplicaciones.
+\noindent En el algoritmo de construcción de subconjuntos, el mayor reto fue la correcta gestión de la memoria dinámica y la búsqueda de subconjuntos repetidos. Inicialmente, existía el riesgo de generar fugas de memoria al evaluar constantemente los conjuntos temporales resultantes de \textit{Move} y \textit{$\varepsilon$-Closure}. Lo diagnosticamos y resolvimos asegurándonos de liberar explícitamente los estados con \texttt{state\_free} cuando el subconjunto resultaba estar vacío, y delegando la validación a la función \texttt{dfa\_find\_or\_add\_state} cuando el estado sí contenía elementos. Esta función se encarga de descartar y liberar la copia de manera segura si el subconjunto ya existía previamente en la matriz del DFA, evitando duplicaciones.
 
 \subsection*{Limitaciones conocidas y deuda técnica}
 
-Nuestro sistema asume restricciones estrictas sobre la entrada debido a la arquitectura estática elegida. Operamos bajo el supuesto de un alfabeto de 256 caracteres y un límite de 128 estados máximos permitidos para el DFA, definido por la constante \texttt{MAX\_DFA\_STATES}. Si el NFA de entrada es altamente complejo y la explosión de estados genera más de 128 subconjuntos, la construcción marcará un error de límite excedido y se detendrá prematuramente. 
+\noindent Nuestro sistema asume restricciones estrictas sobre la entrada debido a la arquitectura estática elegida. Operamos bajo el supuesto de un alfabeto de 256 caracteres y un límite de 128 estados máximos permitidos para el DFA, definido por la constante \texttt{MAX\_DFA\_STATES}. Si el NFA de entrada es altamente complejo y la explosión de estados genera más de 128 subconjuntos, la construcción marcará un error de límite excedido y se detendrá prematuramente. 
 
-Como deuda técnica, si tuviéramos que rediseñar el sistema desde cero, sustituiríamos la representación estática del arreglo de estados y la cola de procesamiento por estructuras de datos dinámicas. Esto permitiría que el tamaño del autómata dependiera únicamente de la memoria disponible. Adicionalmente, la tabla de transiciones actual reserva forzosamente un espacio de $128 \times 256$ enteros en memoria; esto resulta ineficiente para autómatas muy dispersos, por lo que sería ideal migrar a una matriz dispersa o tablas hash para optimizar recursos.
+\noindent Como deuda técnica, si tuviéramos que rediseñar el sistema desde cero, sustituiríamos la representación estática del arreglo de estados y la cola de procesamiento por estructuras de datos dinámicas. Esto permitiría que el tamaño del autómata dependiera únicamente de la memoria disponible. Adicionalmente, la tabla de transiciones actual reserva forzosamente un espacio de $128 \times 256$ enteros en memoria; esto resulta ineficiente para autómatas muy dispersos, por lo que sería ideal migrar a una matriz dispersa o tablas hash para optimizar recursos.
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
@@ -146,7 +232,7 @@ Como deuda técnica, si tuviéramos que rediseñar el sistema desde cero, sustit
 
 \newpage
 \subsection*{Evaluación de la Práctica}
-Grado de acuerdo con cada una de las siguientes afirmaciones utilizando una escala de 1 a 5, donde:
+\noindent Grado de acuerdo con cada una de las siguientes afirmaciones utilizando una escala de 1 a 5, donde:
 \begin{itemize}
     \item 1: Totalmente en desacuerdo
     \item 2: En desacuerdo

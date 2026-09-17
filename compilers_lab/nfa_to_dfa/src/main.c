@@ -4,7 +4,10 @@
 #include "dfa.h"
 #include "subset_construction.h"
 
-//Imprime las transiciones del NFA
+/**
+ * Imprime las transiciones del NFA.
+ * @param n El NFA a imprimir.
+ */
 void print_nfa(nfa n) {
     printf("NFA:\n");
     for (int i = 0; i < n.trans_count; i++) {
@@ -18,6 +21,7 @@ void print_nfa(nfa n) {
 }
 
 int main() {
+    // Definición de un NFA de ejemplo
     transition transitions[] = {
         {0, 1, 'a'},
         {1, 2, 'a'},
@@ -39,6 +43,7 @@ int main() {
     printf("Estado de aceptación: %d\n", my_nfa.accept);
     print_nfa(my_nfa);
 
+    // Construcción del DFA a partir del NFA
     dfa my_dfa = build_dfa(my_nfa);
 
     printf("\nAutomata Finito Determinista (DFA):\n");
@@ -46,5 +51,6 @@ int main() {
     dfa_get_alphabet(my_nfa, alphabet);
     dfa_print_table(&my_dfa, alphabet);
 
+    // Liberar memoria del DFA
     dfa_free(&my_dfa);
 }
