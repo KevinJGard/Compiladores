@@ -89,6 +89,9 @@
 % representaron los subconjuntos de estados del NFA (bitset con
 % arreglo de uint64_t) y cómo se gestionó la tabla de transiciones.
 % Justificar por qué esa estructura.
+En esta práctica se optó por representar cada estado como un bitset. Como en C, no hay un tipo definido para bitsets, se simuló uno a partir de arreglos de enteros de sesenta y cuatro bits sin signo (uint64\_t). En la representación de bits del número, se pone un uno si el estado correspondiente a la posición en el bit pertenece al estado conjunto. En caso de haber más de 64 estados del dfa, se implementó un arreglo de uint64\_t, así, podremos modificar o consultar un estado mediante el redireccionamiento. Se optó por esta decisión de diseño porque ahorra mucha memoria, porque en muchos casos, solo se ocupan 64 bits ya que la dispersión de los estados que construimos en el nfa es mínima (Hicimos estados consecutivos). Aunque este método require manipulación directa de bits, es relativamente sencillo de implementar. Además, se cuenta con una variable bool que indica si el estado es final o no.
+
+La estuctura dfa consiste en un arreglo de estados. Se asume que la cantidad máxima de estados es 128. Por lo que el tamaño de este arreglo tiene capacidad máxima de 128, aunque la estructura cuenta con un contador de estados en el arreglo. El índice correspondiente a cada estado es usado para la tabla de transiciones. Como la función de transición va de un solo par (estado-símbolo) a un estado. Se optó por usar una matriz bidimensional que guarda estados. Pero los estados guardados y cómo se accede son los índices que le corresponden en el arreglo de estados del dfa. Como en las regex se esperan típicamente símbolos ASCII, se asume que el alfabeto consiste en todos los símbolos representables con el tipo de dato char. Como char puede tomar 256 valores posibles, la tabla de transiciones siempre tiene un tamaño constante, ya que la cantidad límite de estados es 128. 
 
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
 
@@ -227,7 +230,7 @@ comparten esa misma representación del NFA.
 \subsubsection*{Zaldivar Alanis Rodrigo:}
 
 \begin{center}
-    Img
+    {\includegraphics[height=20cm]{images/zar3.jpg}}
 \end{center}
 
 \newpage
