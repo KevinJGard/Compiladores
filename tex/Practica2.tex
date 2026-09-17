@@ -83,9 +83,35 @@
 \maketitle
 \vspace*{-2.5cm}
 \subsection*{Descripción de arquitectura y estructuras de datos}
+% PENDIENTE (Rol C): describir cómo se modeló el DFA, cómo se
+% representaron los subconjuntos de estados del NFA (bitset con
+% arreglo de uint64_t) y cómo se gestionó la tabla de transiciones.
+% Justificar por qué esa estructura.
+
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
+% PENDIENTE (Rol D): comandos exactos de compilación y ejecución de
+% la prueba obligatoria, más las capturas de la terminal y la
+% comparación del autómata antes/después.
+
 \subsection*{Bitácora de casos límite y depuración}
+
+Uno de los principales problemas estuvo en la cerradura épsilon. Cuando el NFA
+tiene ciclos de transiciones $\varepsilon$ (por ejemplo, un estado que regresa
+a uno anterior sin consumir símbolo), en primera se nos ocurrio revisaría los mismos
+estados una y otra vez pero vimos que nos quedamos atrapado en un bucle infinito. Lo resolvimos
+apoyándonos en la operación \texttt{state\_contains}: antes de agregar un estado
+al conjunto y apilarlo para revisarlo, comprobamos que no esté ya dentro. Así
+cada estado se procesa una sola vez y la pila termina por vaciarse, rompiendo
+las dependencias cíclicas sin importar cuántos ciclos $\varepsilon$ existan. 
+
+Durante la integración enfrentamos además un problemas de compilación. El  archivo \texttt{nfa.h} no estaba presente en la carpeta de
+esta práctica, por lo que el proyecto no enlazaba al no encontrar la definición
+del autómata; lo resolvimos copiándolo desde la práctica anterior, ya que ambas
+comparten esa misma representación del NFA. 
+
 \subsection*{Limitaciones conocidas y deuda técnica}
+% PENDIENTE (entre todos): supuestos sobre la entrada (número máximo de
+% estados MAX_DFA_STATES, tamaño del alfabeto) y qué se rediseñaría.
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
@@ -101,10 +127,11 @@
     {\includegraphics[height=20cm]{images/KG2.jpg}}
 \end{center}
 \newpage
+
 \subsubsection*{González Gutiérrez Antonio Tonatiuh:}
 
 \begin{center}
-    Img
+    {\includegraphics[height=20cm]{images/validacion2ATGG.jpg}}
 \end{center}
 \newpage
 \subsubsection*{Zaldivar Alanis Rodrigo:}
