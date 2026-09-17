@@ -109,9 +109,13 @@ esta práctica, por lo que el proyecto no enlazaba al no encontrar la definició
 del autómata; lo resolvimos copiándolo desde la práctica anterior, ya que ambas
 comparten esa misma representación del NFA. 
 
+En el algoritmo de construcción de subconjuntos, el mayor reto fue la correcta gestión de la memoria dinámica y la búsqueda de subconjuntos repetidos. Inicialmente, existía el riesgo de generar fugas de memoria al evaluar constantemente los conjuntos temporales resultantes de \textit{Move} y \textit{$\varepsilon$-Closure}. Lo diagnosticamos y resolvimos asegurándonos de liberar explícitamente los estados con \texttt{state\_free} cuando el subconjunto resultaba estar vacío, y delegando la validación a la función \texttt{dfa\_find\_or\_add\_state} cuando el estado sí contenía elementos. Esta función se encarga de descartar y liberar la copia de manera segura si el subconjunto ya existía previamente en la matriz del DFA, evitando duplicaciones.
+
 \subsection*{Limitaciones conocidas y deuda técnica}
-% PENDIENTE (entre todos): supuestos sobre la entrada (número máximo de
-% estados MAX_DFA_STATES, tamaño del alfabeto) y qué se rediseñaría.
+
+Nuestro sistema asume restricciones estrictas sobre la entrada debido a la arquitectura estática elegida. Operamos bajo el supuesto de un alfabeto de 256 caracteres y un límite de 128 estados máximos permitidos para el DFA, definido por la constante \texttt{MAX\_DFA\_STATES}. Si el NFA de entrada es altamente complejo y la explosión de estados genera más de 128 subconjuntos, la construcción marcará un error de límite excedido y se detendrá prematuramente. 
+
+Como deuda técnica, si tuviéramos que rediseñar el sistema desde cero, sustituiríamos la representación estática del arreglo de estados y la cola de procesamiento por estructuras de datos dinámicas. Esto permitiría que el tamaño del autómata dependiera únicamente de la memoria disponible. Adicionalmente, la tabla de transiciones actual reserva forzosamente un espacio de $128 \times 256$ enteros en memoria; esto resulta ineficiente para autómatas muy dispersos, por lo que sería ideal migrar a una matriz dispersa o tablas hash para optimizar recursos.
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
