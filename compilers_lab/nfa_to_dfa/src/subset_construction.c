@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include "subset_construction.h"
 
+/**
+ * Función principal para construir el DFA a partir del NFA
+ * @param n: El NFA a convertir
+ * @return: El DFA resultante
+ */ 
 dfa build_dfa(nfa n) {
     dfa d;
     dfa_init(&d); // Inicializa matriz en -1 y conteos en 0
