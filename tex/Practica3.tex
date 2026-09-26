@@ -76,8 +76,11 @@
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
 
 \subsection*{Bitácora de casos límite y depuración}
+Para asegurarse que el algoritmo de minimización sea efectivo, se realizó la detección de estados inalcanzables mediante una búsqueda por profundidad del autómata dado su estado inicial, el cual se asume que es el estado cero, en la que se marcan los estados alcanzables. Posteriormente al DFS, se reconstruye el autómata con base en los estados que sí son alcanzables. Esto debido a que nuestros DFAs asumen estados indexados consecutivamente desde cero hasta el número total de estados. En caso de haber reutilizado la tabla de transición del autómata original, quedarían estados inalcanzables. 
+En caso de que todos los estados sean alcanzables, dado el cómputo realizado además de que se optó por esta decisión para hacer más efectivo el manejo de memoria, de todas maneras se regresa la reconstrucción del autómata.
 
 \subsection*{Limitaciones conocidas y deuda técnica}
+En la definición de los DFAs, se asume constante el máximo de símbolos en el alfabeto y de estados; el alfabeto máximo está dado por la cantidad de símbolos totales representados por char y los estados por 128. En algunas funciones, como en aquella cuyo propósito es crear un nuevo autómata sin estados inalcanzables, no se hace uso de nuestra función que nos devuelve el alfabeto para reducir los casos de consulta a la función de transición. Por cada estado, se recorre su fila completa, lo cual aumenta el número de operaciones en la gran mayoría de los casos. El rendimiento se ve especialmente afectado en casos en los que el alfabeto del autómata es considerablemente pequeño, como en el caso en el cual este tiene cardinalidad dos. 
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
