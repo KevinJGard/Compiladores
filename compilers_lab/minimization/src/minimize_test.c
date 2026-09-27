@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <string.h>
 #include "dfa.h"
 #include "hopcroft.h"
 #include "minimize.h"
@@ -139,11 +140,168 @@ static void test_already_minimal(void) {
     dfa_free(&d);
 }
 
+bool test_string(const dfa *d, const char *input) {
+    int current = 0; // estado inicial
+    for (int i = 0; input[i] != '\0'; i++) {
+        unsigned char c = (unsigned char)input[i];
+        int next = d->table[current][c];
+        if (next == -1) return false; // transición indefinida
+        current = next;
+    }
+    return d->states[current].accepts;
+}
+
+void run_test_suite (const dfa *d, const char *accept_tests[], int accept_count,
+                     const char *reject_tests[], int reject_count) {
+    int passed = 0;
+    int total = accept_count + reject_count;
+
+    printf("\n[Corriendo Casos de Aceptación]\n");
+    for (int i = 0; i < accept_count; i++) {
+        bool res = test_string(d, accept_tests[i]);
+        printf("Cadena \"%s\": %s\n", accept_tests[i], res ? "PASS" : "FAIL");
+        if (res) passed++;
+    }
+
+    printf("\n[Corriendo Casos de Rechazo]\n");
+    for (int i = 0; i < reject_count; i++) {
+        bool res = !test_string(d, reject_tests[i]);
+        printf("Cadena \"%s\": %s\n", reject_tests[i], res ? "PASS" : "FAIL");
+        if (res) passed++;
+    }
+
+    printf("\nResultados: %d/%d pruebas superadas.\n", passed, total);
+}
+
+void test_regex1(void) {
+    printf("\nPrueba de regex: (a|b)*abb - Cadenas que terminan en abb\n");
+    dfa original;
+    dfa_init(&original);
+    original.state_count = 6;
+
+    for (int i = 0; i < original.state_count; i++) {
+        for (int j = 0; j < ALPHABET_SIZE; j++) {
+            original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
+        }
+        set_state(&original, i, original.state_count, (i == 3));
+    }
+
+    original.table[0]['a'] = 1; original.table[0]['b'] = 0;
+    original.table[1]['a'] = 1; original.table[1]['b'] = 2;
+    original.table[2]['a'] = 1; original.table[2]['b'] = 3;
+    original.table[3]['a'] = 1; original.table[3]['b'] = 0;
+    original.table[4]['a'] = 1; original.table[4]['b'] = 0;
+    original.table[5]['a'] = 1; original.table[5]['b'] = 0;
+
+    print_dfa(&original, "ab");
+
+    dfa *reduced = reachable_dfa(&original);
+    state_list part = minimize_hopcroft(reduced);
+    dfa minimized = build_min_dfa(reduced, &part);
+
+    assert(original.state_count >= minimized.state_count);
+    print_dfa_min(&minimized, "ab");
+    printf("Número de estados: |Q| original=%d, |Q'| minimizado=%d\n", original.state_count, minimized.state_count);
+
+    const char *accept_tests[] = {"abb", "aabb", "aaabb", "babb", "abababb", "ababb", "aababb", "bbaabb", "bbbbabb", "ababababb"};
+    const char *reject_tests[] = {"", "a", "b", "ab", "aab", "ba", "aaa", "bbb", "abab", "aabba"};
+    run_test_suite(&minimized, accept_tests, 10, reject_tests, 10);
+
+    list_free(&part);
+    dfa_free(reduced); free(reduced);
+    dfa_free(&minimized);
+    dfa_free(&original);
+}
+
+void test_regex2(void) {
+    printf("\nPrueba de regex: (0|1)*01(0|1)* - Cadenas que contienen la subcadena 01\n");
+
+    dfa original;
+    dfa_init(&original);
+    original.state_count = 5;
+
+    for (int i = 0; i < original.state_count; i++) {
+        for (int j = 0; j < ALPHABET_SIZE; j++) {
+            original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
+        }
+        set_state(&original, i, original.state_count, (i >= 2));
+    }
+
+    original.table[0]['0'] = 1; original.table[0]['1'] = 0;
+    original.table[1]['0'] = 1; original.table[1]['1'] = 2;
+    original.table[2]['0'] = 3; original.table[2]['1'] = 4;
+    original.table[3]['0'] = 3; original.table[3]['1'] = 4;
+    original.table[4]['0'] = 3; original.table[4]['1'] = 4;
+
+    print_dfa(&original, "01");
+
+    dfa *reduced = reachable_dfa(&original);
+    state_list part = minimize_hopcroft(reduced);
+    dfa minimized = build_min_dfa(reduced, &part);
+
+    assert(original.state_count >= minimized.state_count);
+    print_dfa_min(&minimized, "01");
+    printf("Número de estados: |Q| original=%d, |Q'| minimizado=%d\n", original.state_count, minimized.state_count);
+
+    const char *accept_tests[] = {"01", "001", "101", "010", "1010", "0101", "10101", "01010", "101010", "01010"};
+    const char *reject_tests[] = {"", "0", "1", "00", "11", "000", "111", "1100", "55555555", "11111111"};
+    run_test_suite(&minimized, accept_tests, 10, reject_tests, 10);
+
+    list_free(&part);
+    dfa_free(reduced); free(reduced);
+    dfa_free(&minimized);
+    dfa_free(&original);
+}
+
+void test_regex3(void) {
+    printf("\nPrueba de regex: (0|10*1)* - Cadenas que tienen un número par de 1s\n");
+    dfa original;
+    dfa_init(&original);
+    original.state_count = 4;
+
+    for (int i = 0; i < original.state_count; i++) {
+        for (int j = 0; j < ALPHABET_SIZE; j++) {
+            original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
+        }
+        set_state(&original, i, original.state_count, (i <= 1));
+    }
+
+    original.table[0]['0'] = 1; original.table[0]['1'] = 2;
+    original.table[1]['0'] = 0; original.table[1]['1'] = 3;
+    original.table[2]['0'] = 2; original.table[2]['1'] = 0;
+    original.table[3]['0'] = 3; original.table[3]['1'] = 1;
+
+    print_dfa(&original, "01");
+
+    dfa *reduced = reachable_dfa(&original);
+    state_list part = minimize_hopcroft(reduced);
+    dfa minimized = build_min_dfa(reduced, &part);
+
+    assert(original.state_count >= minimized.state_count);
+    print_dfa_min(&minimized, "01");
+    printf("Número de estados: |Q| original=%d, |Q'| minimizado=%d\n", original.state_count, minimized.state_count);
+
+    const char *accept_tests[] = {"", "00", "11", "0000", "1111", "0011", "1100", "0101", "1010", "1001"};
+    const char *reject_tests[] = {"10101", "1", "01", "10", "001", "111110", "01011", "100", "1110", "0001"};
+    run_test_suite(&minimized, accept_tests, 10, reject_tests, 10);
+
+    list_free(&part);
+    dfa_free(reduced); free(reduced);
+    dfa_free(&minimized);
+    dfa_free(&original);
+}
+
 int main(void) {
     printf("Pruebas de reconstrucción del DFA mínimo\n");
     test_equivalent_states();
     test_unreachable_then_minimize();
     test_already_minimal();
     printf("\nTodas las pruebas pasaron correctamente.\n");
+
+    printf("\nPruebas con expresiones regulares\n");
+    test_regex1();
+    test_regex2();
+    test_regex3();
+    printf("\nTodas las pruebas de expresiones regulares pasaron correctamente.\n");
     return 0;
 }
