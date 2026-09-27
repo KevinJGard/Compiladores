@@ -45,4 +45,7 @@ int  dfa_find_or_add_state(dfa *d, state s, int nfa_accept_state);
 void dfa_print_table(const dfa *d, const char *alphabet);
 int  dfa_get_alphabet(nfa n, char *alphabet);
 
+// Construye un DFA equivalente sin estados inalcanzables.
+dfa* reachable_dfa(const dfa *automaton);
+
 #endif

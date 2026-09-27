@@ -72,8 +72,28 @@
 \maketitle
 \vspace*{-2.5cm}
 \subsection*{Descripción de arquitectura y estructuras de datos}
+El proyecto se organiza en módulos que comparten las estructuras definidas en \texttt{dfa.h}. Un conjunto de estados se representa con la estructura \texttt{state}, un \emph{bitset} respaldado por un arreglo de palabras de 64 bits (\texttt{uint64\_t}); cada bit indica la pertenencia de un estado al conjunto. El autómata \texttt{dfa} agrupa un arreglo de \texttt{state} y una tabla de transiciones \texttt{table[estado][símbolo]} indexada por caracteres, donde el valor $-1$ marca la ausencia de transición. Por convención, el estado inicial siempre ocupa la posición cero del arreglo.
+
+Tanto la partición $P$ como la cola de trabajo $W$ del algoritmo de Hopcroft se modelan con la estructura \texttt{state\_list}, un arreglo de conjuntos \texttt{state}. Se eligió esta representación (un arreglo de \emph{bitsets}) frente a alternativas como una lista enlazada de conjuntos o un vector de vectores de enteros por tres razones. Primero, por legibilidad: cada bloque de la partición es un único \texttt{state}, la misma abstracción que ya usaba el resto del proyecto. Segundo, por la búsqueda de la preimagen $X = \{q \mid \delta(q,c) \in A\}$, que se resuelve recorriendo los estados y consultando la pertenencia a $A$ en tiempo constante sobre el \emph{bitset}. Tercero, por la manipulación de bloques equivalentes: las operaciones $Y_1 = Y \cap X$ y $Y_2 = Y \setminus X$ se implementan directamente como intersección y diferencia de conjuntos, y la comparación de bloques se reduce a comparar sus palabras.
+
+La reconstrucción del DFA mínimo se integra de forma natural con la tabla ya existente: a cada clase de equivalencia de la partición final se le asigna un identificador nuevo (la clase que contiene al estado inicial recibe el identificador cero), y la nueva tabla $\delta'$ se llena tomando un representante de cada clase y mapeando el destino de sus transiciones a la clase correspondiente. El subconjunto de estados fusionados se conserva como la unión de los \emph{bitsets} de los miembros, de modo que la tabla impresa sigue mostrando qué estados originales quedaron agrupados.
 
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
+El módulo de minimización se encuentra en \texttt{compilers\_lab/minimization} y se compila con CMake. Desde ese directorio:
+\begin{verbatim}
+mkdir -p build && cd build
+cmake .. && make
+\end{verbatim}
+Esto genera tres ejecutables: \texttt{minimization} (demostración del flujo completo, que imprime la tabla del DFA antes y después de minimizar), \texttt{reachability\_test} (pruebas de eliminación de estados inalcanzables) y \texttt{minimize\_test} (pruebas de la reconstrucción del DFA mínimo). Para ejecutarlos:
+\begin{verbatim}
+./reachability_test
+./minimize_test
+./minimization
+\end{verbatim}
+Alternativamente, el \texttt{Dockerfile} incluido compila el proyecto y ejecuta ambas suites de pruebas y la demostración dentro de un contenedor:
+\begin{verbatim}
+docker build -t minimization . && docker run --rm minimization
+\end{verbatim}
 
 \subsection*{Bitácora de casos límite y depuración}
 Para asegurarse que el algoritmo de minimización sea efectivo, se realizó la detección de estados inalcanzables mediante una búsqueda por profundidad del autómata dado su estado inicial, el cual se asume que es el estado cero, en la que se marcan los estados alcanzables. Posteriormente al DFS, se reconstruye el autómata con base en los estados que sí son alcanzables. Esto debido a que nuestros DFAs asumen estados indexados consecutivamente desde cero hasta el número total de estados. En caso de haber reutilizado la tabla de transición del autómata original, quedarían estados inalcanzables. 
