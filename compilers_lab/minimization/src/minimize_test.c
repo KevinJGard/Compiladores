@@ -140,6 +140,8 @@ static void test_already_minimal(void) {
     dfa_free(&d);
 }
 
+// Simula la ejecución de un DFA sobre una cadena de entrada y devuelve true si la
+// cadena es aceptada, false si es rechazada.
 bool test_string(const dfa *d, const char *input) {
     int current = 0; // estado inicial
     for (int i = 0; input[i] != '\0'; i++) {
@@ -148,9 +150,12 @@ bool test_string(const dfa *d, const char *input) {
         if (next == -1) return false; // transición indefinida
         current = next;
     }
+    // Al final de la cadena, verificamos si el estado actual es de aceptación.
     return d->states[current].accepts;
 }
 
+// Ejecuta un conjunto de pruebas de aceptación y rechazo sobre un DFA dado
+// y reporta los resultados.
 void run_test_suite (const dfa *d, const char *accept_tests[], int accept_count,
                      const char *reject_tests[], int reject_count) {
     int passed = 0;
@@ -159,6 +164,7 @@ void run_test_suite (const dfa *d, const char *accept_tests[], int accept_count,
     printf("\n[Corriendo Casos de Aceptación]\n");
     for (int i = 0; i < accept_count; i++) {
         bool res = test_string(d, accept_tests[i]);
+        // reporta true si la cadena es aceptada, false si es rechazada
         printf("Cadena \"%s\": %s\n", accept_tests[i], res ? "PASS" : "FAIL");
         if (res) passed++;
     }
@@ -166,6 +172,8 @@ void run_test_suite (const dfa *d, const char *accept_tests[], int accept_count,
     printf("\n[Corriendo Casos de Rechazo]\n");
     for (int i = 0; i < reject_count; i++) {
         bool res = !test_string(d, reject_tests[i]);
+        // reporta true si la cadena es rechazada, false si es aceptada
+        // PASS porque en esta parte se espera que sean rechazadas por eso !test_string
         printf("Cadena \"%s\": %s\n", reject_tests[i], res ? "PASS" : "FAIL");
         if (res) passed++;
     }
@@ -173,6 +181,7 @@ void run_test_suite (const dfa *d, const char *accept_tests[], int accept_count,
     printf("\nResultados: %d/%d pruebas superadas.\n", passed, total);
 }
 
+// Primera prueba de regex de la lista
 void test_regex1(void) {
     printf("\nPrueba de regex: (a|b)*abb - Cadenas que terminan en abb\n");
     dfa original;
@@ -183,7 +192,7 @@ void test_regex1(void) {
         for (int j = 0; j < ALPHABET_SIZE; j++) {
             original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
         }
-        set_state(&original, i, original.state_count, (i == 3));
+        set_state(&original, i, original.state_count, (i == 3)); // Solo el estado 3 es de aceptación
     }
 
     original.table[0]['a'] = 1; original.table[0]['b'] = 0;
@@ -213,6 +222,7 @@ void test_regex1(void) {
     dfa_free(&original);
 }
 
+// Segunda prueba de regex de la lista
 void test_regex2(void) {
     printf("\nPrueba de regex: (0|1)*01(0|1)* - Cadenas que contienen la subcadena 01\n");
 
@@ -224,7 +234,7 @@ void test_regex2(void) {
         for (int j = 0; j < ALPHABET_SIZE; j++) {
             original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
         }
-        set_state(&original, i, original.state_count, (i >= 2));
+        set_state(&original, i, original.state_count, (i >= 2)); // Estados 2, 3 y 4 son de aceptación
     }
 
     original.table[0]['0'] = 1; original.table[0]['1'] = 0;
@@ -252,7 +262,7 @@ void test_regex2(void) {
     dfa_free(&minimized);
     dfa_free(&original);
 }
-
+// Tercera prueba de regex de la lista
 void test_regex3(void) {
     printf("\nPrueba de regex: (0|10*1)* - Cadenas que tienen un número par de 1s\n");
     dfa original;
@@ -263,7 +273,7 @@ void test_regex3(void) {
         for (int j = 0; j < ALPHABET_SIZE; j++) {
             original.table[i][j] = -1; // Inicializar todas las transiciones como indefinidas
         }
-        set_state(&original, i, original.state_count, (i <= 1));
+        set_state(&original, i, original.state_count, (i <= 1)); // Estados 0 y 1 son de aceptación
     }
 
     original.table[0]['0'] = 1; original.table[0]['1'] = 2;
