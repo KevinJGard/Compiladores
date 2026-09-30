@@ -115,11 +115,14 @@ WS          [ \t\r\n]+
  /* 
     4. LITERALES E IDENTIFICADORES   (bloque provisional) */
 
-{FLOAT}                 { return TOK_FLOAT_LITERAL; }
-{INT}                   { return TOK_INT_LITERAL; }
-\'([^\\\n]|\\.)\'       { return TOK_CHAR_LITERAL; }
-\"([^\\\n]|\\.)*\"      { return TOK_STRING_LITERAL; }
-{ID}                    { return TOK_IDENTIFIER; }
+{FLOAT}                     { return TOK_FLOAT_LITERAL; }
+{INT}                       { return TOK_INT_LITERAL; }
+\'([^\\\n\']|\\.)\'         { return TOK_CHAR_LITERAL; }
+\'([^\\\n\']|\\.)*          { return TOK_ERROR; }
+\"([^\\\"\n]|\\.)*\"        { return TOK_STRING_LITERAL; }
+\"([^\\\"\n]|\\.)*          { return TOK_ERROR; }
+{ID}                        { return TOK_IDENTIFIER; }
+
 
  /* 
     5. FIN DE ARCHIVO Y ERRORES */

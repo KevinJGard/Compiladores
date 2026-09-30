@@ -1,0 +1,12 @@
+0
+123
+3.14
+10.5e-2
+'a'
+'\n'
+"hola \"mundo\""
+""
+"este string no cierra
+'xddddd'
+variable_1
+galaxia_x

@@ -52,6 +52,11 @@ const char *scanner_token_name(int token)
 
 		case TOK_FN_RADIAR: return "FN_RADIAR";
 		case TOK_FN_OBSERVAR: return "FN_OBSERVAR";
+	        case TOK_FLOAT_LITERAL: return "FLOAT_LITERAL";
+	        case TOK_CHAR_LITERAL: return "CHAR_LITERAL";
+	        case TOK_INT_LITERAL: return "INT_LITERAL";
+	        case TOK_STRING_LITERAL: return "STRING_LITERAL";
+	        case TOK_IDENTIFIER: return "IDENTIFIER";
 
 		
 
