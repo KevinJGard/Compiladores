@@ -15,15 +15,20 @@ WS          [ \t\r\n]+
 
  /* 
     1. COMENTARIOS Y ESPACIOS  
-    (bloque provisional)*/
+ */
 
-"meteorito"[ \t]*"/"    { BEGIN(COMMENT); }
-<COMMENT>"/"[ \t]*"meteorito"  { BEGIN(INITIAL); }
-<COMMENT>\n             { }
-<COMMENT>.              { }
-<COMMENT><<EOF>>        { return TOK_ERROR; }
+"meteorito*"            { BEGIN(COMMENT); }
+<COMMENT>"*meteorito"   { BEGIN(INITIAL); }
+<COMMENT>\n             { /* yylineno se actualiza automáticamente */ }
+<COMMENT>.              { /* descartar contenido de comentario */ }
+<COMMENT><<EOF>>        { 
+                          fprintf(stderr, "Error: comentario sin cerrar en línea %d\n", yylineno);
+                          BEGIN(INITIAL);
+                          return TOK_ERROR; 
+                        }
 
-"meteorito"[^\n]*       { /* comentario de linea */ }
+"meteorito"[ \t]+[^\n]* { /* comentario de linea (con espacio después de la palabra clave) */ }
+"meteorito"[\n]         { /* comentario de linea vacio */ }
 
 {WS}                    { /* ignorar espacios */ }
 
@@ -126,10 +131,14 @@ WS          [ \t\r\n]+
 
 
  /* 
-    5. FIN DE ARCHIVO Y ERRORES */
+    5. FIN DE ARCHIVO Y ERRORES 
+ */
 
 <<EOF>>                 { return TOK_EOF; }
 
-.                       { return TOK_ERROR; }
+.                       { 
+                          fprintf(stderr, "Error: carácter no reconocido '%s' en línea %d\n", yytext, yylineno);
+                          return TOK_ERROR; 
+                        }
 
 %%

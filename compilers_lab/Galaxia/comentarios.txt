@@ -1,0 +1,7 @@
+meteorito Esto es un comentario de linea
+meteorito* 
+    Esto es un comentario de bloque
+    que abarca varias lineas
+*meteorito
+meteorito
+meteorito* Este es un comentario de bloque sin cerrar
