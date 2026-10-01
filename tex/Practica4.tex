@@ -107,7 +107,11 @@
 
 \subsection*{Bitácora de casos límite y depuración léxica}
 
+Para la parte de Operadores y Delimitadores, el principal caso límite enfrentado fue la resolución de ambigüedades en secuencias consecutivas de símbolos matemáticos, como el lexema \texttt{+++} o la diferenciación entre \verb|>| y \verb|>=|. Este problema radicaba en que Flex podía interpretar anticipadamente caracteres individuales y dividir operadores compuestos si las reglas no estaban estructuradas lógicamente. La solución implementada consistió en aprovechar la regla de la coincidencia más larga (\textit{longest match}) natural de Flex, estructurando el bloque de operadores en \texttt{scanner.l} en un orden estricto de longitud descendente. Se colocaron primero las asignaciones compuestas de 3 caracteres (como \verb|<<=|), seguidas por las de 2 caracteres (como \texttt{++}, \texttt{+=}) y, finalmente, los caracteres simples (\texttt{+}, \texttt{=}). Esto garantizó que lexemas de prueba como \texttt{+=+} se reconocieran correctamente como \texttt{TOK\_PLUS\_ASSIGN} seguido de \texttt{TOK\_PLUS}.
+
 \subsection*{Limitaciones conocidas y deuda técnica}
+
+En cuanto a los operadores a nivel de bits, una limitación del diseño léxico es que se modelaron como palabras de texto (\texttt{convergencia}, \texttt{expansion}, \texttt{oscuridad}) para adaptarse a la temática del lenguaje \textit{CosmoLang}. Debido a que Flex evalúa mediante expresiones regulares sin contexto sintáctico, estas palabras coinciden idénticamente con el patrón definido para los identificadores (\texttt{ID}). Aunque el conflicto se resolvió declarando las reglas de los operadores literales en bloques superiores a la regla de identificadores, la deuda técnica podría ser que los usuarios del lenguaje tienen estrictamente prohibido utilizar palabras como \texttt{expansion} o \texttt{superposicion} para nombrar variables o funciones, ya que el escáner las interceptará forzosamente como operadores, limitando el vocabulario disponible para el programador.
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
