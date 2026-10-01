@@ -275,10 +275,37 @@ Podemos ver que si genera la salida con el formato de \texttt{[TOKEN: LEXEMA]}, 
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
-No se que va a aquí xd
 
 \begin{itemize}
     \item \textbf{Isaac Giovani Escobar González}:
+
+    \textbf{Comentarios anidados.}
+
+    Para lograr el reconocimiento de comentarios de bloque anidados (como \texttt{/*.../*...*/...*/}), se utilizó la directiva de estado exclusivo \texttt{\%x COMMENT} junto con una variable global entera llamada \texttt{comentario\_profundidad} para llevar el registro del nivel de anidamiento.
+
+    Cuando el escáner detecta la apertura de un comentario con \texttt{/*}, inicializa \texttt{comentario\_profundidad} a 1 y cambia al estado \texttt{COMMENT} usando \texttt{BEGIN(COMMENT)}. Dentro de este estado, cada vez que se encuentra otra apertura de comentario (\texttt{/*}), se incrementa \texttt{comentario\_profundidad}. Por el contrario, al encontrar un cierre de comentario (\texttt{*/}), se decrementa la variable. Cuando \texttt{comentario\_profundidad} llega a cero, significa que todos los comentarios anidados han sido cerrados, y el escáner retorna al estado inicial con \texttt{BEGIN(INITIAL)}.
+
+    \begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=7cm]{images/isaacScanner.l.png}
+        \caption{Archivo modificado.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=7cm]{images/isaacTerminal.png}
+        \caption{Salida en terminal.}
+    \end{minipage}
+    
+    \vspace{0.5cm}
+
+    \includegraphics[height=4cm]{images/isaacPrueba.png}
+    \caption{Archivo de prueba.}
+\end{figure}
+
+    \newpage
+
     \item \textbf{Kevin Jonathan Garduño Escobar}:
     \item \textbf{Antonio Tonatiuh González Gutiérrez}:
     \item \textbf{Rodrigo Zaldivar Alanis}:
