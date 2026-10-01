@@ -103,18 +103,209 @@
 \vspace*{-2.5cm}
 \subsection*{Estrategia de diseño léxico y condiciones de inicio}
 
+\noindent Para gestionar el contexto de los comentarios multilinea que lleva el siguiente estilo:
+\begin{lstlisting}[style=bashstyle]
+meteorito*
+    ...
+    ...
+*meteorito
+\end{lstlisting}
+Se definió un estado exclusivo como \texttt{\%x COMMENT}. El uso de esta condición de inicio permite que el escáner reconozca la apertura del comentario con \texttt{meteorito*} y cambie al estado \texttt{COMMENT}, donde se ignoran todos los caracteres hasta encontrar la secuencia de cierre \texttt{*meteorito}. Esto asegura que el contenido del comentario no interfiera con la tokenización de otros elementos del lenguaje.
+
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
+
+\noindent Para poder compilar y generar nuestro analizador léxico, implementamos un Makefile que automatiza el proceso de compilación ya que internamente hace la invocación de Flex para generar el código en C y compilarlo. Se ejecuta primero el comando:
+\begin{lstlisting}[style=bashstyle]
+make
+\end{lstlisting}
+Para poder ejecutar las pruebas y validar el funcionamiento ejecutamos el comando:
+\begin{lstlisting}[style=bashstyle]
+make test
+\end{lstlisting}
+Este es el que se encarga de ejecutar cada archivo individual de prueba y uno de una prueba más general, de este modo nos permite ver la siguiente salida en terminal:
+\begin{lstlisting}[style=bashstyle]
+-> make test
+
+Pruebas de comentarios
+./scanner < comentarios.txt
+Error: comentario sin cerrar en línea 7
+[ERROR:]
+
+Pruebas de palabras reservadas
+./scanner < keywords.txt
+[KW_BIG_BANG:big_bang]
+[KW_MUERTE_TERMICA:muerte_termica]
+[KW_AGUJERO_NEGRO:agujero_negro]
+[KW_PLANETA:planeta]
+[KW_ESTRELLA:estrella]
+[KW_ROCOSO:rocoso]
+[KW_GASEOSO:gaseoso]
+[KW_NEBULOSA:nebulosa]
+[KW_PULSAR:pulsar]
+[KW_VACIO:vacio]
+[KW_ECLIPSE:eclipse]
+[KW_DESPEJE:despeje]
+[KW_ORBITA:orbita]
+[KW_CONSTELACION:constelacion]
+[KW_GALAXIA:galaxia]
+[KW_EN:en]
+[KW_SUPERNOVA:supernova]
+[KW_COLISION:colision]
+[KW_COMETA:cometa]
+[KW_LUMINOSO:luminoso]
+[KW_OSCURO:oscuro]
+[FN_RADIAR:radiar]
+[FN_OBSERVAR:observar]
+[IDENTIFIER:eclipsado]
+[IDENTIFIER:despejes]
+[IDENTIFIER:orbital]
+[IDENTIFIER:constelaciones]
+[IDENTIFIER:planetas]
+[IDENTIFIER:planetario]
+[IDENTIFIER:estrellado]
+[IDENTIFIER:radiarlo]
+[IDENTIFIER:big_bang2]
+[IDENTIFIER:agujero_negro_x]
+[IDENTIFIER:supernova9]
+[IDENTIFIER:_radiar]
+[IDENTIFIER:radiador]
+[IDENTIFIER:observatorio]
+[IDENTIFIER:cometas]
+[IDENTIFIER:colisiones]
+[OP_OSCURIDAD:oscuridad]
+[KW_OSCURO:oscuro]
+[IDENTIFIER:oscurecer]
+
+Pruebas de operadores
+./scanner < operadores.txt
+[IDENTIFIER:a]
+[OP_EXPANSION:expansion]
+[IDENTIFIER:b]
+[IDENTIFIER:a]
+[GT:>]
+[IDENTIFIER:b]
+[IDENTIFIER:x]
+[OP_CONVERGENCIA:convergencia]
+[IDENTIFIER:y]
+[INC:++]
+[PLUS:+]
+[AND:&&]
+[OP_CONVERGENCIA:convergencia]
+[OR:||]
+[OP_SUPERPOSICION:superposicion]
+[PLUS_ASSIGN:+=]
+[PLUS_ASSIGN:+=]
+[PLUS:+]
+
+Pruebas de literales
+./scanner < literals.txt
+[INT_LITERAL:0]
+[INT_LITERAL:123]
+[FLOAT_LITERAL:3.14]
+[FLOAT_LITERAL:10.5e-2]
+[CHAR_LITERAL:'a']
+[CHAR_LITERAL:'\n']
+[STRING_LITERAL:"hola \"mundo\""]
+[STRING_LITERAL:""]
+[ERROR:"este string no cierra]
+[ERROR:'xddddd]
+[ERROR:']
+[IDENTIFIER:variable_1]
+[IDENTIFIER:galaxia_x]
+
+Pruebas de errores
+./scanner < errores.txt
+Error: carácter no reconocido '@' en línea 1
+[ERROR:@]
+Error: carácter no reconocido '#' en línea 2
+[ERROR:#]
+Error: carácter no reconocido '$' en línea 3
+[ERROR:$]
+Error: carácter no reconocido '~' en línea 4
+[ERROR:~]
+Error: carácter no reconocido '?' en línea 4
+[ERROR:?]
+
+Prueba completa
+./scanner < prueba.txt 
+[KW_BIG_BANG:big_bang]
+[KW_PLANETA:planeta]
+[IDENTIFIER:p]
+[ASSIGN:=]
+[INT_LITERAL:123]
+[SEMICOLON:;]
+[KW_ESTRELLA:estrella]
+[IDENTIFIER:e]
+[ASSIGN:=]
+[FLOAT_LITERAL:3.14]
+[SEMICOLON:;]
+[KW_ECLIPSE:eclipse]
+[LPAREN:(]
+[IDENTIFIER:p]
+[GE:>=]
+[INT_LITERAL:100]
+[RPAREN:)]
+[LBRACE:{]
+[FN_RADIAR:radiar]
+[LPAREN:(]
+[STRING_LITERAL:"hola \"mundo\"\n"]
+[RPAREN:)]
+[SEMICOLON:;]
+[RBRACE:}]
+[KW_DESPEJE:despeje]
+[LBRACE:{]
+[IDENTIFIER:p]
+[PLUS_ASSIGN:+=]
+[INT_LITERAL:1]
+[SEMICOLON:;]
+[RBRACE:}]
+[KW_MUERTE_TERMICA:muerte_termica]
+\end{lstlisting}
+Podemos ver que si genera la salida con el formato de \texttt{[TOKEN: LEXEMA]}, además que si nos reporta bien la linea exacta en la que ocurrio un error o encontro caracteres no reconocidos.
 
 \subsection*{Bitácora de casos límite y depuración léxica}
 
+\noindent Para la parte de Operadores y Delimitadores, el principal caso límite enfrentado fue la resolución de ambigüedades en secuencias consecutivas de símbolos matemáticos, como el lexema \texttt{+++} o la diferenciación entre \verb|>| y \verb|>=|. Este problema radicaba en que Flex podía interpretar anticipadamente caracteres individuales y dividir operadores compuestos si las reglas no estaban estructuradas lógicamente. La solución implementada consistió en aprovechar la regla de la coincidencia más larga (\textit{longest match}) natural de Flex, estructurando el bloque de operadores en \texttt{scanner.l} en un orden estricto de longitud descendente. Se colocaron primero las asignaciones compuestas de 3 caracteres (como \verb|<<=|), seguidas por las de 2 caracteres (como \texttt{++}, \texttt{+=}) y, finalmente, los caracteres simples (\texttt{+}, \texttt{=}). Esto garantizó que lexemas de prueba como \texttt{+=+} se reconocieran correctamente como \texttt{TOK\_PLUS\_ASSIGN} seguido de \texttt{TOK\_PLUS}.
+
+\noindent Para la parte de los comentarios tuvimos un problema porque se generó un ciclo infinito en la terminal al momento de intentar procesar un comentario de varias líneas que no fue cerrado antes del fin del archivo, esto porque cuando flex detecto el error dentro del estado \texttt{<COMMENT>} se devolvia un \texttt{TOK\_ERROR} pero no salía de ese estado, así que forzamos la salida de ese estado con la instrucción \texttt{BEGIN(INITIAL);} justo antes del \texttt{return TOK\_ERROR;} para que el escáner vuelva al estado inicial y pueda continuar con la lectura del archivo.
+
 \subsection*{Limitaciones conocidas y deuda técnica}
+
+\noindent En cuanto a los operadores a nivel de bits, una limitación del diseño léxico es que se modelaron como palabras de texto (\texttt{convergencia}, \texttt{expansion}, \texttt{oscuridad}) para adaptarse a la temática del lenguaje \textit{CosmoLang}. Debido a que Flex evalúa mediante expresiones regulares sin contexto sintáctico, estas palabras coinciden idénticamente con el patrón definido para los identificadores (\texttt{ID}). Aunque el conflicto se resolvió declarando las reglas de los operadores literales en bloques superiores a la regla de identificadores, la deuda técnica podría ser que los usuarios del lenguaje tienen estrictamente prohibido utilizar palabras como \texttt{expansion} o \texttt{superposicion} para nombrar variables o funciones, ya que el escáner las interceptará forzosamente como operadores, limitando el vocabulario disponible para el programador.
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
-No se que va a aquí xd
 
 \begin{itemize}
     \item \textbf{Isaac Giovani Escobar González}:
+
+    \textbf{Comentarios anidados.}
+
+    Para lograr el reconocimiento de comentarios de bloque anidados (como \texttt{/*.../*...*/...*/}), se utilizó la directiva de estado exclusivo \texttt{\%x COMMENT} junto con una variable global entera llamada \texttt{comentario\_profundidad} para llevar el registro del nivel de anidamiento.
+
+    Cuando el escáner detecta la apertura de un comentario con \texttt{/*}, inicializa \texttt{comentario\_profundidad} a 1 y cambia al estado \texttt{COMMENT} usando \texttt{BEGIN(COMMENT)}. Dentro de este estado, cada vez que se encuentra otra apertura de comentario (\texttt{/*}), se incrementa \texttt{comentario\_profundidad}. Por el contrario, al encontrar un cierre de comentario (\texttt{*/}), se decrementa la variable. Cuando \texttt{comentario\_profundidad} llega a cero, significa que todos los comentarios anidados han sido cerrados, y el escáner retorna al estado inicial con \texttt{BEGIN(INITIAL)}.
+
+    \begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=7cm]{images/isaacScanner.l.png}
+        \caption{Archivo modificado.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=7cm]{images/isaacTerminal.png}
+        \caption{Salida en terminal.}
+    \end{minipage}
+    
+    \vspace{0.5cm}
+
+    \includegraphics[height=4cm]{images/isaacPrueba.png}
+    \caption{Archivo de prueba.}
+\end{figure}
+
+    \newpage
+
     \item \textbf{Kevin Jonathan Garduño Escobar}:
     \item \textbf{Antonio Tonatiuh González Gutiérrez}:
     \item \textbf{Rodrigo Zaldivar Alanis}:
