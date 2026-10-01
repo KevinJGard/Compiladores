@@ -294,6 +294,8 @@ Podemos ver que si genera la salida con el formato de \texttt{[TOKEN: LEXEMA]}, 
 
 \noindent En cuanto a los operadores a nivel de bits, una limitación del diseño léxico es que se modelaron como palabras de texto (\texttt{convergencia}, \texttt{expansion}, \texttt{oscuridad}) para adaptarse a la temática del lenguaje \textit{CosmoLang}. Debido a que Flex evalúa mediante expresiones regulares sin contexto sintáctico, estas palabras coinciden idénticamente con el patrón definido para los identificadores (\texttt{ID}). Aunque el conflicto se resolvió declarando las reglas de los operadores literales en bloques superiores a la regla de identificadores, la deuda técnica podría ser que los usuarios del lenguaje tienen estrictamente prohibido utilizar palabras como \texttt{expansion} o \texttt{superposicion} para nombrar variables o funciones, ya que el escáner las interceptará forzosamente como operadores, limitando el vocabulario disponible para el programador.
 
+Por otro lado, la cantidad de caracteres que se pueden representar en cadenas o como \textit{chars}, es limitada, ya que nuestro programa solo da soporte a cadenas de chars en C, basadas en ASCII. Se excluye una gran cantidad de caracteres, como los caracteres multi-byte. Esto impide la representación correcta de palabras en español con acentos así como muchos otros caracteres que sí son soportados por UTF-8. 
+
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
 
@@ -405,8 +407,42 @@ Podemos ver que si genera la salida con el formato de \texttt{[TOKEN: LEXEMA]}, 
 
 \newpage
     
-    \item \textbf{Rodrigo Zaldivar Alanis}:
+\item \textbf{Rodrigo Zaldivar Alanis}:
+  
+    \textbf{Comentarios anidados.}
+    La implementación de comentarios anidados en un lenguaje de programación es útil para cuando un usuario del lenguaje necesita comentar temporalmente una función, que frecuentemente se debe a que se realizará una depuración. En lenguajes donde esta función no está implementada, al encontrar un comentario dentro de otro comentario, al leer el caracter de cierre (comúnmente */) en el comentario anidado, el lexer lo interpreta como que todo el bloque de comentario ha sido cerrado, lo cuál deja al programa en un estado inconsiste que no es reconocido por el lexer. Para solventar esta problemática, se simula un \textit{push down automaton}. Se hace uso de una variable definida en la cabecera del programa que lleve la cuenta de los niveles de profundidad en los comentarios anidados. La implementación de los comentarios anidados está en la sección de reglas. Cada que se lee la de apertura de comentario, la variable es incrementadad en uno. Cuando lee el cierre de un comentario, decrementa la variable en uno. De tal manera que cuando se sale de todo el bloque de comentarios, el contador de profundidad debe valer cero. Si el lexer lee end of file y el contador de profundidad $> 0$, se manda error. Si se lee un símbolo dentro de los comentarios de tal manera que este no es de inicio o fin de comentario, este simplemente se ignora.
+    \newpage
+    \begin{figure}[H]
+    \begin{minipage}{0.6\textwidth}
+        \centering
+        \includegraphics[width=13cm]{images/rorrisImp.png}
+        \caption{Implementación de comentarios anidados con flex. La variable profundidad fue declarada como entera estática en el primer bloque del archivo scanner\.l}
+    \end{minipage}
+
+    \begin{minipage}{0.6\textwidth}
+        \centering
+        \includegraphics[width=13cm]{images/rorrisTest.png}
+        \caption{Archivo de pruebas para comentarios.}
+    \end{minipage}
+    \end{figure}
+
+    Para probarlo, tomaremos dos casos. El del camino feliz, en el cuál se omite la última línea que es la que genera un error debido a que los comentarios no cierran apropiadamanete antes de encontrar el símbolo de fin de archivo. Esta entrada no debería arrojar nada. Por otro lado, si incluimos la última línea, la ejecución debe darnos un error.
+
+    \begin{figure}[H]
+      \begin{minipage}{0.6\textwidth}
+        \centering
+        \includegraphics[width=13cm]{images/rorrisTerminal.png}
+        \caption{Salida en terminal con camino feliz.}
+      \end{minipage}
+      
+      \begin{minipage}{0.6\textwidth}
+        \centering
+        \includegraphics[width=13cm]{images/rorrisTerminal2.png}
+        \caption{Salida en terminal con camino no feliz por comentarios sin cerrar.}
+      \end{minipage}
+    \end{figure}
 \end{itemize}
+
 
 \newpage
 \subsection*{Evaluación de la Práctica}
