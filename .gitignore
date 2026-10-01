@@ -1,7 +1,6 @@
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
-Makefile
 build/
 regex_to_nfa
 *.o

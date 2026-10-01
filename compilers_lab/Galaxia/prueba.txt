@@ -1,4 +1,4 @@
-meteorito / Programa de prueba / meteorito
+meteorito* Programa de prueba *meteorito
 big_bang
     planeta p = 123;
     estrella e = 3.14;
