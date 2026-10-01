@@ -1,0 +1,12 @@
+meteorito / Programa de prueba / meteorito
+big_bang
+    planeta p = 123;
+    estrella e = 3.14;
+
+    meteorito Verificando
+    eclipse (p >= 100) {
+        radiar("hola \"mundo\"\n");
+    } despeje {
+        p += 1;
+    }
+muerte_termica

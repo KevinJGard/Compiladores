@@ -1,0 +1,155 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm, bm}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+%% Sets page size and margins
+\usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{gensymb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{Compiladores}
+\fancyhead[C]{Práctica 4}
+\fancyhead[R]{Facultad de Ciencias UNAM}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{gray!10},
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    frameround=tttt
+}
+
+\lstset{
+    inputencoding=utf8,
+    extendedchars=true,
+    literate=
+        {á}{{\'a}}1
+        {é}{{\'e}}1
+        {í}{{\'i}}1
+        {ó}{{\'o}}1
+        {ú}{{\'u}}1
+        {Á}{{\'A}}1
+        {É}{{\'E}}1
+        {Í}{{\'I}}1
+        {Ó}{{\'O}}1
+        {Ú}{{\'U}}1
+        {ñ}{{\~n}}1
+        {Ñ}{{\~N}}1
+        {ü}{{\"u}}1
+        {Ü}{{\"U}}1
+}
+
+
+\title{
+    \vspace*{-2.5cm}
+    \setlength{\parindent}{0cm} %Indentation 0
+    \rule{\linewidth}{0.1mm}
+    \vspace*{-1.4cm}
+    \begin{center}
+        \begin{minipage}{2.5cm}
+            \begin{center}
+            \includegraphics[height=3.4cm]{images/Logo_UNAM.png}
+            \end{center}
+        \end{minipage}\hfill
+        %--------------
+        \hspace{0.3cm}
+        \begin{minipage}{11cm}
+            \begin{center}
+            \normalfont \small \textsc{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO \\ FACULTAD DE CIENCIAS \\ Compiladores } \\
+    		\normalsize \textbf{Práctica 4}\\
+            \normalsize \textsc{Flex}\\
+            \end{center}
+        \end{minipage}\hfill
+        %--------------
+        \begin{minipage}{3cm}
+            \begin{center}
+            \includegraphics[height=3.6cm]{images/Logo_FC.png}
+            \end{center}
+        \end{minipage}
+    \end{center}
+    \vspace*{-0.25cm}
+    \rule{\linewidth}{0.1mm}
+    \vspace*{0.5cm}
+    {\normalsize \textbf{Integrantes:} \par}
+    \vspace{-0.5cm}
+    \begin{tabular}{{l@{\hspace{1cm}}r}}
+        \vspace*{-0.5cm}
+        \small Escobar Gonzalez Isaac Giovani & \small 321336400 \\
+        \vspace*{-0.5cm}
+        \small Garduño Escobar Kevin Jonathan & \small 321070629 \\
+        \vspace*{-0.5cm}
+        \small González Gutiérrez Antonio Tonatiuh & \small 321195476 \\
+        \vspace*{-0.5cm}
+        \small Zaldivar Alanis Rodrigo & \small 424029605
+    \end{tabular}
+    \date{}
+}
+
+\begin{document}
+\maketitle
+\vspace*{-2.5cm}
+\subsection*{Estrategia de diseño léxico y condiciones de inicio}
+
+\subsection*{Instrucciones de compilación y ejecución de pruebas}
+
+\subsection*{Bitácora de casos límite y depuración léxica}
+
+\subsection*{Limitaciones conocidas y deuda técnica}
+
+\newpage
+\subsection*{Validación de Trabajo Presencial / Reposición Teórica}
+No se que va a aquí xd
+
+\begin{itemize}
+    \item \textbf{Isaac Giovani Escobar González}:
+    \item \textbf{Kevin Jonathan Garduño Escobar}:
+    \item \textbf{Antonio Tonatiuh González Gutiérrez}:
+    \item \textbf{Rodrigo Zaldivar Alanis}:
+\end{itemize}
+
+\newpage
+\subsection*{Evaluación de la Práctica}
+\noindent Grado de acuerdo con cada una de las siguientes afirmaciones utilizando una escala de 1 a 5, donde:
+\begin{itemize}
+    \item 1: Totalmente en desacuerdo
+    \item 2: En desacuerdo
+    \item 3: Neutral
+    \item 4: De acuerdo
+    \item 5: Totalmente de acuerdo
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|c|c|c|c|c|}
+        \hline
+        \textbf{Criterio / Afirmación} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} \\
+        \hline
+        Los conceptos y habilidades desarrollados en esta práctica son relevantes para mi formación profesional. &  &  & \checkmark &  &  \\
+        \hline
+        El trabajo realizado me permitió comprender de forma práctica la teoría revisada en clase. &  &  &  & \checkmark &  \\
+        \hline
+        Las actividades y problemáticas planteadas durante la sesión resultaron atractivas y motivadoras. &  &  & \checkmark &  &  \\
+        \hline
+        El enfoque práctico y los retos propuestos captaron mi interés a lo largo del desarrollo. &  &  &  & \checkmark &  \\
+        \hline
+        El nivel de complejidad técnica fue adecuado respecto a los conocimientos y recursos previos disponibles. &  &  &  & \checkmark &  \\
+        \hline
+        La claridad de la guía permitió realizar la práctica de manera fluida y sin bloques innecesarios. &  &  & \checkmark &  &  \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\end{document}
