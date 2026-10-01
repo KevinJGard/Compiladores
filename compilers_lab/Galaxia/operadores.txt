@@ -1,0 +1,7 @@
+a expansion b
+a>b
+x convergencia y
++++
+&& convergencia
+|| superposicion
++= +=+

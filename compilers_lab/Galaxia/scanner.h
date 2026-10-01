@@ -50,17 +50,17 @@ typedef enum ScannerToken {
 	TOK_STRING_LITERAL,
 	TOK_CHAR_LITERAL,
 
-	/* operadores y delimitadores*/
+	/* Operadores y Delimitadores*/
 
-	/* Operadores de bits, escritos como palabra en CosmoLang.
-	   OJO: estos matchean el patron de identificador, asi que
-	   sus reglas van ANTES de la regla de IDs. */
+	/* Operadores de bits, escritos como palabra en CosmoLang. */
 	TOK_OP_CONVERGENCIA,    /* convergencia   &  */
 	TOK_OP_SUPERPOSICION,   /* superposicion  |  */
 	TOK_OP_INTERFERENCIA,   /* interferencia  ^  */
 	TOK_OP_OSCURIDAD,       /* oscuridad      ~  */
 	TOK_OP_EXPANSION,       /* expansion      << */
 	TOK_OP_CONTRACCION,     /* contraccion    >> */
+	TOK_OP_EXPANSION_ASSIGN,  /* <<= */
+	TOK_OP_CONTRACCION_ASSIGN,/* >>= */
 
 	/* Aritmeticos */
 	TOK_PLUS,

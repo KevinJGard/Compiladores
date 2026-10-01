@@ -68,8 +68,6 @@ WS          [ \t\r\n]+
 
  /* 
     3. OPERADORES Y DELIMITADORES   
-    (bloque provision)
-
     */
 
 "convergencia"          { return TOK_OP_CONVERGENCIA; }
@@ -78,6 +76,9 @@ WS          [ \t\r\n]+
 "oscuridad"             { return TOK_OP_OSCURIDAD; }
 "expansion"             { return TOK_OP_EXPANSION; }
 "contraccion"           { return TOK_OP_CONTRACCION; }
+
+"<<="                   { return TOK_OP_EXPANSION_ASSIGN; }
+">>="                   { return TOK_OP_CONTRACCION_ASSIGN; }
 
 "++"                    { return TOK_INC; }
 "--"                    { return TOK_DEC; }
