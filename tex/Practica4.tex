@@ -103,13 +103,37 @@
 \vspace*{-2.5cm}
 \subsection*{Estrategia de diseño léxico y condiciones de inicio}
 
-\noindent Para gestionar el contexto de los comentarios multilinea que lleva el siguiente estilo:
+\noindent Nuestro lenguaje lleva por nombre CosmoLang. En él se sustituyen las
+palabras reservadas habituales por términos astronómicos (\texttt{planeta} por
+variable, \texttt{eclipse} por condicional, \texttt{radiar} por impresión), y
+los operadores a nivel de bits también se escriben como palabras
+(\texttt{convergencia}, \texttt{expansion}).
+
+\noindent Colocamos todas las palabras reservadas, las funciones nativas y los
+operadores literales antes de la regla \texttt{\{ID\}}. Lo hicimos así porque
+todo ese vocabulario encaja en el mismo patrón que define a los
+identificadores, de modo que el orden resulta determinante.
+
+\noindent lo hicimos asi porque  Flex resuelve el conflicto en dos niveles.
+Cuando las dos reglas coinciden con la misma longitud, como ocurre con
+\texttt{planeta}, gana la que aparece primero y el lexema se clasifica como
+\texttt{KW\_PLANETA}.
+
+\noindent Cuando una regla logra una coincidencia más larga, como ocurre con
+\texttt{planetario}, Flex la prefiere sin importar el orden y el lexema se
+clasifica como \texttt{IDENTIFIER}.
+
+\noindent Para gestionar el contexto de los comentarios multilinea que lleva el
+siguiente estilo:
 \begin{lstlisting}[style=bashstyle]
 meteorito*
     ...
     ...
 *meteorito
 \end{lstlisting}
+
+
+
 Se definió un estado exclusivo como \texttt{\%x COMMENT}. El uso de esta condición de inicio permite que el escáner reconozca la apertura del comentario con \texttt{meteorito*} y cambie al estado \texttt{COMMENT}, donde se ignoran todos los caracteres hasta encontrar la secuencia de cierre \texttt{*meteorito}. Esto asegura que el contenido del comentario no interfiera con la tokenización de otros elementos del lenguaje.
 
 \subsection*{Instrucciones de compilación y ejecución de pruebas}
@@ -307,7 +331,43 @@ Podemos ver que si genera la salida con el formato de \texttt{[TOKEN: LEXEMA]}, 
     \newpage
 
     \item \textbf{Kevin Jonathan Garduño Escobar}:
+    
     \item \textbf{Antonio Tonatiuh González Gutiérrez}:
+    \textbf{Operadores de asignación compuesta y pre/post incremento.}
+
+      La ambigüedad entre \texttt{+}, \texttt{++} y \texttt{+=} ya estaba
+    resuelta en la plantilla, porque Flex elige siempre la coincidencia más
+    larga: ante \texttt{+++} prueba los tres caracteres, no halla regla, toma
+    \texttt{++} y entrega el tercero como \texttt{+}.  pero lo que sí faltaba es
+    que la plantilla devolvía el mismo token \texttt{INC} para \texttt{a++} y
+    para \texttt{++a}, y ninguna regla puede distinguirlos mirando solo el
+    lexema: la diferencia está en lo que vino antes. Por eso le di al
+    analizador una memoria del último token emitido, desdoblé \texttt{INC} y
+    \texttt{DEC} en sus variantes prefija y sufija, y definí que el operador es
+    sufijo cuando lo anterior pudo cerrar un operando (identificador, literal
+    numérico, paréntesis o corchete derecho). La limitación es que solo observa
+    una ventana de un token, así que \texttt{a++++b} produce dos
+    \texttt{POST\_INC} seguidos, algo inválido en C que solo el análisis
+    sintáctico puede detectar.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/antonioScanner.png}
+    \caption{Reglas modificadas en scanner.l}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/antonioScanner2.png}
+    \caption{Tokens y funciones agregadas}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/antonioTerminal.png}
+    \caption{Salida en terminal}
+\end{figure}
+    
     \item \textbf{Rodrigo Zaldivar Alanis}:
 \end{itemize}
 
