@@ -1,0 +1,469 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm, bm}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+%% Sets page size and margins
+\usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{gensymb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{Compiladores}
+\fancyhead[C]{Práctica 5}
+\fancyhead[R]{Facultad de Ciencias UNAM}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcommand{\nt}[1]{\textit{#1}}          % no terminal
+\newcommand{\tl}[1]{\texttt{#1}}          % terminal
+\newcommand{\der}{\ensuremath{\rightarrow}}
+
+\title{
+    \vspace*{-2.5cm}
+    \setlength{\parindent}{0cm} %Indentation 0
+    \rule{\linewidth}{0.1mm}
+    \vspace*{-1.4cm}
+    \begin{center}
+        \begin{minipage}{2.5cm}
+            \begin{center}
+            \includegraphics[height=3.4cm]{images/Logo_UNAM.png}
+            \end{center}
+        \end{minipage}\hfill
+        %--------------
+        \hspace{0.3cm}
+        \begin{minipage}{11cm}
+            \begin{center}
+            \normalfont \small \textsc{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO \\ FACULTAD DE CIENCIAS \\ Compiladores } \\
+    		\normalsize \textbf{Práctica 5: Parsers LR(0) y SLR(1)}\\
+            \normalsize \textsc{Construcción de Tablas y Motor de Ejecución}\\
+            \end{center}
+        \end{minipage}\hfill
+        %--------------
+        \begin{minipage}{3cm}
+            \begin{center}
+            \includegraphics[height=3.6cm]{images/Logo_FC.png}
+            \end{center}
+        \end{minipage}
+    \end{center}
+    \vspace*{-0.25cm}
+    \rule{\linewidth}{0.1mm}
+    \vspace*{0.5cm}
+    {\normalsize \textbf{Integrantes:} \par}
+    \vspace{-0.5cm}
+    \begin{tabular}{{l@{\hspace{1cm}}r}}
+        \vspace*{-0.5cm}
+        \small Escobar Gonzalez Isaac Giovani & \small 321336400 \\
+        \vspace*{-0.5cm}
+        \small Garduño Escobar Kevin Jonathan & \small 321070629 \\
+        \vspace*{-0.5cm}
+        \small González Gutiérrez Antonio Tonatiuh & \small 321195476 \\
+        \vspace*{-0.5cm}
+        \small Zaldivar Alanis Rodrigo & \small 424029605
+    \end{tabular}
+    \date{}
+}
+
+\begin{document}
+\maketitle
+\vspace*{-2.5cm}
+
+\section{La gramática}
+
+El lenguaje elegido es \textbf{CosmoLang}, de temática astronómica. La
+gramática tiene 21 producciones, 8 no terminales y 22 terminales. El
+símbolo inicial es \nt{P}.
+
+\begin{center}
+\begin{tabular}{r l c l}
+\toprule
+\# & \multicolumn{3}{l}{Producción} \\
+\midrule
+ 1 & \nt{P}  & \der & \tl{big\_bang} \nt{Cu} \tl{muerte\_termica} \\
+ 2 & \nt{Cu} & \der & \nt{Cu} \nt{C} \\
+ 3 & \nt{Cu} & \der & \nt{C} \\
+ 4 & \nt{C}  & \der & \tl{planeta} \nt{TI} \tl{id} \tl{=} \nt{E} \tl{;} \\
+ 5 & \nt{C}  & \der & \tl{estrella} \tl{id} \tl{=} \nt{E} \tl{;} \\
+ 6 & \nt{C}  & \der & \tl{orbita} \tl{id} \tl{\{} \nt{Cu} \tl{\}} \\
+ 7 & \nt{C}  & \der & \tl{eclipse} \tl{(} \nt{E} \tl{)} \tl{\{} \nt{Cu} \tl{\}} \\
+ 8 & \nt{C}  & \der & \tl{eclipse} \tl{(} \nt{E} \tl{)} \tl{\{} \nt{Cu} \tl{\}} \tl{despeje} \tl{\{} \nt{Cu} \tl{\}} \\
+ 9 & \nt{TI} & \der & \tl{rocoso} \\
+10 & \nt{TI} & \der & \tl{gaseoso} \\
+11 & \nt{TI} & \der & \tl{nebulosa} \\
+12 & \nt{E}  & \der & \nt{E} \tl{superposicion} \nt{T} \\
+13 & \nt{E}  & \der & \nt{T} \\
+14 & \nt{T}  & \der & \nt{T} \tl{interferencia} \nt{U} \\
+15 & \nt{T}  & \der & \nt{U} \\
+16 & \nt{U}  & \der & \nt{U} \tl{convergencia} \nt{V} \\
+17 & \nt{U}  & \der & \nt{V} \\
+18 & \nt{V}  & \der & \tl{oscuridad} \nt{V} \\
+19 & \nt{V}  & \der & \tl{(} \nt{E} \tl{)} \\
+20 & \nt{V}  & \der & \tl{id} \\
+21 & \nt{V}  & \der & \tl{num} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Observación previa.} La gramática \textbf{no contiene
+producciones $\varepsilon$}: ningún no terminal deriva la cadena vacía.
+Esto simplifica el cálculo de ambos conjuntos, porque elimina el caso en
+que un símbolo del lado derecho puede desaparecer y obliga a seguir
+examinando los símbolos posteriores. En particular, en la regla
+\textbf{R2} de Follow nunca es necesario propagar más allá del símbolo
+inmediatamente siguiente.
+
+\section{Conjuntos First}
+
+\subsection{Definición y reglas}
+
+$\mathrm{First}(X)$ es el conjunto de terminales que pueden aparecer como
+\emph{primer} símbolo de alguna cadena derivable a partir de $X$. Dado que
+no hay producciones $\varepsilon$, basta aplicar dos casos:
+
+\begin{itemize}
+  \item Si existe una producción $X \der a\,\alpha$ con $a$ terminal,
+        entonces $a \in \mathrm{First}(X)$ y no se examina $\alpha$.
+  \item Si existe una producción $X \der Y\,\alpha$ con $Y$ no terminal,
+        entonces $\mathrm{First}(Y) \subseteq \mathrm{First}(X)$.
+\end{itemize}
+
+Las producciones recursivas por la izquierda ($X \der X\,\alpha$) no
+aportan información: el primer símbolo de $X\,\alpha$ es el primer símbolo
+de $X$, que es precisamente la incógnita. Se descartan.
+
+El cálculo se realiza de abajo hacia arriba, comenzando por los no
+terminales que no dependen de ningún otro.
+
+\subsection{Derivación}
+
+\paragraph{$\mathrm{First}(V)$.} Las cuatro producciones de \nt{V}
+(18--21) comienzan con terminal, de modo que el conjunto se obtiene
+directamente sin consultar a ningún otro no terminal:
+\[
+  \mathrm{First}(V) = \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \}
+\]
+
+\paragraph{$\mathrm{First}(U)$.} La producción 16 es recursiva por la
+izquierda y se descarta. Queda la 17, $\nt{U} \der \nt{V}$, por lo que
+$\mathrm{First}(U) = \mathrm{First}(V)$:
+\[
+  \mathrm{First}(U) = \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \}
+\]
+
+\paragraph{$\mathrm{First}(T)$.} Idéntico razonamiento: la 14 se descarta
+y la 15 da $\mathrm{First}(T) = \mathrm{First}(U)$:
+\[
+  \mathrm{First}(T) = \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \}
+\]
+
+\paragraph{$\mathrm{First}(E)$.} La 12 se descarta y la 13 da
+$\mathrm{First}(E) = \mathrm{First}(T)$:
+\[
+  \mathrm{First}(E) = \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \}
+\]
+
+Los cuatro niveles de la jerarquía de expresiones comparten el mismo
+conjunto First. Esto es consistente con el diseño: una expresión siempre
+comienza con un operando (identificador, literal, paréntesis de apertura
+u operador unario prefijo), y los niveles de precedencia sólo introducen
+estructura en posiciones interiores, nunca en la inicial.
+
+\paragraph{$\mathrm{First}(TI)$.} Las tres producciones (9--11) comienzan
+con terminal:
+\[
+  \mathrm{First}(TI) = \{\ \tl{rocoso},\ \tl{gaseoso},\ \tl{nebulosa}\ \}
+\]
+
+\paragraph{$\mathrm{First}(C)$.} Las cinco producciones (4--8) comienzan
+con terminal. Las producciones 7 y 8 aportan ambas \tl{eclipse}, que al
+tratarse de un conjunto se registra una sola vez:
+\[
+  \mathrm{First}(C) = \{\ \tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \}
+\]
+
+\paragraph{$\mathrm{First}(Cu)$.} La producción 2 es recursiva por la
+izquierda y se descarta; la 3 da $\mathrm{First}(Cu) = \mathrm{First}(C)$:
+\[
+  \mathrm{First}(Cu) = \{\ \tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \}
+\]
+
+\paragraph{$\mathrm{First}(P)$.} La única producción comienza con
+terminal:
+\[
+  \mathrm{First}(P) = \{\ \tl{big\_bang}\ \}
+\]
+
+\subsection{Resumen}
+
+\begin{center}
+\begin{tabular}{>{$}c<{$} l}
+\toprule
+\text{No terminal} & $\mathrm{First}$ \\
+\midrule
+P  & \{\ \tl{big\_bang}\ \} \\
+Cu & \{\ \tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \} \\
+C  & \{\ \tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \} \\
+TI & \{\ \tl{rocoso},\ \tl{gaseoso},\ \tl{nebulosa}\ \} \\
+E  & \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \} \\
+T  & \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \} \\
+U  & \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \} \\
+V  & \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Conjuntos Follow}
+
+\subsection{Definición y reglas}
+
+$\mathrm{Follow}(A)$ es el conjunto de terminales que pueden aparecer
+inmediatamente a la derecha de $A$ en alguna derivación a partir del
+símbolo inicial. Se aplican tres reglas:
+
+\begin{description}
+  \item[R1] $\$ \in \mathrm{Follow}(S)$, donde $S$ es el símbolo inicial.
+  \item[R2] Si existe una producción $A \der \alpha\,B\,\beta$ con
+        $\beta \neq \epsilon$, entonces
+        $\mathrm{First}(\beta) \subseteq \mathrm{Follow}(B)$.
+  \item[R3] Si existe una producción $A \der \alpha\,B$ (es decir, $B$
+        ocupa la última posición), entonces
+        $\mathrm{Follow}(A) \subseteq \mathrm{Follow}(B)$.
+\end{description}
+
+Al no haber producciones $\varepsilon$, la regla R3 se activa únicamente
+cuando $B$ aparece literalmente al final del lado derecho.
+
+El procedimiento consiste en localizar \emph{todas} las apariciones de
+cada no terminal en los lados derechos de la gramática y examinar qué
+símbolo lo sigue en cada caso.
+
+\subsection{Derivación}
+
+\paragraph{$\mathrm{Follow}(P)$.} \nt{P} es el símbolo inicial, por lo que
+R1 aporta \$. Además \nt{P} no aparece en ningún lado derecho, de modo que
+no hay más contribuciones:
+\[
+  \mathrm{Follow}(P) = \{\ \$\ \}
+\]
+
+\paragraph{$\mathrm{Follow}(TI)$.} \nt{TI} aparece una única vez, en la
+producción 4:
+\[
+  \nt{C} \der \tl{planeta}\ \underline{\nt{TI}}\ \tl{id}\ \tl{=}\ \nt{E}\ \tl{;}
+\]
+Por R2 con $\beta = \tl{id}\ \tl{=}\ \nt{E}\ \tl{;}$, cuyo First es
+\tl{id}:
+\[
+  \mathrm{Follow}(TI) = \{\ \tl{id}\ \}
+\]
+
+\paragraph{$\mathrm{Follow}(Cu)$ y $\mathrm{Follow}(C)$.} Estos dos
+conjuntos se calculan conjuntamente porque son mutuamente dependientes.
+Las apariciones de \nt{Cu} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{P} \der \tl{big\_bang}\ \nt{Cu}\ \tl{muerte\_termica}$ & R2 & \tl{muerte\_termica} \\
+$\nt{Cu} \der \nt{Cu}\ \nt{C}$ & R2 & $\mathrm{First}(C)$ \\
+$\nt{C} \der \tl{orbita}\ \tl{id}\ \tl{\{}\ \nt{Cu}\ \tl{\}}$ & R2 & \tl{\}} \\
+$\nt{C} \der \tl{eclipse}\ \tl{(}\ \nt{E}\ \tl{)}\ \tl{\{}\ \nt{Cu}\ \tl{\}}$ & R2 & \tl{\}} \\
+$\nt{C} \der \ldots \tl{\{}\ \nt{Cu}\ \tl{\}}\ \tl{despeje} \ldots$ (1.\textsuperscript{a} aparición) & R2 & \tl{\}} \\
+$\nt{C} \der \ldots \tl{despeje}\ \tl{\{}\ \nt{Cu}\ \tl{\}}$ (2.\textsuperscript{a} aparición) & R2 & \tl{\}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Las apariciones de \nt{C} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{Cu} \der \nt{Cu}\ \nt{C}$ & R3 & $\mathrm{Follow}(Cu)$ \\
+$\nt{Cu} \der \nt{C}$ & R3 & $\mathrm{Follow}(Cu)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+En ambos casos \nt{C} ocupa la última posición, por lo que
+$\mathrm{Follow}(C) = \mathrm{Follow}(Cu)$. Sustituyendo
+$\mathrm{First}(C) = \{\tl{planeta}, \tl{estrella}, \tl{orbita}, \tl{eclipse}\}$:
+\begin{align*}
+  \mathrm{Follow}(Cu) = \mathrm{Follow}(C) = \{\ &\tl{muerte\_termica},\ \tl{\}},\\
+  &\tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \}
+\end{align*}
+
+La lectura es coherente con el lenguaje: después de un cuerpo de comandos
+puede aparecer \tl{muerte\_termica} si se trata del cuerpo del programa,
+una llave de cierre si se trata del cuerpo de un bloque, o el primer
+terminal de otro comando, dado que los comandos se encadenan.
+
+\paragraph{$\mathrm{Follow}(E)$.} Las apariciones de \nt{E} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{C} \der \tl{planeta}\ \nt{TI}\ \tl{id}\ \tl{=}\ \nt{E}\ \tl{;}$ & R2 & \tl{;} \\
+$\nt{C} \der \tl{estrella}\ \tl{id}\ \tl{=}\ \nt{E}\ \tl{;}$ & R2 & \tl{;} \\
+$\nt{C} \der \tl{eclipse}\ \tl{(}\ \nt{E}\ \tl{)}\ \tl{\{}\ \nt{Cu}\ \tl{\}}$ & R2 & \tl{)} \\
+$\nt{C} \der \tl{eclipse}\ \tl{(}\ \nt{E}\ \tl{)} \ldots \tl{despeje} \ldots$ & R2 & \tl{)} \\
+$\nt{E} \der \nt{E}\ \tl{superposicion}\ \nt{T}$ & R2 & \tl{superposicion} \\
+$\nt{V} \der \tl{(}\ \nt{E}\ \tl{)}$ & R2 & \tl{)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Ninguna aparición de \nt{E} ocurre en última posición, de modo que R3 no
+interviene:
+\[
+  \mathrm{Follow}(E) = \{\ \tl{;},\ \tl{)},\ \tl{superposicion}\ \}
+\]
+
+\paragraph{$\mathrm{Follow}(T)$.} Las apariciones de \nt{T} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{E} \der \nt{E}\ \tl{superposicion}\ \nt{T}$ & R3 & $\mathrm{Follow}(E)$ \\
+$\nt{E} \der \nt{T}$ & R3 & $\mathrm{Follow}(E)$ \\
+$\nt{T} \der \nt{T}\ \tl{interferencia}\ \nt{U}$ & R2 & \tl{interferencia} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+  \mathrm{Follow}(T) = \mathrm{Follow}(E) \cup \{\tl{interferencia}\}
+  = \{\ \tl{;},\ \tl{)},\ \tl{superposicion},\ \tl{interferencia}\ \}
+\]
+
+\paragraph{$\mathrm{Follow}(U)$.} Las apariciones de \nt{U} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{T} \der \nt{T}\ \tl{interferencia}\ \nt{U}$ & R3 & $\mathrm{Follow}(T)$ \\
+$\nt{T} \der \nt{U}$ & R3 & $\mathrm{Follow}(T)$ \\
+$\nt{U} \der \nt{U}\ \tl{convergencia}\ \nt{V}$ & R2 & \tl{convergencia} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{align*}
+  \mathrm{Follow}(U) &= \mathrm{Follow}(T) \cup \{\tl{convergencia}\} \\
+  &= \{\ \tl{;},\ \tl{)},\ \tl{superposicion},\ \tl{interferencia},\ \tl{convergencia}\ \}
+\end{align*}
+
+\paragraph{$\mathrm{Follow}(V)$.} Las apariciones de \nt{V} son:
+
+\begin{center}
+\begin{tabular}{l l l}
+\toprule
+Producción & Regla & Aporta \\
+\midrule
+$\nt{U} \der \nt{U}\ \tl{convergencia}\ \nt{V}$ & R3 & $\mathrm{Follow}(U)$ \\
+$\nt{U} \der \nt{V}$ & R3 & $\mathrm{Follow}(U)$ \\
+$\nt{V} \der \tl{oscuridad}\ \nt{V}$ & R3 & $\mathrm{Follow}(V)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La tercera fila aporta $\mathrm{Follow}(V) \subseteq \mathrm{Follow}(V)$,
+que es cierto pero vacuo y no añade elementos. Por tanto:
+\begin{align*}
+  \mathrm{Follow}(V) &= \mathrm{Follow}(U) \\
+  &= \{\ \tl{;},\ \tl{)},\ \tl{superposicion},\ \tl{interferencia},\ \tl{convergencia}\ \}
+\end{align*}
+
+\paragraph{Patrón de la jerarquía de expresiones.} Mientras que los cuatro
+niveles comparten el mismo conjunto First, sus conjuntos Follow crecen a
+medida que se desciende: cada nivel hereda el Follow del nivel superior y
+le añade su propio operador. Así, $\mathrm{Follow}(E)$ no contiene
+\tl{interferencia} ni \tl{convergencia}, $\mathrm{Follow}(T)$ contiene
+\tl{interferencia} pero no \tl{convergencia}, y $\mathrm{Follow}(U)$
+contiene ambos. Esta asimetría es exactamente la que permite a SLR(1)
+resolver los conflictos \emph{shift/reduce} de la jerarquía, como se
+detalla en la sección correspondiente.
+
+\newpage
+\subsection*{Validación de Trabajo Presencial / Reposición Teórica}
+
+\begin{itemize}
+    \item \textbf{Isaac Giovani Escobar González}:
+
+    IMG
+
+    \newpage
+
+    \item \textbf{Kevin Jonathan Garduño Escobar}:
+    
+    IMG
+
+    \newpage
+    
+    \item \textbf{Antonio Tonatiuh González Gutiérrez}:
+    
+    IMG
+
+    \newpage
+    
+    \item \textbf{Rodrigo Zaldivar Alanis}:
+    
+    IMG
+\end{itemize}
+
+\newpage
+\subsection*{Evaluación de la Práctica}
+\noindent Grado de acuerdo con cada una de las siguientes afirmaciones utilizando una escala de 1 a 5, donde:
+\begin{itemize}
+    \item 1: Totalmente en desacuerdo
+    \item 2: En desacuerdo
+    \item 3: Neutral
+    \item 4: De acuerdo
+    \item 5: Totalmente de acuerdo
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|c|c|c|c|c|}
+        \hline
+        \textbf{Criterio / Afirmación} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} \\
+        \hline
+        El calcular manualmente el autómata me ayudó a entender por qué LR(0) falla en la vida real. &  &  & \checkmark &  &  \\
+        \hline
+        Programar el motor de la pila por separado de la tabla dejó más clara la arquitectura de un compilador. &  &  &  & \checkmark &  \\
+        \hline
+        El nivel de complejidad técnica fue adecuado y el no usar plantillas permitió mayor libertad creativa en el código. &  &  & \checkmark &  &  \\
+        \hline
+        Las pautas para definir la gramática fueron claras y evitaron bloqueos durante el diseño. &  &  &  & \checkmark &  \\
+        \hline
+        Considero que separar el análisis teórico (a mano) del código fuente redujo mi frustración frente a la computadora. &  &  &  & \checkmark &  \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsection*{Comentarios y Retroalimentación}
+\noindent Por favor, dedica un par de líneas para comentar:
+\begin{itemize}
+    \item ¿Qué aspecto de esta práctica fue tu favorito o te resultó más revelador?
+    \item ¿Qué cambiarías o mejorarías de esta práctica para futuras generaciones?
+\end{itemize}
+
+\end{document}
