@@ -78,7 +78,7 @@
 
 \section{La gramática}
 
-El lenguaje elegido es \textbf{CosmoLang}, de temática astronómica. La
+El lenguaje elegido es \textbf{CosmoLang}. La
 gramática tiene 21 producciones, 8 no terminales y 22 terminales. El
 símbolo inicial es \nt{P}.
 
@@ -114,7 +114,7 @@ símbolo inicial es \nt{P}.
 
 \paragraph{Observación previa.} La gramática \textbf{no contiene
 producciones $\varepsilon$}: ningún no terminal deriva la cadena vacía.
-Esto simplifica el cálculo de ambos conjuntos, porque elimina el caso en
+Porque elimina el caso en
 que un símbolo del lado derecho puede desaparecer y obliga a seguir
 examinando los símbolos posteriores. En particular, en la regla
 \textbf{R2} de Follow nunca es necesario propagar más allá del símbolo
@@ -122,25 +122,7 @@ inmediatamente siguiente.
 
 \section{Conjuntos First}
 
-\subsection{Definición y reglas}
 
-$\mathrm{First}(X)$ es el conjunto de terminales que pueden aparecer como
-\emph{primer} símbolo de alguna cadena derivable a partir de $X$. Dado que
-no hay producciones $\varepsilon$, basta aplicar dos casos:
-
-\begin{itemize}
-  \item Si existe una producción $X \der a\,\alpha$ con $a$ terminal,
-        entonces $a \in \mathrm{First}(X)$ y no se examina $\alpha$.
-  \item Si existe una producción $X \der Y\,\alpha$ con $Y$ no terminal,
-        entonces $\mathrm{First}(Y) \subseteq \mathrm{First}(X)$.
-\end{itemize}
-
-Las producciones recursivas por la izquierda ($X \der X\,\alpha$) no
-aportan información: el primer símbolo de $X\,\alpha$ es el primer símbolo
-de $X$, que es precisamente la incógnita. Se descartan.
-
-El cálculo se realiza de abajo hacia arriba, comenzando por los no
-terminales que no dependen de ningún otro.
 
 \subsection{Derivación}
 
@@ -170,11 +152,6 @@ $\mathrm{First}(E) = \mathrm{First}(T)$:
   \mathrm{First}(E) = \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \}
 \]
 
-Los cuatro niveles de la jerarquía de expresiones comparten el mismo
-conjunto First. Esto es consistente con el diseño: una expresión siempre
-comienza con un operando (identificador, literal, paréntesis de apertura
-u operador unario prefijo), y los niveles de precedencia sólo introducen
-estructura en posiciones interiores, nunca en la inicial.
 
 \paragraph{$\mathrm{First}(TI)$.} Las tres producciones (9--11) comienzan
 con terminal:
@@ -222,23 +199,8 @@ V  & \{\ \tl{oscuridad},\ \tl{(},\ \tl{id},\ \tl{num}\ \} \\
 
 \section{Conjuntos Follow}
 
-\subsection{Definición y reglas}
 
-$\mathrm{Follow}(A)$ es el conjunto de terminales que pueden aparecer
-inmediatamente a la derecha de $A$ en alguna derivación a partir del
-símbolo inicial. Se aplican tres reglas:
-
-\begin{description}
-  \item[R1] $\$ \in \mathrm{Follow}(S)$, donde $S$ es el símbolo inicial.
-  \item[R2] Si existe una producción $A \der \alpha\,B\,\beta$ con
-        $\beta \neq \epsilon$, entonces
-        $\mathrm{First}(\beta) \subseteq \mathrm{Follow}(B)$.
-  \item[R3] Si existe una producción $A \der \alpha\,B$ (es decir, $B$
-        ocupa la última posición), entonces
-        $\mathrm{Follow}(A) \subseteq \mathrm{Follow}(B)$.
-\end{description}
-
-Al no haber producciones $\varepsilon$, la regla R3 se activa únicamente
+Al no haber producciones $\varepsilon$, la regla 3 se activa únicamente
 cuando $B$ aparece literalmente al final del lado derecho.
 
 El procedimiento consiste en localizar \emph{todas} las apariciones de
@@ -305,10 +267,7 @@ $\mathrm{First}(C) = \{\tl{planeta}, \tl{estrella}, \tl{orbita}, \tl{eclipse}\}$
   &\tl{planeta},\ \tl{estrella},\ \tl{orbita},\ \tl{eclipse}\ \}
 \end{align*}
 
-La lectura es coherente con el lenguaje: después de un cuerpo de comandos
-puede aparecer \tl{muerte\_termica} si se trata del cuerpo del programa,
-una llave de cierre si se trata del cuerpo de un bloque, o el primer
-terminal de otro comando, dado que los comandos se encadenan.
+
 
 \paragraph{$\mathrm{Follow}(E)$.} Las apariciones de \nt{E} son:
 
@@ -420,7 +379,13 @@ detalla en la sección correspondiente.
     
     \item \textbf{Antonio Tonatiuh González Gutiérrez}:
     
-    IMG
+   \begin{center}
+    {\includegraphics[height=20cm]{images/ATGGValidacion51.jpeg}}
+\end{center}
+
+\begin{center}
+    {\includegraphics[height=20cm]{images/ATGGValidacion52.jpeg}}
+\end{center}
 
     \newpage
     
