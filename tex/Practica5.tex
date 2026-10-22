@@ -6,9 +6,13 @@
 \usepackage{array}
 \usepackage{enumitem}
 \usepackage{float}
-\usepackage{xcolor}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
 \usepackage{setspace}
@@ -23,58 +27,53 @@
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
+% DEFINICIÓN DE COLORES (Agregados para resolver errores de \color)
+\definecolor{accent}{RGB}{180, 40, 40}
+\definecolor{primary}{RGB}{0, 100, 0}
+\definecolor{headerbg}{RGB}{220, 230, 241}
+\definecolor{rowalt}{RGB}{245, 245, 245}
+
 \newcommand{\nt}[1]{\textit{#1}}          % no terminal
 \newcommand{\tl}[1]{\texttt{#1}}          % terminal
 \newcommand{\der}{\ensuremath{\rightarrow}}
 
-\title{
-    \vspace*{-2.5cm}
-    \setlength{\parindent}{0cm} %Indentation 0
-    \rule{\linewidth}{0.1mm}
-    \vspace*{-1.4cm}
-    \begin{center}
-        \begin{minipage}{2.5cm}
-            \begin{center}
-            \includegraphics[height=3.4cm]{images/Logo_UNAM.png}
-            \end{center}
-        \end{minipage}\hfill
-        %--------------
-        \hspace{0.3cm}
-        \begin{minipage}{11cm}
-            \begin{center}
-            \normalfont \small \textsc{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO \\ FACULTAD DE CIENCIAS \\ Compiladores } \\
-    		\normalsize \textbf{Práctica 5: Parsers LR(0) y SLR(1)}\\
-            \normalsize \textsc{Construcción de Tablas y Motor de Ejecución}\\
-            \end{center}
-        \end{minipage}\hfill
-        %--------------
-        \begin{minipage}{3cm}
-            \begin{center}
-            \includegraphics[height=3.6cm]{images/Logo_FC.png}
-            \end{center}
-        \end{minipage}
-    \end{center}
-    \vspace*{-0.25cm}
-    \rule{\linewidth}{0.1mm}
-    \vspace*{0.5cm}
-    {\normalsize \textbf{Integrantes:} \par}
-    \vspace{-0.5cm}
-    \begin{tabular}{{l@{\hspace{1cm}}r}}
-        \vspace*{-0.5cm}
-        \small Escobar Gonzalez Isaac Giovani & \small 321336400 \\
-        \vspace*{-0.5cm}
-        \small Garduño Escobar Kevin Jonathan & \small 321070629 \\
-        \vspace*{-0.5cm}
-        \small González Gutiérrez Antonio Tonatiuh & \small 321195476 \\
-        \vspace*{-0.5cm}
-        \small Zaldivar Alanis Rodrigo & \small 424029605
-    \end{tabular}
-    \date{}
-}
-
 \begin{document}
-\maketitle
-\vspace*{-2.5cm}
+
+% Encabezado y Portada Estructurada Correctamente
+\begin{center}
+    \rule{\linewidth}{0.1mm} \\[0.2cm]
+    \begin{minipage}{2.5cm}
+        \begin{center}
+            \includegraphics[height=3.4cm]{images/Logo_UNAM.png} % Reemplazar por images/Logo_UNAM.png
+        \end{center}
+    \end{minipage}\hfill
+    \begin{minipage}{11cm}
+        \begin{center}
+            \small \textsc{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO \\ FACULTAD DE CIENCIAS \\ Compiladores } \\ \vspace{0.2cm}
+            \normalsize \textbf{Práctica 5: Parsers LR(0) y SLR(1)}\\
+            \normalsize \textsc{Construcción de Tablas y Motor de Ejecución}
+        \end{center}
+    \end{minipage}\hfill
+    \begin{minipage}{3cm}
+        \begin{center}
+            \includegraphics[height=3.6cm]{images/Logo_FC.png} % Reemplazar por images/Logo_FC.png
+        \end{center}
+    \end{minipage} \\[0.2cm]
+    \rule{\linewidth}{0.1mm}
+\end{center}
+
+\vspace*{0.2cm}
+{\normalsize \textbf{Integrantes:} \par}
+\vspace{0.2cm}
+\noindent
+\begin{tabular}{l@{\hspace{1cm}}r}
+    \small Escobar Gonzalez Isaac Giovani & \small 321336400 \\
+    \small Garduño Escobar Kevin Jonathan & \small 321070629 \\
+    \small González Gutiérrez Antonio Tonatiuh & \small 321195476 \\
+    \small Zaldivar Alanis Rodrigo & \small 424029605
+\end{tabular}
+
+\vspace*{0.5cm}
 
 \section{La gramática}
 
@@ -178,7 +177,7 @@ terminal:
   \mathrm{First}(P) = \{\ \tl{big\_bang}\ \}
 \]
 
-\subsection{Resumen}
+\subsection{Conjuntos First finales}
 
 \begin{center}
 \begin{tabular}{>{$}c<{$} l}
@@ -361,6 +360,1004 @@ contiene ambos. Esta asimetría es exactamente la que permite a SLR(1)
 resolver los conflictos \emph{shift/reduce} de la jerarquía, como se
 detalla en la sección correspondiente.
 
+En LR(0) puro, todo estado con un ítem completo $[A \to \alpha \bullet]$ reduce en todas las columnas de terminales. Cuando ese mismo estado contiene un ítem desplazable $[B \to \beta \bullet a \gamma]$ sobre un terminal $a \in V_T$, surge un \textbf{conflicto Desplazamiento/Reducción (Shift/Reduce)}. La Tabla 2 detalla los 5 estados donde ocurre este fenómeno:
+
+{\small
+\begin{longtable}{c p{3.6cm} p{3.6cm} p{5.8cm}}
+\caption{Los 5 estados con conflicto Desplazamiento/Reducción en LR(0) identificados en la colección canónica.} \\
+\toprule
+\textbf{Estado} & \textbf{Ítem de Desplazamiento (Shift)} & \textbf{Ítem de Reducción} & \textbf{Resolución en SLR(1) vía Follow} \\
+\midrule
+\endfirsthead
+\multicolumn{4}{c}{\footnotesize\emph{Tabla 2 -- Continuación desde la página anterior}} \\
+\toprule
+\textbf{Estado} & \textbf{Ítem de Desplazamiento (Shift)} & \textbf{Ítem de Reducción} & \textbf{Resolución en SLR(1) vía Follow} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize\emph{Continúa en la siguiente página...}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+$I_{22}$ & \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U} & \textit{E} $\to$ \textit{T} $\bullet$ ($r_{13}$) & Precedencia: \textbf{\texttt{interferencia}} $\notin \text{Follow}(\textit{E})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}). En SLR(1) se hace Shift a $I_{34}$. \\
+\addlinespace[3pt]
+$I_{23}$ & \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V} & \textit{T} $\to$ \textit{U} $\bullet$ ($r_{15}$) & Precedencia: \textbf{\texttt{convergencia}} $\notin \text{Follow}(\textit{T})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}, \textbf{\texttt{interferencia}}). En SLR(1) se hace Shift a $I_{35}$. \\
+\addlinespace[3pt]
+$I_{42}$ & \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U} & \textit{E} $\to$ \textit{E} \textbf{\texttt{superposicion}} \textit{T} $\bullet$ ($r_{12}$) & Precedencia: \textbf{\texttt{interferencia}} $\notin \text{Follow}(\textit{E})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}). En SLR(1) se hace Shift a $I_{34}$. \\
+\addlinespace[3pt]
+$I_{43}$ & \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V} & \textit{T} $\to$ \textit{T} \textbf{\texttt{interferencia}} \textit{U} $\bullet$ ($r_{14}$) & Precedencia: \textbf{\texttt{convergencia}} $\notin \text{Follow}(\textit{T})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}, \textbf{\texttt{interferencia}}). En SLR(1) se hace Shift a $I_{35}$. \\
+\addlinespace[3pt]
+$I_{48}$ & \textit{C} $\to \dots$ \texttt{\}} $\bullet$ \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}} & \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ ($r_{7}$) & Rama opcional: \textbf{\texttt{despeje}} $\notin \text{Follow}(\textit{C})$ (que contiene \textbf{\texttt{planeta}}, \textbf{\texttt{estrella}}, \textbf{\texttt{orbita}}, \textbf{\texttt{eclipse}}, \textbf{\texttt{muerte\_termica}}, \texttt{\}}). En SLR(1) se hace Shift a $I_{49}$. \\
+\addlinespace[3pt]
+\end{longtable}
+}
+
+\newpage
+
+\section{Ítems:}
+
+
+La construcción manual de los conjuntos de ítems LR(0) se rige por dos operaciones formales:
+
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+    \item \textbf{Operación $\text{Cerradura}(I)$:} Si $[A \to \alpha \bullet B \beta] \in I$ con $B \in V_N$, entonces para toda producción $B \to \gamma$ en $G'$ se agrega el ítem $[B \to \bullet \gamma]$ al conjunto $I$, repitiendo hasta alcanzar punto fijo.
+    \item \textbf{Operación $\text{Goto}(I, X)$:} Dado un estado $I$ y un símbolo gramatical $X \in V_N \cup V_T$, se calcula como la cerradura de todos los ítems $[A \to \alpha X \bullet \beta]$ tales que $[A \to \alpha \bullet X \beta] \in I$.
+\end{enumerate}
+
+\subsection*{Estado $I_{0}$ \quad {\normalfont\small(Estado Inicial: $\text{Cerradura}(\{[\textit{P'} \to \bullet \textit{P}]\})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P'} $\to$ $\bullet$ \textit{P}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P} $\to$ $\bullet$ \textbf{\texttt{big\_bang}} \textit{Cu} \textbf{\texttt{muerte\_termica}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{0}, \textit{P}) = I_{1}$, \quad $\text{Goto}(I_{0}, \textbf{\texttt{big\_bang}}) = I_{2}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{1}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{0}, \textit{P})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P'} $\to$ \textit{P} $\bullet$ \quad {\color{accent}\textbf{[Accept]}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{2}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{0}, \textbf{\texttt{big\_bang}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P} $\to$ \textbf{\texttt{big\_bang}} $\bullet$ \textit{Cu} \textbf{\texttt{muerte\_termica}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{Cu} \textit{C}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{C}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{2}, \textit{Cu}) = I_{3}$, \quad $\text{Goto}(I_{2}, \textit{C}) = I_{4}$, \quad $\text{Goto}(I_{2}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{2}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{2}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{2}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{3}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textit{Cu})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P} $\to$ \textbf{\texttt{big\_bang}} \textit{Cu} $\bullet$ \textbf{\texttt{muerte\_termica}}
+    \item \textit{Cu} $\to$ \textit{Cu} $\bullet$ \textit{C}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{3}, \textbf{\texttt{muerte\_termica}}) = I_{9}$, \quad $\text{Goto}(I_{3}, \textit{C}) = I_{10}$, \quad $\text{Goto}(I_{3}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{3}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{3}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{3}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{4}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textit{C})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ \textit{C} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{3}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{5}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textbf{\texttt{planeta}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} $\bullet$ \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{TI} $\to$ $\bullet$ \textbf{\texttt{rocoso}}
+    \item \textit{TI} $\to$ $\bullet$ \textbf{\texttt{gaseoso}}
+    \item \textit{TI} $\to$ $\bullet$ \textbf{\texttt{nebulosa}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{5}, \textit{TI}) = I_{11}$, \quad $\text{Goto}(I_{5}, \textbf{\texttt{rocoso}}) = I_{12}$, \quad $\text{Goto}(I_{5}, \textbf{\texttt{gaseoso}}) = I_{13}$, \quad $\text{Goto}(I_{5}, \textbf{\texttt{nebulosa}}) = I_{14}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{6}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textbf{\texttt{estrella}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{estrella}} $\bullet$ \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{6}, \textbf{\texttt{id}}) = I_{15}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{7}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textbf{\texttt{orbita}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{orbita}} $\bullet$ \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{7}, \textbf{\texttt{id}}) = I_{16}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{8}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{2}, \textbf{\texttt{eclipse}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} $\bullet$ \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} $\bullet$ \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{8}, \texttt{(}) = I_{17}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{9}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{3}, \textbf{\texttt{muerte\_termica}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{P} $\to$ \textbf{\texttt{big\_bang}} \textit{Cu} \textbf{\texttt{muerte\_termica}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{1}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{10}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{3}, \textit{C})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ \textit{Cu} \textit{C} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{2}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{11}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{5}, \textit{TI})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} \textit{TI} $\bullet$ \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{11}, \textbf{\texttt{id}}) = I_{18}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{12}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{5}, \textbf{\texttt{rocoso}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{TI} $\to$ \textbf{\texttt{rocoso}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{9}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{13}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{5}, \textbf{\texttt{gaseoso}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{TI} $\to$ \textbf{\texttt{gaseoso}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{10}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{14}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{5}, \textbf{\texttt{nebulosa}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{TI} $\to$ \textbf{\texttt{nebulosa}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{11}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{15}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{6}, \textbf{\texttt{id}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} $\bullet$ \texttt{=} \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{15}, \texttt{=}) = I_{19}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{16}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{7}, \textbf{\texttt{id}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} $\bullet$ \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{16}, \texttt{\{}) = I_{20}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{17}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{8}, \texttt{(})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} $\bullet$ \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} $\bullet$ \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ $\bullet$ \textit{E} \textbf{\texttt{superposicion}} \textit{T}
+    \item \textit{E} $\to$ $\bullet$ \textit{T}
+    \item \textit{T} $\to$ $\bullet$ \textit{T} \textbf{\texttt{interferencia}} \textit{U}
+    \item \textit{T} $\to$ $\bullet$ \textit{U}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{17}, \textit{E}) = I_{21}$, \quad $\text{Goto}(I_{17}, \textit{T}) = I_{22}$, \quad $\text{Goto}(I_{17}, \textit{U}) = I_{23}$, \quad $\text{Goto}(I_{17}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{17}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{17}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{17}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{17}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{18}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{11}, \textbf{\texttt{id}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} $\bullet$ \texttt{=} \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{18}, \texttt{=}) = I_{29}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{19}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{15}, \texttt{=})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} $\bullet$ \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ $\bullet$ \textit{E} \textbf{\texttt{superposicion}} \textit{T}
+    \item \textit{E} $\to$ $\bullet$ \textit{T}
+    \item \textit{T} $\to$ $\bullet$ \textit{T} \textbf{\texttt{interferencia}} \textit{U}
+    \item \textit{T} $\to$ $\bullet$ \textit{U}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{19}, \textit{E}) = I_{30}$, \quad $\text{Goto}(I_{19}, \textit{T}) = I_{22}$, \quad $\text{Goto}(I_{19}, \textit{U}) = I_{23}$, \quad $\text{Goto}(I_{19}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{19}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{19}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{19}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{19}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{20}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{16}, \texttt{\{})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} $\bullet$ \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{Cu} \textit{C}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{C}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{20}, \textit{Cu}) = I_{31}$, \quad $\text{Goto}(I_{20}, \textit{C}) = I_{4}$, \quad $\text{Goto}(I_{20}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{20}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{20}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{20}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{21}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textit{E})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} $\bullet$ \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} $\bullet$ \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{E} $\to$ \textit{E} $\bullet$ \textbf{\texttt{superposicion}} \textit{T}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{21}, \texttt{)}) = I_{32}$, \quad $\text{Goto}(I_{21}, \textbf{\texttt{superposicion}}) = I_{33}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{22}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textit{T})$)} \hfill {\color{accent}\textbf{[CONFLICTO LR(0) SHIFT/REDUCE]}}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ \textit{T} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{13}$)}}
+    \item \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{22}, \textbf{\texttt{interferencia}}) = I_{34}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{23}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textit{U})$)} \hfill {\color{accent}\textbf{[CONFLICTO LR(0) SHIFT/REDUCE]}}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{T} $\to$ \textit{U} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{15}$)}}
+    \item \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{23}, \textbf{\texttt{convergencia}}) = I_{35}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{24}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textit{V})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{U} $\to$ \textit{V} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{17}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{25}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textbf{\texttt{oscuridad}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \textbf{\texttt{oscuridad}} $\bullet$ \textit{V}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{25}, \textit{V}) = I_{36}$, \quad $\text{Goto}(I_{25}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{25}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{25}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{25}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{26}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \texttt{(})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \texttt{(} $\bullet$ \textit{E} \texttt{)}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ $\bullet$ \textit{E} \textbf{\texttt{superposicion}} \textit{T}
+    \item \textit{E} $\to$ $\bullet$ \textit{T}
+    \item \textit{T} $\to$ $\bullet$ \textit{T} \textbf{\texttt{interferencia}} \textit{U}
+    \item \textit{T} $\to$ $\bullet$ \textit{U}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{26}, \textit{E}) = I_{37}$, \quad $\text{Goto}(I_{26}, \textit{T}) = I_{22}$, \quad $\text{Goto}(I_{26}, \textit{U}) = I_{23}$, \quad $\text{Goto}(I_{26}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{26}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{26}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{26}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{26}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{27}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textbf{\texttt{id}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \textbf{\texttt{id}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{20}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{28}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{17}, \textbf{\texttt{num}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \textbf{\texttt{num}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{21}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{29}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{18}, \texttt{=})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} $\bullet$ \textit{E} \texttt{;}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ $\bullet$ \textit{E} \textbf{\texttt{superposicion}} \textit{T}
+    \item \textit{E} $\to$ $\bullet$ \textit{T}
+    \item \textit{T} $\to$ $\bullet$ \textit{T} \textbf{\texttt{interferencia}} \textit{U}
+    \item \textit{T} $\to$ $\bullet$ \textit{U}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{29}, \textit{E}) = I_{38}$, \quad $\text{Goto}(I_{29}, \textit{T}) = I_{22}$, \quad $\text{Goto}(I_{29}, \textit{U}) = I_{23}$, \quad $\text{Goto}(I_{29}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{29}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{29}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{29}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{29}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{30}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{19}, \textit{E})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} $\bullet$ \texttt{;}
+    \item \textit{E} $\to$ \textit{E} $\bullet$ \textbf{\texttt{superposicion}} \textit{T}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{30}, \texttt{;}) = I_{39}$, \quad $\text{Goto}(I_{30}, \textbf{\texttt{superposicion}}) = I_{33}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{31}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{20}, \textit{Cu})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} $\bullet$ \texttt{\}}
+    \item \textit{Cu} $\to$ \textit{Cu} $\bullet$ \textit{C}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{31}, \texttt{\}}) = I_{40}$, \quad $\text{Goto}(I_{31}, \textit{C}) = I_{10}$, \quad $\text{Goto}(I_{31}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{31}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{31}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{31}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{32}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{21}, \texttt{)})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} $\bullet$ \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} $\bullet$ \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{32}, \texttt{\{}) = I_{41}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{33}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{21}, \textbf{\texttt{superposicion}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ \textit{E} \textbf{\texttt{superposicion}} $\bullet$ \textit{T}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{T} $\to$ $\bullet$ \textit{T} \textbf{\texttt{interferencia}} \textit{U}
+    \item \textit{T} $\to$ $\bullet$ \textit{U}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{33}, \textit{T}) = I_{42}$, \quad $\text{Goto}(I_{33}, \textit{U}) = I_{23}$, \quad $\text{Goto}(I_{33}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{33}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{33}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{33}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{33}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{34}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{22}, \textbf{\texttt{interferencia}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{T} $\to$ \textit{T} \textbf{\texttt{interferencia}} $\bullet$ \textit{U}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{U} $\to$ $\bullet$ \textit{U} \textbf{\texttt{convergencia}} \textit{V}
+    \item \textit{U} $\to$ $\bullet$ \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{34}, \textit{U}) = I_{43}$, \quad $\text{Goto}(I_{34}, \textit{V}) = I_{24}$, \quad $\text{Goto}(I_{34}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{34}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{34}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{34}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{35}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{23}, \textbf{\texttt{convergencia}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{U} $\to$ \textit{U} \textbf{\texttt{convergencia}} $\bullet$ \textit{V}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{oscuridad}} \textit{V}
+    \item \textit{V} $\to$ $\bullet$ \texttt{(} \textit{E} \texttt{)}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{id}}
+    \item \textit{V} $\to$ $\bullet$ \textbf{\texttt{num}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{35}, \textit{V}) = I_{44}$, \quad $\text{Goto}(I_{35}, \textbf{\texttt{oscuridad}}) = I_{25}$, \quad $\text{Goto}(I_{35}, \texttt{(}) = I_{26}$, \quad $\text{Goto}(I_{35}, \textbf{\texttt{id}}) = I_{27}$, \quad $\text{Goto}(I_{35}, \textbf{\texttt{num}}) = I_{28}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{36}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{25}, \textit{V})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \textbf{\texttt{oscuridad}} \textit{V} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{18}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{37}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{26}, \textit{E})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \texttt{(} \textit{E} $\bullet$ \texttt{)}
+    \item \textit{E} $\to$ \textit{E} $\bullet$ \textbf{\texttt{superposicion}} \textit{T}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{37}, \texttt{)}) = I_{45}$, \quad $\text{Goto}(I_{37}, \textbf{\texttt{superposicion}}) = I_{33}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{38}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{29}, \textit{E})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} $\bullet$ \texttt{;}
+    \item \textit{E} $\to$ \textit{E} $\bullet$ \textbf{\texttt{superposicion}} \textit{T}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{38}, \texttt{;}) = I_{46}$, \quad $\text{Goto}(I_{38}, \textbf{\texttt{superposicion}}) = I_{33}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{39}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{30}, \texttt{;})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{5}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{40}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{31}, \texttt{\}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{6}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{41}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{32}, \texttt{\{})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} $\bullet$ \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} $\bullet$ \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{Cu} \textit{C}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{C}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{41}, \textit{Cu}) = I_{47}$, \quad $\text{Goto}(I_{41}, \textit{C}) = I_{4}$, \quad $\text{Goto}(I_{41}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{41}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{41}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{41}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{42}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{33}, \textit{T})$)} \hfill {\color{accent}\textbf{[CONFLICTO LR(0) SHIFT/REDUCE]}}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{E} $\to$ \textit{E} \textbf{\texttt{superposicion}} \textit{T} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{12}$)}}
+    \item \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{42}, \textbf{\texttt{interferencia}}) = I_{34}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{43}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{34}, \textit{U})$)} \hfill {\color{accent}\textbf{[CONFLICTO LR(0) SHIFT/REDUCE]}}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{T} $\to$ \textit{T} \textbf{\texttt{interferencia}} \textit{U} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{14}$)}}
+    \item \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{43}, \textbf{\texttt{convergencia}}) = I_{35}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{44}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{35}, \textit{V})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{U} $\to$ \textit{U} \textbf{\texttt{convergencia}} \textit{V} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{16}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{45}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{37}, \texttt{)})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{V} $\to$ \texttt{(} \textit{E} \texttt{)} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{19}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{46}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{38}, \texttt{;})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{4}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{47}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{41}, \textit{Cu})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} $\bullet$ \texttt{\}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} $\bullet$ \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{Cu} $\to$ \textit{Cu} $\bullet$ \textit{C}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{47}, \texttt{\}}) = I_{48}$, \quad $\text{Goto}(I_{47}, \textit{C}) = I_{10}$, \quad $\text{Goto}(I_{47}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{47}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{47}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{47}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{48}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{47}, \texttt{\}})$)} \hfill {\color{accent}\textbf{[CONFLICTO LR(0) SHIFT/REDUCE]}}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{7}$)}}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{48}, \textbf{\texttt{despeje}}) = I_{49}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{49}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{48}, \textbf{\texttt{despeje}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} $\bullet$ \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{49}, \texttt{\{}) = I_{50}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{50}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{49}, \texttt{\{})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} $\bullet$ \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{Cu} \textit{C}
+    \item \textit{Cu} $\to$ $\bullet$ \textit{C}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{50}, \textit{Cu}) = I_{51}$, \quad $\text{Goto}(I_{50}, \textit{C}) = I_{4}$, \quad $\text{Goto}(I_{50}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{50}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{50}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{50}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{51}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{50}, \textit{Cu})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} $\bullet$ \texttt{\}}
+    \item \textit{Cu} $\to$ \textit{Cu} $\bullet$ \textit{C}
+\end{itemize}
+\item \textbf{Cerradura (Closure):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{planeta}} \textit{TI} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{estrella}} \textbf{\texttt{id}} \texttt{=} \textit{E} \texttt{;}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{orbita}} \textbf{\texttt{id}} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}}
+    \item \textit{C} $\to$ $\bullet$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}}
+\end{itemize}
+\item \textbf{Transiciones salientes:} $\text{Goto}(I_{51}, \texttt{\}}) = I_{52}$, \quad $\text{Goto}(I_{51}, \textit{C}) = I_{10}$, \quad $\text{Goto}(I_{51}, \textbf{\texttt{planeta}}) = I_{5}$, \quad $\text{Goto}(I_{51}, \textbf{\texttt{estrella}}) = I_{6}$, \quad $\text{Goto}(I_{51}, \textbf{\texttt{orbita}}) = I_{7}$, \quad $\text{Goto}(I_{51}, \textbf{\texttt{eclipse}}) = I_{8}$.
+\end{itemize}
+\vspace{2pt}
+\subsection*{Estado $I_{52}$ \quad {\normalfont\small(Origen: $\text{Goto}(I_{51}, \texttt{\}})$)}}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\item \textbf{Núcleo (Kernel):}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ \quad {\color{accent}\textbf{(Reducción $r_{8}$)}}
+\end{itemize}
+\item \textbf{Cerradura (Closure):} \emph{Sin ítems adicionales (el punto no precede a ningún no terminal).}
+\item \textbf{Transiciones salientes:} \emph{Ninguna (estado puramente reductor o de aceptación).}
+\end{itemize}
+\vspace{2pt}
+\newpage
+
+\section{Autómata}
+Se adjunta una imagen del autómata en la misma carpeta que esta gráfica. Con el nombre \texttt{automaton.svg}.
+
+\section{Tabla de Transiciones Goto y Acciones por Estado}
+
+Esta tabla resume todas las aristas del diagrama de transiciones Goto entre los 53 estados.
+
+{\small
+\begin{longtable}{c l p{5.0cm} p{2.6cm} p{3.6cm}}
+\toprule
+\textbf{Estado} & \textbf{Origen} & \textbf{Desplazamientos (Terminales)} & \textbf{Goto (No Term.)} & \textbf{Reducción} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize\emph{Continúa en la siguiente página...}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+$I_{0}$ & Inicial & \textbf{\texttt{big\_bang}} $\to I_{2}$ & \textit{P} $\to I_{1}$ & --- \\
+\addlinespace[2pt]
+$I_{1}$ & $I_{0}$ con \textit{P} & --- & --- & \textbf{\color{primary}Accept} \\
+\addlinespace[2pt]
+$I_{2}$ & $I_{0}$ con \textbf{\texttt{big\_bang}} & \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{Cu} $\to I_{3}$, \textit{C} $\to I_{4}$ & --- \\
+\addlinespace[2pt]
+$I_{3}$ & $I_{2}$ con \textit{Cu} & \textbf{\texttt{muerte\_termica}} $\to I_{9}$, \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{C} $\to I_{10}$ & --- \\
+\addlinespace[2pt]
+$I_{4}$ & $I_{2}$ con \textit{C} & --- & --- & $r_{3}$ (\textit{Cu}) \\
+\addlinespace[2pt]
+$I_{5}$ & $I_{2}$ con \textbf{\texttt{planeta}} & \textbf{\texttt{rocoso}} $\to I_{12}$, \textbf{\texttt{gaseoso}} $\to I_{13}$, \textbf{\texttt{nebulosa}} $\to I_{14}$ & \textit{TI} $\to I_{11}$ & --- \\
+\addlinespace[2pt]
+$I_{6}$ & $I_{2}$ con \textbf{\texttt{estrella}} & \textbf{\texttt{id}} $\to I_{15}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{7}$ & $I_{2}$ con \textbf{\texttt{orbita}} & \textbf{\texttt{id}} $\to I_{16}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{8}$ & $I_{2}$ con \textbf{\texttt{eclipse}} & \texttt{(} $\to I_{17}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{9}$ & $I_{3}$ con \textbf{\texttt{muerte\_termica}} & --- & --- & $r_{1}$ (\textit{P}) \\
+\addlinespace[2pt]
+$I_{10}$ & $I_{3}$ con \textit{C} & --- & --- & $r_{2}$ (\textit{Cu}) \\
+\addlinespace[2pt]
+$I_{11}$ & $I_{5}$ con \textit{TI} & \textbf{\texttt{id}} $\to I_{18}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{12}$ & $I_{5}$ con \textbf{\texttt{rocoso}} & --- & --- & $r_{9}$ (\textit{TI}) \\
+\addlinespace[2pt]
+$I_{13}$ & $I_{5}$ con \textbf{\texttt{gaseoso}} & --- & --- & $r_{10}$ (\textit{TI}) \\
+\addlinespace[2pt]
+$I_{14}$ & $I_{5}$ con \textbf{\texttt{nebulosa}} & --- & --- & $r_{11}$ (\textit{TI}) \\
+\addlinespace[2pt]
+$I_{15}$ & $I_{6}$ con \textbf{\texttt{id}} & \texttt{=} $\to I_{19}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{16}$ & $I_{7}$ con \textbf{\texttt{id}} & \texttt{\{} $\to I_{20}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{17}$ & $I_{8}$ con \texttt{(} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{E} $\to I_{21}$, \textit{T} $\to I_{22}$, \textit{U} $\to I_{23}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{18}$ & $I_{11}$ con \textbf{\texttt{id}} & \texttt{=} $\to I_{29}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{19}$ & $I_{15}$ con \texttt{=} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{E} $\to I_{30}$, \textit{T} $\to I_{22}$, \textit{U} $\to I_{23}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{20}$ & $I_{16}$ con \texttt{\{} & \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{Cu} $\to I_{31}$, \textit{C} $\to I_{4}$ & --- \\
+\addlinespace[2pt]
+$I_{21}$ & $I_{17}$ con \textit{E} & \texttt{)} $\to I_{32}$, \textbf{\texttt{superposicion}} $\to I_{33}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{22}$ & $I_{17}$ con \textit{T} & \textbf{\texttt{interferencia}} $\to I_{34}$ & --- & \textbf{\color{accent}$r_{13}$ (Conflicto)} \\
+\addlinespace[2pt]
+$I_{23}$ & $I_{17}$ con \textit{U} & \textbf{\texttt{convergencia}} $\to I_{35}$ & --- & \textbf{\color{accent}$r_{15}$ (Conflicto)} \\
+\addlinespace[2pt]
+$I_{24}$ & $I_{17}$ con \textit{V} & --- & --- & $r_{17}$ (\textit{U}) \\
+\addlinespace[2pt]
+$I_{25}$ & $I_{17}$ con \textbf{\texttt{oscuridad}} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{V} $\to I_{36}$ & --- \\
+\addlinespace[2pt]
+$I_{26}$ & $I_{17}$ con \texttt{(} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{E} $\to I_{37}$, \textit{T} $\to I_{22}$, \textit{U} $\to I_{23}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{27}$ & $I_{17}$ con \textbf{\texttt{id}} & --- & --- & $r_{20}$ (\textit{V}) \\
+\addlinespace[2pt]
+$I_{28}$ & $I_{17}$ con \textbf{\texttt{num}} & --- & --- & $r_{21}$ (\textit{V}) \\
+\addlinespace[2pt]
+$I_{29}$ & $I_{18}$ con \texttt{=} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{E} $\to I_{38}$, \textit{T} $\to I_{22}$, \textit{U} $\to I_{23}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{30}$ & $I_{19}$ con \textit{E} & \texttt{;} $\to I_{39}$, \textbf{\texttt{superposicion}} $\to I_{33}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{31}$ & $I_{20}$ con \textit{Cu} & \texttt{\}} $\to I_{40}$, \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{C} $\to I_{10}$ & --- \\
+\addlinespace[2pt]
+$I_{32}$ & $I_{21}$ con \texttt{)} & \texttt{\{} $\to I_{41}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{33}$ & $I_{21}$ con \textbf{\texttt{superposicion}} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{T} $\to I_{42}$, \textit{U} $\to I_{23}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{34}$ & $I_{22}$ con \textbf{\texttt{interferencia}} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{U} $\to I_{43}$, \textit{V} $\to I_{24}$ & --- \\
+\addlinespace[2pt]
+$I_{35}$ & $I_{23}$ con \textbf{\texttt{convergencia}} & \textbf{\texttt{oscuridad}} $\to I_{25}$, \texttt{(} $\to I_{26}$, \textbf{\texttt{id}} $\to I_{27}$, \textbf{\texttt{num}} $\to I_{28}$ & \textit{V} $\to I_{44}$ & --- \\
+\addlinespace[2pt]
+$I_{36}$ & $I_{25}$ con \textit{V} & --- & --- & $r_{18}$ (\textit{V}) \\
+\addlinespace[2pt]
+$I_{37}$ & $I_{26}$ con \textit{E} & \texttt{)} $\to I_{45}$, \textbf{\texttt{superposicion}} $\to I_{33}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{38}$ & $I_{29}$ con \textit{E} & \texttt{;} $\to I_{46}$, \textbf{\texttt{superposicion}} $\to I_{33}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{39}$ & $I_{30}$ con \texttt{;} & --- & --- & $r_{5}$ (\textit{C}) \\
+\addlinespace[2pt]
+$I_{40}$ & $I_{31}$ con \texttt{\}} & --- & --- & $r_{6}$ (\textit{C}) \\
+\addlinespace[2pt]
+$I_{41}$ & $I_{32}$ con \texttt{\{} & \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{Cu} $\to I_{47}$, \textit{C} $\to I_{4}$ & --- \\
+\addlinespace[2pt]
+$I_{42}$ & $I_{33}$ con \textit{T} & \textbf{\texttt{interferencia}} $\to I_{34}$ & --- & \textbf{\color{accent}$r_{12}$ (Conflicto)} \\
+\addlinespace[2pt]
+$I_{43}$ & $I_{34}$ con \textit{U} & \textbf{\texttt{convergencia}} $\to I_{35}$ & --- & \textbf{\color{accent}$r_{14}$ (Conflicto)} \\
+\addlinespace[2pt]
+$I_{44}$ & $I_{35}$ con \textit{V} & --- & --- & $r_{16}$ (\textit{U}) \\
+\addlinespace[2pt]
+$I_{45}$ & $I_{37}$ con \texttt{)} & --- & --- & $r_{19}$ (\textit{V}) \\
+\addlinespace[2pt]
+$I_{46}$ & $I_{38}$ con \texttt{;} & --- & --- & $r_{4}$ (\textit{C}) \\
+\addlinespace[2pt]
+$I_{47}$ & $I_{41}$ con \textit{Cu} & \texttt{\}} $\to I_{48}$, \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{C} $\to I_{10}$ & --- \\
+\addlinespace[2pt]
+$I_{48}$ & $I_{47}$ con \texttt{\}} & \textbf{\texttt{despeje}} $\to I_{49}$ & --- & \textbf{\color{accent}$r_{7}$ (Conflicto)} \\
+\addlinespace[2pt]
+$I_{49}$ & $I_{48}$ con \textbf{\texttt{despeje}} & \texttt{\{} $\to I_{50}$ & --- & --- \\
+\addlinespace[2pt]
+$I_{50}$ & $I_{49}$ con \texttt{\{} & \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{Cu} $\to I_{51}$, \textit{C} $\to I_{4}$ & --- \\
+\addlinespace[2pt]
+$I_{51}$ & $I_{50}$ con \textit{Cu} & \texttt{\}} $\to I_{52}$, \textbf{\texttt{planeta}} $\to I_{5}$, \textbf{\texttt{estrella}} $\to I_{6}$, \textbf{\texttt{orbita}} $\to I_{7}$, \textbf{\texttt{eclipse}} $\to I_{8}$ & \textit{C} $\to I_{10}$ & --- \\
+\addlinespace[2pt]
+$I_{52}$ & $I_{51}$ con \texttt{\}} & --- & --- & $r_{8}$ (\textit{C}) \\
+\addlinespace[2pt]
+\end{longtable}
+}
+
+\section{Matriz de Análisis Sintáctico SLR(1)}
+
+Para representar la tabla completa de 53 estados en el formato impreso, se han abreviado los símbolos terminales de la siguiente manera. Las celdas de \textbf{Acción} indican \textit{Shift} (\textbf{sX}), \textit{Reduce} (\textbf{rX}) o \textit{Accept} (\textbf{Acc}). Las celdas de \textbf{Goto} indican el estado destino. Los conflictos de desplazamiento/reducción de LR(0) han sido resueltos exitosamente aplicando los conjuntos \textit{Follow}.
+
+\vspace{0.5cm}
+\noindent\textbf{Leyenda de Terminales: (Para usar abreviaturas en la tabla de transiciones)}
+\begin{center}
+\small
+\begin{tabular}{ll|ll|ll}
+\toprule
+\textbf{bb} & \texttt{big\_bang} & \textbf{id} & \texttt{id} & \textbf{su} & \texttt{superposicion} \\
+\textbf{mt} & \texttt{muerte\_termica} & \textbf{=} & \texttt{=} & \textbf{in} & \texttt{interferencia} \\
+\textbf{pl} & \texttt{planeta} & \textbf{;} & \texttt{;} & \textbf{co} & \texttt{convergencia} \\
+\textbf{es} & \texttt{estrella} & \textbf{\{} & \texttt{\{} & \textbf{os} & \texttt{oscuridad} \\
+\textbf{or} & \texttt{orbita} & \textbf{\}} & \texttt{\}} & \textbf{nm} & \texttt{num} \\
+\textbf{ec} & \texttt{eclipse} & \textbf{(} & \texttt{(} & \textbf{\$} & \texttt{Fin de cadena} \\
+\textbf{de} & \texttt{despeje} & \textbf{)} & \texttt{)} & & \\
+\textbf{ro} & \texttt{rocoso} & \textbf{ga} & \texttt{gaseoso} & \textbf{ne} & \texttt{nebulosa} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+\begin{landscape}
+\subsection*{Tabla de Transiciones (Action / Goto)}
+
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt} % Reducir el espacio entre columnas
+\renewcommand{\arraystretch}{1.3} % Espaciado vertical
+\rowcolors{2}{rowalt}{white} % Alternar colores de filas
+
+\begin{longtable}{|c|*{23}{c|}*{8}{c|}}
+\caption{Matriz SLR(1) para CosmoLang (Estados 0-52)} \\
+\hline
+\rowcolor{headerbg}
+& \multicolumn{23}{c|}{\textbf{Acción (Terminales)}} & \multicolumn{8}{c|}{\textbf{Goto (No Terminales)}} \\
+\cline{2-32}
+\rowcolor{headerbg}
+\multirow{-2}{*}{\textbf{Edo}} 
+& \textbf{bb} & \textbf{mt} & \textbf{pl} & \textbf{es} & \textbf{or} & \textbf{ec} & \textbf{id} & \textbf{=} & \textbf{;} & \textbf{\{} & \textbf{\}} & \textbf{(} & \textbf{)} & \textbf{de} & \textbf{ro} & \textbf{ga} & \textbf{ne} & \textbf{su} & \textbf{in} & \textbf{co} & \textbf{os} & \textbf{nm} & \textbf{\$}
+& \textbf{P} & \textbf{Cu} & \textbf{C} & \textbf{TI} & \textbf{E} & \textbf{T} & \textbf{U} & \textbf{V} \\
+\hline
+\endfirsthead
+
+\multicolumn{32}{c}%
+{{\bfseries \tablename\ \thetable{} -- Continuación desde la página anterior}} \\
+\hline
+\rowcolor{headerbg}
+& \multicolumn{23}{c|}{\textbf{Acción (Terminales)}} & \multicolumn{8}{c|}{\textbf{Goto (No Terminales)}} \\
+\cline{2-32}
+\rowcolor{headerbg}
+\multirow{-2}{*}{\textbf{Edo}} 
+& \textbf{bb} & \textbf{mt} & \textbf{pl} & \textbf{es} & \textbf{or} & \textbf{ec} & \textbf{id} & \textbf{=} & \textbf{;} & \textbf{\{} & \textbf{\}} & \textbf{(} & \textbf{)} & \textbf{de} & \textbf{ro} & \textbf{ga} & \textbf{ne} & \textbf{su} & \textbf{in} & \textbf{co} & \textbf{os} & \textbf{nm} & \textbf{\$}
+& \textbf{P} & \textbf{Cu} & \textbf{C} & \textbf{TI} & \textbf{E} & \textbf{T} & \textbf{U} & \textbf{V} \\
+\hline
+\endhead
+
+\hline \multicolumn{32}{|r|}{{Continúa en la siguiente página...}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+0 & s2 & & & & & & & & & & & & & & & & & & & & & & & 1 & & & & & & & \\
+1 & & & & & & & & & & & & & & & & & & & & & & & \textbf{Acc} & & & & & & & & \\
+2 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 3 & 4 & & & & & \\
+3 & & s9 & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & & 10 & & & & & \\
+4 & & r3 & r3 & r3 & r3 & r3 & & & & & r3 & & & & & & & & & & & & & & & & & & & & \\
+5 & & & & & & & & & & & & & & & s12 & s13 & s14 & & & & & & & & & & 11 & & & & \\
+6 & & & & & & & s15 & & & & & & & & & & & & & & & & & & & & & & & & \\
+7 & & & & & & & s16 & & & & & & & & & & & & & & & & & & & & & & & & \\
+8 & & & & & & & & & & & & s17 & & & & & & & & & & & & & & & & & & & \\
+9 & & & & & & & & & & & & & & & & & & & & & & & r1 & & & & & & & & \\
+10 & & r2 & r2 & r2 & r2 & r2 & & & & & r2 & & & & & & & & & & & & & & & & & & & & \\
+11 & & & & & & & s18 & & & & & & & & & & & & & & & & & & & & & & & & \\
+12 & & & & & & & r9 & & & & & & & & & & & & & & & & & & & & & & & & \\
+13 & & & & & & & r10 & & & & & & & & & & & & & & & & & & & & & & & & \\
+14 & & & & & & & r11 & & & & & & & & & & & & & & & & & & & & & & & & \\
+15 & & & & & & & & s19 & & & & & & & & & & & & & & & & & & & & & & & \\
+16 & & & & & & & & & & s20 & & & & & & & & & & & & & & & & & & & & & \\
+17 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 21 & 22 & 23 & 24 \\
+18 & & & & & & & & s29 & & & & & & & & & & & & & & & & & & & & & & & \\
+19 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 30 & 22 & 23 & 24 \\
+20 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 31 & 4 & & & & & \\
+21 & & & & & & & & & & & & & s32 & & & & & s33 & & & & & & & & & & & & & \\
+22 & & & & & & & & & r13 & & & & r13 & & & & & r13 & s34 & & & & & & & & & & & & \\
+23 & & & & & & & & & r15 & & & & r15 & & & & & r15 & r15 & s35 & & & & & & & & & & & \\
+24 & & & & & & & & & r17 & & & & r17 & & & & & r17 & r17 & r17 & & & & & & & & & & & \\
+25 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & & 36 \\
+26 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 37 & 22 & 23 & 24 \\
+27 & & & & & & & & & r20 & & & & r20 & & & & & r20 & r20 & r20 & & & & & & & & & & & \\
+28 & & & & & & & & & r21 & & & & r21 & & & & & r21 & r21 & r21 & & & & & & & & & & & \\
+29 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 38 & 22 & 23 & 24 \\
+30 & & & & & & & & & s39 & & & & & & & & & s33 & & & & & & & & & & & & & \\
+31 & & & s5 & s6 & s7 & s8 & & & & & s40 & & & & & & & & & & & & & & & 10 & & & & & \\
+32 & & & & & & & & & & s41 & & & & & & & & & & & & & & & & & & & & & \\
+33 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & 42 & 23 & 24 \\
+34 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & 43 & 24 \\
+35 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & & 44 \\
+36 & & & & & & & & & r18 & & & & r18 & & & & & r18 & r18 & r18 & & & & & & & & & & & \\
+37 & & & & & & & & & & & & & s45 & & & & & s33 & & & & & & & & & & & & & \\
+38 & & & & & & & & & s46 & & & & & & & & & s33 & & & & & & & & & & & & & \\
+39 & & r5 & r5 & r5 & r5 & r5 & & & & & r5 & & & & & & & & & & & & & & & & & & & & \\
+40 & & r6 & r6 & r6 & r6 & r6 & & & & & r6 & & & & & & & & & & & & & & & & & & & & \\
+41 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 47 & 4 & & & & & \\
+42 & & & & & & & & & r12 & & & & r12 & & & & & r12 & s34 & & & & & & & & & & & & \\
+43 & & & & & & & & & r14 & & & & r14 & & & & & r14 & r14 & s35 & & & & & & & & & & & \\
+44 & & & & & & & & & r16 & & & & r16 & & & & & r16 & r16 & r16 & & & & & & & & & & & \\
+45 & & & & & & & & & r19 & & & & r19 & & & & & r19 & r19 & r19 & & & & & & & & & & & \\
+46 & & r4 & r4 & r4 & r4 & r4 & & & & & r4 & & & & & & & & & & & & & & & & & & & & \\
+47 & & & s5 & s6 & s7 & s8 & & & & & s48 & & & & & & & & & & & & & & & 10 & & & & & \\
+48 & & r7 & r7 & r7 & r7 & r7 & & & & & r7 & & & s49 & & & & & & & & & & & & & & & & & \\
+49 & & & & & & & & & & s50 & & & & & & & & & & & & & & & & & & & & & \\
+50 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 51 & 4 & & & & & \\
+51 & & & s5 & s6 & s7 & s8 & & & & & s52 & & & & & & & & & & & & & & & 10 & & & & & \\
+52 & & r8 & r8 & r8 & r8 & r8 & & & & & r8 & & & & & & & & & & & & & & & & & & & & \\
+\hline
+\end{longtable}
+\endgroup
+\end{landscape}
+
+
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
 
@@ -439,7 +1436,14 @@ detalla en la sección correspondiente.
 \noindent Por favor, dedica un par de líneas para comentar:
 \begin{itemize}
     \item ¿Qué aspecto de esta práctica fue tu favorito o te resultó más revelador?
+    
+    \textbf{Respuesta:}
+
+    Nos pareció muy interesante observar cómo los conjuntos Follow actúan como un filtro matemático preciso para resolver los conflictos de desplazamiento/reducción (Shift/Reduce) del autómata $LR(0)$. Específicamente, cómo la asimetría en la jerarquía de expresiones y la estructura de bloques de nuestra gramática \texttt{CosmoLang} permitió resolver los 5 conflictos identificados en los estados del parser (como la precedencia de operadores y la rama opcional de la estructura condicional), demostrando que el análisis SLR(1) resultante es totalmente funcional para reconocer y analizar correctamente cualquier cadena válida del lenguaje
+
     \item ¿Qué cambiarías o mejorarías de esta práctica para futuras generaciones?
+    
+    \textbf{Respuesta:}
 \end{itemize}
 
 \end{document}
