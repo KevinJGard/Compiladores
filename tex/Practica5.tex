@@ -6,10 +6,12 @@
 \usepackage{array}
 \usepackage{enumitem}
 \usepackage{float}
-\usepackage{xcolor}
 \usepackage{tabularx}
 \usepackage{booktabs}
-\usepackage{longtable} % <--- AGREGADO: Necesario para la Sección 5
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
 
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
@@ -28,6 +30,8 @@
 % DEFINICIÓN DE COLORES (Agregados para resolver errores de \color)
 \definecolor{accent}{RGB}{180, 40, 40}
 \definecolor{primary}{RGB}{0, 100, 0}
+\definecolor{headerbg}{RGB}{220, 230, 241}
+\definecolor{rowalt}{RGB}{245, 245, 245}
 
 \newcommand{\nt}[1]{\textit{#1}}          % no terminal
 \newcommand{\tl}[1]{\texttt{#1}}          % terminal
@@ -1286,7 +1290,130 @@ $I_{52}$ & $I_{51}$ con \texttt{\}} & --- & --- & $r_{8}$ (\textit{C}) \\
 \end{longtable}
 }
 
+\section*{6. Matriz de Análisis Sintáctico SLR(1)}
+
+Para representar la tabla completa de 53 estados en el formato impreso, se han abreviado los símbolos terminales de la siguiente manera. Las celdas de \textbf{Acción} indican \textit{Shift} (\textbf{sX}), \textit{Reduce} (\textbf{rX}) o \textit{Accept} (\textbf{Acc}). Las celdas de \textbf{Goto} indican el estado destino. Los conflictos de desplazamiento/reducción de LR(0) han sido resueltos exitosamente aplicando los conjuntos \textit{Follow}.
+
+\vspace{0.5cm}
+\noindent\textbf{Leyenda de Terminales:}
+\begin{center}
+\small
+\begin{tabular}{ll|ll|ll}
+\toprule
+\textbf{bb} & \texttt{big\_bang} & \textbf{id} & \texttt{id} & \textbf{su} & \texttt{superposicion} \\
+\textbf{mt} & \texttt{muerte\_termica} & \textbf{=} & \texttt{=} & \textbf{in} & \texttt{interferencia} \\
+\textbf{pl} & \texttt{planeta} & \textbf{;} & \texttt{;} & \textbf{co} & \texttt{convergencia} \\
+\textbf{es} & \texttt{estrella} & \textbf{\{} & \texttt{\{} & \textbf{os} & \texttt{oscuridad} \\
+\textbf{or} & \texttt{orbita} & \textbf{\}} & \texttt{\}} & \textbf{nm} & \texttt{num} \\
+\textbf{ec} & \texttt{eclipse} & \textbf{(} & \texttt{(} & \textbf{\$} & \texttt{Fin de cadena} \\
+\textbf{de} & \texttt{despeje} & \textbf{)} & \texttt{)} & & \\
+\textbf{ro} & \texttt{rocoso} & \textbf{ga} & \texttt{gaseoso} & \textbf{ne} & \texttt{nebulosa} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \newpage
+
+\begin{landscape}
+\subsection*{Tabla de Transiciones (Action / Goto)}
+
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt} % Reducir el espacio entre columnas
+\renewcommand{\arraystretch}{1.3} % Espaciado vertical
+\rowcolors{2}{rowalt}{white} % Alternar colores de filas
+
+\begin{longtable}{|c|*{23}{c|}*{8}{c|}}
+\caption{Matriz SLR(1) para CosmoLang (Estados 0-52)} \\
+\hline
+\rowcolor{headerbg}
+& \multicolumn{23}{c|}{\textbf{Acción (Terminales)}} & \multicolumn{8}{c|}{\textbf{Goto (No Terminales)}} \\
+\cline{2-32}
+\rowcolor{headerbg}
+\multirow{-2}{*}{\textbf{Edo}} 
+& \textbf{bb} & \textbf{mt} & \textbf{pl} & \textbf{es} & \textbf{or} & \textbf{ec} & \textbf{id} & \textbf{=} & \textbf{;} & \textbf{\{} & \textbf{\}} & \textbf{(} & \textbf{)} & \textbf{de} & \textbf{ro} & \textbf{ga} & \textbf{ne} & \textbf{su} & \textbf{in} & \textbf{co} & \textbf{os} & \textbf{nm} & \textbf{\$}
+& \textbf{P} & \textbf{Cu} & \textbf{C} & \textbf{TI} & \textbf{E} & \textbf{T} & \textbf{U} & \textbf{V} \\
+\hline
+\endfirsthead
+
+\multicolumn{32}{c}%
+{{\bfseries \tablename\ \thetable{} -- Continuación desde la página anterior}} \\
+\hline
+\rowcolor{headerbg}
+& \multicolumn{23}{c|}{\textbf{Acción (Terminales)}} & \multicolumn{8}{c|}{\textbf{Goto (No Terminales)}} \\
+\cline{2-32}
+\rowcolor{headerbg}
+\multirow{-2}{*}{\textbf{Edo}} 
+& \textbf{bb} & \textbf{mt} & \textbf{pl} & \textbf{es} & \textbf{or} & \textbf{ec} & \textbf{id} & \textbf{=} & \textbf{;} & \textbf{\{} & \textbf{\}} & \textbf{(} & \textbf{)} & \textbf{de} & \textbf{ro} & \textbf{ga} & \textbf{ne} & \textbf{su} & \textbf{in} & \textbf{co} & \textbf{os} & \textbf{nm} & \textbf{\$}
+& \textbf{P} & \textbf{Cu} & \textbf{C} & \textbf{TI} & \textbf{E} & \textbf{T} & \textbf{U} & \textbf{V} \\
+\hline
+\endhead
+
+\hline \multicolumn{32}{|r|}{{Continúa en la siguiente página...}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+0 & s2 & & & & & & & & & & & & & & & & & & & & & & & 1 & & & & & & & \\
+1 & & & & & & & & & & & & & & & & & & & & & & & \textbf{Acc} & & & & & & & & \\
+2 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 3 & 4 & & & & & \\
+3 & & s9 & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & & 10 & & & & & \\
+4 & & r3 & r3 & r3 & r3 & r3 & & & & & r3 & & & & & & & & & & & & & & & & & & & & \\
+5 & & & & & & & & & & & & & & & s12 & s13 & s14 & & & & & & & & & & 11 & & & & \\
+6 & & & & & & & s15 & & & & & & & & & & & & & & & & & & & & & & & & \\
+7 & & & & & & & s16 & & & & & & & & & & & & & & & & & & & & & & & & \\
+8 & & & & & & & & & & & & s17 & & & & & & & & & & & & & & & & & & & \\
+9 & & & & & & & & & & & & & & & & & & & & & & & r1 & & & & & & & & \\
+10 & & r2 & r2 & r2 & r2 & r2 & & & & & r2 & & & & & & & & & & & & & & & & & & & & \\
+11 & & & & & & & s18 & & & & & & & & & & & & & & & & & & & & & & & & \\
+12 & & & & & & & r9 & & & & & & & & & & & & & & & & & & & & & & & & \\
+13 & & & & & & & r10 & & & & & & & & & & & & & & & & & & & & & & & & \\
+14 & & & & & & & r11 & & & & & & & & & & & & & & & & & & & & & & & & \\
+15 & & & & & & & & s19 & & & & & & & & & & & & & & & & & & & & & & & \\
+16 & & & & & & & & & & s20 & & & & & & & & & & & & & & & & & & & & & \\
+17 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 21 & 22 & 23 & 24 \\
+18 & & & & & & & & s29 & & & & & & & & & & & & & & & & & & & & & & & \\
+19 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 30 & 22 & 23 & 24 \\
+20 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 31 & 4 & & & & & \\
+21 & & & & & & & & & & & & & s32 & & & & & s33 & & & & & & & & & & & & & \\
+22 & & & & & & & & & r13 & & & & r13 & & & & & r13 & s34 & & & & & & & & & & & & \\
+23 & & & & & & & & & r15 & & & & r15 & & & & & r15 & r15 & s35 & & & & & & & & & & & \\
+24 & & & & & & & & & r17 & & & & r17 & & & & & r17 & r17 & r17 & & & & & & & & & & & \\
+25 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & & 36 \\
+26 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & 37 & 22 & 23 & 24 \\
+27 & & & & & & & & & r20 & & & & r20 & & & & & r20 & r20 & r20 & & & & & & & & & & & \\
+28 & & & & & & & & & r21 & & & & r21 & & & & & r21 & r21 & r21 & & & & & & & & & & & \\
+29 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & 38 & 22 & 23 & 24 \\
+30 & & & & & & & & & s39 & & & & & & & & & s33 & & & & & & & & & & & & & \\
+31 & & & s5 & s6 & s7 & s8 & & & & & s40 & & & & & & & & & & & & & & & 10 & & & & & \\
+32 & & & & & & & & & & s41 & & & & & & & & & & & & & & & & & & & & & \\
+33 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & 42 & 23 & 24 \\
+34 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & 43 & 24 \\
+35 & & & & & & & s27 & & & & & s26 & & & & & & & & & s25 & s28 & & & & & & & & & 44 \\
+36 & & & & & & & & & r18 & & & & r18 & & & & & r18 & r18 & r18 & & & & & & & & & & & \\
+37 & & & & & & & & & & & & & s45 & & & & & s33 & & & & & & & & & & & & & \\
+38 & & & & & & & & & s46 & & & & & & & & & s33 & & & & & & & & & & & & & \\
+39 & & r5 & r5 & r5 & r5 & r5 & & & & & r5 & & & & & & & & & & & & & & & & & & & & \\
+40 & & r6 & r6 & r6 & r6 & r6 & & & & & r6 & & & & & & & & & & & & & & & & & & & & \\
+41 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 47 & 4 & & & & & \\
+42 & & & & & & & & & r12 & & & & r12 & & & & & r12 & s34 & & & & & & & & & & & & \\
+43 & & & & & & & & & r14 & & & & r14 & & & & & r14 & r14 & s35 & & & & & & & & & & & \\
+44 & & & & & & & & & r16 & & & & r16 & & & & & r16 & r16 & r16 & & & & & & & & & & & \\
+45 & & & & & & & & & r19 & & & & r19 & & & & & r19 & r19 & r19 & & & & & & & & & & & \\
+46 & & r4 & r4 & r4 & r4 & r4 & & & & & r4 & & & & & & & & & & & & & & & & & & & & \\
+47 & & & s5 & s6 & s7 & s8 & & & & & s48 & & & & & & & & & & & & & & & 10 & & & & & \\
+48 & & r7 & r7 & r7 & r7 & r7 & & & & & r7 & & & s49 & & & & & & & & & & & & & & & & & \\
+49 & & & & & & & & & & s50 & & & & & & & & & & & & & & & & & & & & & \\
+50 & & & s5 & s6 & s7 & s8 & & & & & & & & & & & & & & & & & & & 51 & 4 & & & & & \\
+51 & & & s5 & s6 & s7 & s8 & & & & & s52 & & & & & & & & & & & & & & & 10 & & & & & \\
+52 & & r8 & r8 & r8 & r8 & r8 & & & & & r8 & & & & & & & & & & & & & & & & & & & & \\
+\hline
+\end{longtable}
+\endgroup
+\end{landscape}
+
+
 \newpage
 \subsection*{Evaluación de la Práctica}
 \noindent Grado de acuerdo con cada una de las siguientes afirmaciones utilizando una escala de 1 a 5.
