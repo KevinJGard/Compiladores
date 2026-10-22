@@ -14,6 +14,8 @@
 \usepackage[table]{xcolor}
 \usepackage{multirow}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, babel}
 
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
@@ -1366,6 +1368,77 @@ Para representar la tabla completa de 53 estados en el formato impreso, se han a
 \end{longtable}
 \endgroup
 \end{landscape}
+
+\section{Diseño de Solución}
+
+Para la implementación del motor de ejecución (\textit{driver}) del analizador sintáctico ascendente SLR(1), se diseñó una arquitectura donde el motor consulta las tablas precalculadas sin conocer la gramática subyacente. 
+
+A diferencia del enfoque tradicional, nuestra implementación no utiliza un analizador léxico (\textit{lexer}) externo leyendo un archivo de texto plano. En su lugar, el motor recibe los tokens y sus respectivos lexemas inyectados directamente desde el archivo principal mediante secuencias predefinidas. El programa mantiene una pila implementada con arreglos sincrónicos para rastrear los estados y construir el Árbol de Sintaxis Abstracta (AST) nodo por nodo.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2.5cm, auto, >=stealth, thick]
+
+% Nodos de arquitectura
+\node (entrada) [rectangle, draw=black, text width=3cm, text centered, minimum height=1.2cm] {Cadenas de prueba\\(tokens y lexemas)\\\texttt{main.c}};
+\node (motor) [rectangle, draw=black, fill=gray!10, text width=3.5cm, text centered, minimum height=1.2cm, right=of entrada, xshift=0.5cm] {\textbf{Motor LR SLR(1)}\\\texttt{motor.c}};
+\node (salida) [rectangle, draw=black, text width=3.5cm, text centered, minimum height=1.2cm, right=of motor, xshift=0.5cm] {Salida:\\AST válido o\\\texttt{ErrorSintactico}};
+
+\node (pilas) [rectangle, draw=black, text width=3.5cm, text centered, minimum height=1.2cm, below=of motor, xshift=-2.2cm] {Arreglos (Pilas)\\ \texttt{estados[]} y \texttt{nodos[]}\\(Nodos AST)};
+\node (tablas) [rectangle, draw=black, text width=3.5cm, text centered, minimum height=1.2cm, below=of motor, xshift=2.2cm] {Tablas \texttt{GRAM\_COSMOLANG}\\\texttt{accion} e \texttt{ir\_a}\\\texttt{gram\_cosmolang.c}};
+
+% Flechas
+\draw[->] (entrada) -- node[above, text width=2cm, align=center] {\scriptsize secuencias\\harcodeadas} (motor);
+\draw[->] (motor) -- node[above] {\scriptsize evalúa} (salida);
+\draw[<->] (motor) -- node[left, align=right] {\scriptsize tope / push / pop\;} (pilas);
+\draw[<->] (motor) -- node[right, align=left] {\;consulta tabla} (tablas);
+
+\end{tikzpicture}
+\caption{Arquitectura del parser: \texttt{main.c} simula al lexer inyectando secuencias de tokens. El motor interpreta las tablas precalculadas y manipula los nodos del AST.}
+\end{figure}
+
+El motor evalúa las reglas codificadas en enteros utilizando el apuntador actual (\texttt{ip}). Las acciones se determinan por el signo del valor en la celda de la matriz: un valor igual a $0$ representa un error, $9999$ indica que la cadena es aceptada, los valores positivos representan operaciones de \textit{Shift}, y los valores negativos representan operaciones de \textit{Reduce}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2.2cm, >=stealth, thick]
+
+% Estilos de los nodos
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2.5cm, minimum height=0.8cm, text centered, draw=black, fill=gray!20]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=4cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, aspect=2, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+
+% Nodos
+\node (start) [startstop] {Inicio};
+\node (init) [process, below of=start, yshift=0.3cm] {\texttt{tope = 0}, \texttt{ip = 0}\\ \texttt{estados[0] = 0}\\ \texttt{nodos[0] = NULL}};
+\node (read) [process, below of=init, yshift=0.3cm] {\texttt{s = estados[tope]}\\ \texttt{t = tokens[ip]}};
+\node (decide) [decision, below of=read, yshift=-0.5cm] {\texttt{a = accion[s][t]}};
+
+\node (shift) [process, left of=decide, xshift=-3cm, text width=3.8cm] {\textbf{Shift ($a > 0$)}\\1. \texttt{estados[++tope] = a}\\2. \texttt{nodos[tope] = terminal}\\3. \texttt{ip++}};
+\node (reduce) [process, right of=decide, xshift=3cm, text width=4.2cm] {\textbf{Reduce ($a < 0$)}\\1. $k = -a$, pop $largo$ elementos\\2. \texttt{s\_nuevo = ir\_a[estado][lhs]}\\3. \texttt{estados[++tope] = s\_nuevo}\\4. \texttt{nodos[tope] = no\_terminal}};
+
+\node (accept) [startstop, below of=decide, yshift=-1.5cm, xshift=-2.5cm, text width=2.5cm] {\textbf{Accept (9999)}\\Retorna 1 y AST};
+\node (error) [startstop, below of=decide, yshift=-1.5cm, xshift=2.5cm, text width=2.5cm] {\textbf{Error (0)}\\Retorna 0 y Error};
+
+% Rutas
+\draw[->] (start) -- (init);
+\draw[->] (init) -- (read);
+\draw[->] (read) -- (decide);
+
+\draw[->] (decide) -- node[above] {$a > 0$} (shift);
+\draw[->] (decide) -- node[above] {$a < 0$} (reduce);
+\draw[->] (decide) -- node[left] {$a == 9999\,$} (accept);
+\draw[->] (decide) -- node[right] {$\,a == 0$} (error);
+
+% Retornos al ciclo
+\draw[->] (shift) |- (read);
+\draw[->] (reduce) |- (read);
+
+\end{tikzpicture}
+\caption{Ciclo del motor de análisis sintáctico evaluando las variables de estado y apuntador (\texttt{ip}).}
+\end{figure}
+
+\newpage
 
 \section{Tabla de Pruebas y Resultados}
 
