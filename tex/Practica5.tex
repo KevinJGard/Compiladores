@@ -10,8 +10,10 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{pdflscape}
+\usepackage{listings}
 \usepackage[table]{xcolor}
 \usepackage{multirow}
+\usepackage{url}
 
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
@@ -36,6 +38,14 @@
 \newcommand{\nt}[1]{\textit{#1}}          % no terminal
 \newcommand{\tl}[1]{\texttt{#1}}          % terminal
 \newcommand{\der}{\ensuremath{\rightarrow}}
+
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{gray!10},
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    frameround=tttt
+}
 
 \begin{document}
 
@@ -1357,6 +1367,54 @@ Para representar la tabla completa de 53 estados en el formato impreso, se han a
 \endgroup
 \end{landscape}
 
+\section{Tabla de Pruebas y Resultados}
+
+La siguiente tabla detalla la ejecución del motor con 10 cadenas de prueba (5 válidas y 5 inválidas).
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c p{6cm} c p{4.5cm}}
+\toprule
+\textbf{\#} & \textbf{Cadena de Entrada (Tokens)} & \textbf{Resultado} & \textbf{Comentario / Razón} \\
+\midrule
+1 & \texttt{big\_bang estrella id = num ; muerte\_termica} & \textbf{\color{primary}Aceptada} & Es una declaración mínima válida. \\
+
+2 & \texttt{big\_bang planeta rocoso id = id superposicion num interferencia id ; muerte\_termica} & \textbf{\color{primary}Aceptada} & Muestra resolución de precedencia: \texttt{interferencia} reduce antes que \texttt{superposicion}. \\
+
+3 & \texttt{big\_bang orbita id \{ estrella id = oscuridad ( id convergencia num ) ; \} muerte\_termica} & \textbf{\color{primary}Aceptada} & Validación de anidamiento de bloques y operadores unarios (\texttt{oscuridad}). \\
+
+4 & \texttt{big\_bang eclipse ( id ) \{ estrella id = num ; \} muerte\_termica} & \textbf{\color{primary}Aceptada} & Estructura condicional (\texttt{eclipse}) sin la rama opcional. \\
+
+5 & \texttt{big\_bang eclipse ( id superposicion num ) \{ planeta gaseoso id = num ; \} despeje \{ estrella id = id ; \} muerte\_termica} & \textbf{\color{primary}Aceptada} & Estructura condicional incluyendo la rama opcional (\texttt{despeje}). \\
+
+6 & \texttt{estrella id = num ; muerte\_termica} & \textbf{\color{accent}Rechazada} & Error sintáctico en el estado 0: Falta el token inicial \texttt{big\_bang}. \\
+
+7 & \texttt{big\_bang muerte\_termica} & \textbf{\color{accent}Rechazada} & El cuerpo requiere al menos un comando antes del cierre. \\
+
+8 & \texttt{big\_bang estrella id = num muerte\_termica} & \textbf{\color{accent}Rechazada} & Falta el \texttt{;} al final de la línea. \\
+
+9 & \texttt{big\_bang planeta id = num ; muerte\_termica} & \textbf{\color{accent}Rechazada} & Falta el derivado de \textit{TI} (\texttt{rocoso}, \texttt{gaseoso} o \texttt{nebulosa}) después de planeta. \\
+
+10 & \texttt{big\_bang eclipse ( id ) estrella id = num ; muerte\_termica} & \textbf{\color{accent}Rechazada} & Falta la llave de apertura. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Comandos de compilación y ejecución:}
+
+Construir la imagen del contenedor:
+\begin{lstlisting}[style=bashstyle]
+docker build -t parser-lr .
+\end{lstlisting}
+Ejecutar el motor de análisis:
+\begin{lstlisting}[style=bashstyle]
+docker run --rm parser-lr
+\end{lstlisting}
+
+\textbf{Enlace al repositorio público:} 
+\url{https://github.com/KevinJGard/Compiladores}
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
@@ -1376,7 +1434,13 @@ Para representar la tabla completa de 53 estados en el formato impreso, se han a
 
     \item \textbf{Kevin Jonathan Garduño Escobar}:
     
-    IMG
+    \begin{center}
+        {\includegraphics[width=\textwidth]{images/KGVal5-1.jpeg}}
+    \end{center}
+
+    \begin{center}
+        {\includegraphics[height=20cm]{images/KGVal5.jpeg}}
+    \end{center}
 
     \newpage
     
