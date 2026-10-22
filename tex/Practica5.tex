@@ -403,13 +403,23 @@ detalla en la sección correspondiente.
 
 En LR(0) puro, todo estado con un ítem completo $[A \to \alpha \bullet]$ reduce en todas las columnas de terminales. Cuando ese mismo estado contiene un ítem desplazable $[B \to \beta \bullet a \gamma]$ sobre un terminal $a \in V_T$, surge un \textbf{conflicto Desplazamiento/Reducción (Shift/Reduce)}. La Tabla 2 detalla los 5 estados donde ocurre este fenómeno:
 
-\begin{table}[h!]
-\centering
-\small
-\begin{tabularx}{\textwidth}{c l l X}
+{\small
+\begin{longtable}{c p{3.6cm} p{3.6cm} p{5.8cm}}
+\caption{Los 5 estados con conflicto Desplazamiento/Reducción en LR(0) identificados en la colección canónica.} \\
 \toprule
 \textbf{Estado} & \textbf{Ítem de Desplazamiento (Shift)} & \textbf{Ítem de Reducción} & \textbf{Resolución en SLR(1) vía Follow} \\
 \midrule
+\endfirsthead
+\multicolumn{4}{c}{\footnotesize\emph{Tabla 2 -- Continuación desde la página anterior}} \\
+\toprule
+\textbf{Estado} & \textbf{Ítem de Desplazamiento (Shift)} & \textbf{Ítem de Reducción} & \textbf{Resolución en SLR(1) vía Follow} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize\emph{Continúa en la siguiente página...}} \\
+\endfoot
+\bottomrule
+\endlastfoot
 
 $I_{22}$ & \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U} & \textit{E} $\to$ \textit{T} $\bullet$ ($r_{13}$) & Precedencia: \textbf{\texttt{interferencia}} $\notin \text{Follow}(\textit{E})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}). En SLR(1) se hace Shift a $I_{34}$. \\
 \addlinespace[3pt]
@@ -421,10 +431,8 @@ $I_{43}$ & \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} 
 \addlinespace[3pt]
 $I_{48}$ & \textit{C} $\to \dots$ \texttt{\}} $\bullet$ \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}} & \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ ($r_{7}$) & Rama opcional: \textbf{\texttt{despeje}} $\notin \text{Follow}(\textit{C})$ (que contiene \textbf{\texttt{planeta}}, \textbf{\texttt{estrella}}, \textbf{\texttt{orbita}}, \textbf{\texttt{eclipse}}, \textbf{\texttt{muerte\_termica}}, \texttt{\}}). En SLR(1) se hace Shift a $I_{49}$. \\
 \addlinespace[3pt]
-\bottomrule
-\end{tabularx}
-\caption{Los 5 estados con conflicto Desplazamiento/Reducción en LR(0) identificados en la colección canónica.}
-\end{table}
+\end{longtable}
+}
 
 \newpage
 
@@ -437,29 +445,6 @@ La construcción manual de los conjuntos de ítems LR(0) se rige por dos operaci
     \item \textbf{Operación $\text{Cerradura}(I)$:} Si $[A \to \alpha \bullet B \beta] \in I$ con $B \in V_N$, entonces para toda producción $B \to \gamma$ en $G'$ se agrega el ítem $[B \to \bullet \gamma]$ al conjunto $I$, repitiendo hasta alcanzar punto fijo.
     \item \textbf{Operación $\text{Goto}(I, X)$:} Dado un estado $I$ y un símbolo gramatical $X \in V_N \cup V_T$, se calcula como la cerradura de todos los ítems $[A \to \alpha X \bullet \beta]$ tales que $[A \to \alpha \bullet X \beta] \in I$.
 \end{enumerate}
-
-\begin{table}[h!]
-\centering
-\small
-\begin{tabularx}{\textwidth}{c l l X}
-\toprule
-\textbf{Estado} & \textbf{Ítem de Desplazamiento (Shift)} & \textbf{Ítem de Reducción} & \textbf{Resolución en SLR(1) vía Follow} \\
-\midrule
-
-$I_{22}$ & \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U} & \textit{E} $\to$ \textit{T} $\bullet$ ($r_{13}$) & Precedencia: \textbf{\texttt{interferencia}} $\notin \text{Follow}(\textit{E})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}). En SLR(1) se hace Shift a $I_{34}$. \\
-\addlinespace[3pt]
-$I_{23}$ & \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V} & \textit{T} $\to$ \textit{U} $\bullet$ ($r_{15}$) & Precedencia: \textbf{\texttt{convergencia}} $\notin \text{Follow}(\textit{T})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}, \textbf{\texttt{interferencia}}). En SLR(1) se hace Shift a $I_{35}$. \\
-\addlinespace[3pt]
-$I_{42}$ & \textit{T} $\to$ \textit{T} $\bullet$ \textbf{\texttt{interferencia}} \textit{U} & \textit{E} $\to$ \textit{E} \textbf{\texttt{superposicion}} \textit{T} $\bullet$ ($r_{12}$) & Precedencia: \textbf{\texttt{interferencia}} $\notin \text{Follow}(\textit{E})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}). En SLR(1) se hace Shift a $I_{34}$. \\
-\addlinespace[3pt]
-$I_{43}$ & \textit{U} $\to$ \textit{U} $\bullet$ \textbf{\texttt{convergencia}} \textit{V} & \textit{T} $\to$ \textit{T} \textbf{\texttt{interferencia}} \textit{U} $\bullet$ ($r_{14}$) & Precedencia: \textbf{\texttt{convergencia}} $\notin \text{Follow}(\textit{T})$ (que contiene \texttt{;}, \texttt{)}, \textbf{\texttt{superposicion}}, \textbf{\texttt{interferencia}}). En SLR(1) se hace Shift a $I_{35}$. \\
-\addlinespace[3pt]
-$I_{48}$ & \textit{C} $\to \dots$ \texttt{\}} $\bullet$ \textbf{\texttt{despeje}} \texttt{\{} \textit{Cu} \texttt{\}} & \textit{C} $\to$ \textbf{\texttt{eclipse}} \texttt{(} \textit{E} \texttt{)} \texttt{\{} \textit{Cu} \texttt{\}} $\bullet$ ($r_{7}$) & Rama opcional: \textbf{\texttt{despeje}} $\notin \text{Follow}(\textit{C})$ (que contiene \textbf{\texttt{planeta}}, \textbf{\texttt{estrella}}, \textbf{\texttt{orbita}}, \textbf{\texttt{eclipse}}, \textbf{\texttt{muerte\_termica}}, \texttt{\}}). En SLR(1) se hace Shift a $I_{49}$. \\
-\addlinespace[3pt]
-\bottomrule
-\end{tabularx}
-\caption{Los 5 estados con conflicto Desplazamiento/Reducción en LR(0) identificados en la colección canónica.}
-\end{table}
 
 \subsection*{Estado $I_{0}$ \quad {\normalfont\small(Estado Inicial: $\text{Cerradura}(\{[\textit{P'} \to \bullet \textit{P}]\})$)}}
 \begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
@@ -1170,7 +1155,7 @@ Se adjunta una imagen del autómata en la misma carpeta que esta gráfica. Con e
 Esta tabla resume todas las aristas del diagrama de transiciones Goto entre los 53 estados.
 
 {\small
-\begin{longtable}{c l p{5.6cm} p{3.1cm} l}
+\begin{longtable}{c l p{5.0cm} p{2.6cm} p{3.6cm}}
 \toprule
 \textbf{Estado} & \textbf{Origen} & \textbf{Desplazamientos (Terminales)} & \textbf{Goto (No Term.)} & \textbf{Reducción} \\
 \midrule
