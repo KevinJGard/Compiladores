@@ -1,0 +1,1354 @@
+<svg width="3476pt" height="4879pt" viewBox="0.00 0.00 3476.00 4879.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 4875.2)">
+<title>AutomataLR0</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-4875.2 3471.72,-4875.2 3471.72,4 -4,4"/>
+<!-- I0 -->
+<g id="node1" class="node">
+<title>I0</title>
+<path fill="#f4f7fb" stroke="black" d="M1318.43,-4871.2C1318.43,-4871.2 1209.42,-4871.2 1209.42,-4871.2 1203.42,-4871.2 1197.42,-4865.2 1197.42,-4859.2 1197.42,-4859.2 1197.42,-4818.4 1197.42,-4818.4 1197.42,-4812.4 1203.42,-4806.4 1209.42,-4806.4 1209.42,-4806.4 1318.43,-4806.4 1318.43,-4806.4 1324.43,-4806.4 1330.43,-4812.4 1330.43,-4818.4 1330.43,-4818.4 1330.43,-4859.2 1330.43,-4859.2 1330.43,-4865.2 1324.43,-4871.2 1318.43,-4871.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1263.92" y="-4847.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_0</text>
+<text xml:space="preserve" text-anchor="middle" x="1263.92" y="-4835.8" font-family="Helvetica,sans-Serif" font-size="10.00">P' -&gt;  . P</text>
+<text xml:space="preserve" text-anchor="middle" x="1263.92" y="-4823.8" font-family="Helvetica,sans-Serif" font-size="10.00">(+1 items en cerradura)</text>
+</g>
+<!-- I1 -->
+<g id="node2" class="node">
+<title>I1</title>
+<path fill="#f4f7fb" stroke="black" d="M1273.54,-4703.6C1273.54,-4703.6 1194.3,-4703.6 1194.3,-4703.6 1188.3,-4703.6 1182.3,-4697.6 1182.3,-4691.6 1182.3,-4691.6 1182.3,-4662.8 1182.3,-4662.8 1182.3,-4656.8 1188.3,-4650.8 1194.3,-4650.8 1194.3,-4650.8 1273.54,-4650.8 1273.54,-4650.8 1279.54,-4650.8 1285.54,-4656.8 1285.54,-4662.8 1285.54,-4662.8 1285.54,-4691.6 1285.54,-4691.6 1285.54,-4697.6 1279.54,-4703.6 1273.54,-4703.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1233.92" y="-4680.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_1</text>
+<text xml:space="preserve" text-anchor="middle" x="1233.92" y="-4668.2" font-family="Helvetica,sans-Serif" font-size="10.00">P' -&gt; P . [Accept]</text>
+</g>
+<!-- I0&#45;&gt;I1 -->
+<g id="edge1" class="edge">
+<title>I0-&gt;I1</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1258,-4806.27C1252.89,-4779.1 1245.53,-4739.98 1240.3,-4712.13"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1242.73,-4711.79 1239.03,-4705.37 1237.91,-4712.7 1242.73,-4711.79"/>
+<text xml:space="preserve" text-anchor="middle" x="1252.52" y="-4755.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">P</text>
+</g>
+<!-- I2 -->
+<g id="node3" class="node">
+<title>I2</title>
+<path fill="#f4f7fb" stroke="black" d="M1508.28,-4709.6C1508.28,-4709.6 1347.57,-4709.6 1347.57,-4709.6 1341.57,-4709.6 1335.57,-4703.6 1335.57,-4697.6 1335.57,-4697.6 1335.57,-4656.8 1335.57,-4656.8 1335.57,-4650.8 1341.57,-4644.8 1347.57,-4644.8 1347.57,-4644.8 1508.28,-4644.8 1508.28,-4644.8 1514.28,-4644.8 1520.28,-4650.8 1520.28,-4656.8 1520.28,-4656.8 1520.28,-4697.6 1520.28,-4697.6 1520.28,-4703.6 1514.28,-4709.6 1508.28,-4709.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4686.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_2</text>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4674.2" font-family="Helvetica,sans-Serif" font-size="10.00">P -&gt; big_bang . Cu muerte_termica</text>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4662.2" font-family="Helvetica,sans-Serif" font-size="10.00">(+7 items en cerradura)</text>
+</g>
+<!-- I0&#45;&gt;I2 -->
+<g id="edge2" class="edge">
+<title>I0-&gt;I2</title>
+<path fill="none" stroke="black" d="M1296.32,-4806.27C1323.08,-4780.23 1361.12,-4743.21 1389.42,-4715.67"/>
+<polygon fill="black" stroke="black" points="1390.92,-4717.63 1394.22,-4710.99 1387.5,-4714.12 1390.92,-4717.63"/>
+<text xml:space="preserve" text-anchor="middle" x="1372.44" y="-4755.3" font-family="Courier,monospace" font-size="9.00">big_bang</text>
+</g>
+<!-- I3 -->
+<g id="node4" class="node">
+<title>I3</title>
+<path fill="#f4f7fb" stroke="black" d="M1508.28,-4548C1508.28,-4548 1347.57,-4548 1347.57,-4548 1341.57,-4548 1335.57,-4542 1335.57,-4536 1335.57,-4536 1335.57,-4483.2 1335.57,-4483.2 1335.57,-4477.2 1341.57,-4471.2 1347.57,-4471.2 1347.57,-4471.2 1508.28,-4471.2 1508.28,-4471.2 1514.28,-4471.2 1520.28,-4477.2 1520.28,-4483.2 1520.28,-4483.2 1520.28,-4536 1520.28,-4536 1520.28,-4542 1514.28,-4548 1508.28,-4548"/>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4524.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_3</text>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4512.6" font-family="Helvetica,sans-Serif" font-size="10.00">P -&gt; big_bang Cu . muerte_termica</text>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4500.6" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; Cu . C</text>
+<text xml:space="preserve" text-anchor="middle" x="1427.92" y="-4488.6" font-family="Helvetica,sans-Serif" font-size="10.00">(+5 items en cerradura)</text>
+</g>
+<!-- I2&#45;&gt;I3 -->
+<g id="edge3" class="edge">
+<title>I2-&gt;I3</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1427.92,-4644.66C1427.92,-4619.83 1427.92,-4584.85 1427.92,-4556.85"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1430.37,-4556.92 1427.92,-4549.92 1425.47,-4556.92 1430.37,-4556.92"/>
+<text xml:space="preserve" text-anchor="middle" x="1433.32" y="-4593.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">Cu</text>
+</g>
+<!-- I4 -->
+<g id="node5" class="node">
+<title>I4</title>
+<path fill="#f4f7fb" stroke="black" d="M2215.63,-2225.6C2215.63,-2225.6 2152.21,-2225.6 2152.21,-2225.6 2146.21,-2225.6 2140.21,-2219.6 2140.21,-2213.6 2140.21,-2213.6 2140.21,-2184.8 2140.21,-2184.8 2140.21,-2178.8 2146.21,-2172.8 2152.21,-2172.8 2152.21,-2172.8 2215.63,-2172.8 2215.63,-2172.8 2221.63,-2172.8 2227.63,-2178.8 2227.63,-2184.8 2227.63,-2184.8 2227.63,-2213.6 2227.63,-2213.6 2227.63,-2219.6 2221.63,-2225.6 2215.63,-2225.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2183.92" y="-2202.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_4</text>
+<text xml:space="preserve" text-anchor="middle" x="2183.92" y="-2190.2" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; C . (r3)</text>
+</g>
+<!-- I2&#45;&gt;I4 -->
+<g id="edge4" class="edge">
+<title>I2-&gt;I4</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2279.92,-4122.6C2229.81,-4018.96 2075.92,-4078.12 2075.92,-3963 2075.92,-3963 2075.92,-3963 2075.92,-3452.2 2075.92,-3261.3 2121.43,-3217.85 2165.92,-3032.2"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2279.92,-4272.2C2261.15,-4209.34 2300.08,-4187.03 2279.92,-4124.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2078.62" y="-3450.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I5 -->
+<g id="node6" class="node">
+<title>I5</title>
+<path fill="#f4f7fb" stroke="black" d="M886.4,-2064C886.4,-2064 775.44,-2064 775.44,-2064 769.44,-2064 763.44,-2058 763.44,-2052 763.44,-2052 763.44,-2011.2 763.44,-2011.2 763.44,-2005.2 769.44,-1999.2 775.44,-1999.2 775.44,-1999.2 886.4,-1999.2 886.4,-1999.2 892.4,-1999.2 898.4,-2005.2 898.4,-2011.2 898.4,-2011.2 898.4,-2052 898.4,-2052 898.4,-2058 892.4,-2064 886.4,-2064"/>
+<text xml:space="preserve" text-anchor="middle" x="830.92" y="-2040.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_5</text>
+<text xml:space="preserve" text-anchor="middle" x="830.92" y="-2028.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta . TI id = E ;</text>
+<text xml:space="preserve" text-anchor="middle" x="830.92" y="-2016.6" font-family="Helvetica,sans-Serif" font-size="10.00">(+3 items en cerradura)</text>
+</g>
+<!-- I2&#45;&gt;I5 -->
+<g id="edge5" class="edge">
+<title>I2-&gt;I5</title>
+<path fill="none" stroke="black" d="M452.92,-2111.4C571.78,-2062.81 613.36,-2095.17 737.92,-2064 743.55,-2062.59 749.32,-2061 755.1,-2059.31"/>
+<polygon fill="black" stroke="black" points="755.54,-2061.74 761.53,-2057.37 754.12,-2057.04 755.54,-2061.74"/>
+<path fill="none" stroke="black" d="M269.92,-4595.4C234.17,-4577.05 218.73,-4578.8 192.92,-4548 154.81,-4502.51 143.92,-4483.14 143.92,-4423.8 143.92,-4423.8 143.92,-4423.8 143.92,-3452.2 143.92,-3226.7 119.92,-3170.9 119.92,-2945.4 119.92,-2945.4 119.92,-2945.4 119.92,-2365.8 119.92,-2230.19 232.26,-2234.76 345.92,-2160.8 389.52,-2132.43 404.78,-2133.08 452.92,-2113.4"/>
+<path fill="none" stroke="black" d="M1335.07,-4649.33C1326.95,-4647.58 1318.82,-4646.02 1310.92,-4644.8 1196.5,-4627.06 370.22,-4655.26 269.92,-4597.4"/>
+<text xml:space="preserve" text-anchor="middle" x="162.42" y="-3363.7" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I6 -->
+<g id="node7" class="node">
+<title>I6</title>
+<path fill="#f4f7fb" stroke="black" d="M1987.29,-2058C1987.29,-2058 1888.56,-2058 1888.56,-2058 1882.56,-2058 1876.56,-2052 1876.56,-2046 1876.56,-2046 1876.56,-2017.2 1876.56,-2017.2 1876.56,-2011.2 1882.56,-2005.2 1888.56,-2005.2 1888.56,-2005.2 1987.29,-2005.2 1987.29,-2005.2 1993.29,-2005.2 1999.29,-2011.2 1999.29,-2017.2 1999.29,-2017.2 1999.29,-2046 1999.29,-2046 1999.29,-2052 1993.29,-2058 1987.29,-2058"/>
+<text xml:space="preserve" text-anchor="middle" x="1937.92" y="-2034.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_6</text>
+<text xml:space="preserve" text-anchor="middle" x="1937.92" y="-2022.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; estrella . id = E ;</text>
+</g>
+<!-- I2&#45;&gt;I6 -->
+<g id="edge6" class="edge">
+<title>I2-&gt;I6</title>
+<path fill="none" stroke="black" d="M2279.92,-4122.6C2216.32,-3927.57 2247.2,-3396.94 2303.92,-3199.8"/>
+<text xml:space="preserve" text-anchor="middle" x="2298.64" y="-3363.7" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I7 -->
+<g id="node8" class="node">
+<title>I7</title>
+<path fill="#f4f7fb" stroke="black" d="M1207.76,-4374.4C1207.76,-4374.4 1112.08,-4374.4 1112.08,-4374.4 1106.08,-4374.4 1100.08,-4368.4 1100.08,-4362.4 1100.08,-4362.4 1100.08,-4333.6 1100.08,-4333.6 1100.08,-4327.6 1106.08,-4321.6 1112.08,-4321.6 1112.08,-4321.6 1207.76,-4321.6 1207.76,-4321.6 1213.76,-4321.6 1219.76,-4327.6 1219.76,-4333.6 1219.76,-4333.6 1219.76,-4362.4 1219.76,-4362.4 1219.76,-4368.4 1213.76,-4374.4 1207.76,-4374.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1159.92" y="-4351" font-family="Helvetica,sans-Serif" font-size="10.00">I_7</text>
+<text xml:space="preserve" text-anchor="middle" x="1159.92" y="-4339" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; orbita . id { Cu }</text>
+</g>
+<!-- I2&#45;&gt;I7 -->
+<g id="edge7" class="edge">
+<title>I2-&gt;I7</title>
+<path fill="none" stroke="black" d="M269.92,-4595.4C-37.66,-4424.84 835.41,-4365.66 1091.57,-4352.21"/>
+<polygon fill="black" stroke="black" points="1091.32,-4354.68 1098.19,-4351.87 1091.07,-4349.79 1091.32,-4354.68"/>
+<text xml:space="preserve" text-anchor="middle" x="268.19" y="-4506.9" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I8 -->
+<g id="node9" class="node">
+<title>I8</title>
+<path fill="#f4f7fb" stroke="black" d="M1442.17,-3740C1442.17,-3740 1263.67,-3740 1263.67,-3740 1257.67,-3740 1251.67,-3734 1251.67,-3728 1251.67,-3728 1251.67,-3687.2 1251.67,-3687.2 1251.67,-3681.2 1257.67,-3675.2 1263.67,-3675.2 1263.67,-3675.2 1442.17,-3675.2 1442.17,-3675.2 1448.17,-3675.2 1454.17,-3681.2 1454.17,-3687.2 1454.17,-3687.2 1454.17,-3728 1454.17,-3728 1454.17,-3734 1448.17,-3740 1442.17,-3740"/>
+<text xml:space="preserve" text-anchor="middle" x="1352.92" y="-3716.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_8</text>
+<text xml:space="preserve" text-anchor="middle" x="1352.92" y="-3704.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse . ( E ) { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1352.92" y="-3692.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse . ( E ) { Cu } despeje { Cu }</text>
+</g>
+<!-- I2&#45;&gt;I8 -->
+<g id="edge8" class="edge">
+<title>I2-&gt;I8</title>
+<path fill="none" stroke="black" d="M2279.92,-4272.2C2276.35,-4266.93 1616.98,-3868.18 1412.6,-3744.66"/>
+<polygon fill="black" stroke="black" points="1414.08,-3742.69 1406.82,-3741.17 1411.55,-3746.88 1414.08,-3742.69"/>
+<path fill="none" stroke="black" d="M1520.45,-4673.65C1757.57,-4662.39 2362.72,-4601.63 2279.92,-4274.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2218" y="-4195.7" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I3&#45;&gt;I5 -->
+<g id="edge11" class="edge">
+<title>I3-&gt;I5</title>
+<path fill="none" stroke="black" d="M326.92,-4347C293.99,-4290.27 326.92,-4265 326.92,-4199.4 326.92,-4199.4 326.92,-4199.4 326.92,-3452.2 326.92,-3371.81 327.4,-3348.08 359.12,-3274.2 403.57,-3170.64 458.23,-3170.26 508.92,-3069.6 603.1,-2882.61 776.27,-2239.39 820.45,-2072.44"/>
+<polygon fill="black" stroke="black" points="822.77,-2073.26 822.19,-2065.86 818.03,-2072.01 822.77,-2073.26"/>
+<text xml:space="preserve" text-anchor="middle" x="378.02" y="-3276.9" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I3&#45;&gt;I6 -->
+<g id="edge12" class="edge">
+<title>I3-&gt;I6</title>
+<path fill="none" stroke="black" d="M2303.92,-3197.8C2324.05,-3127.01 2303.92,-3105.8 2303.92,-3032.2 2303.92,-3032.2 2303.92,-3032.2 2303.92,-2285 2303.92,-2225.33 2290.41,-2207.23 2252.92,-2160.8 2229.55,-2131.85 2208.91,-2140.97 2183.92,-2113.4"/>
+<path fill="none" stroke="black" d="M1520.64,-4508.13C1721.3,-4504.6 2177.92,-4481.96 2177.92,-4349 2177.92,-4349 2177.92,-4349 2177.92,-3452.2 2177.92,-3370.62 2180.93,-3344.26 2222.72,-3274.2 2247.79,-3232.16 2288.32,-3246.2 2303.92,-3199.8"/>
+<text xml:space="preserve" text-anchor="middle" x="2244.32" y="-3276.9" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I3&#45;&gt;I7 -->
+<g id="edge13" class="edge">
+<title>I3-&gt;I7</title>
+<path fill="none" stroke="black" d="M1364.41,-4470.78C1317.34,-4442.75 1254.06,-4405.06 1210.42,-4379.07"/>
+<polygon fill="black" stroke="black" points="1211.89,-4377.09 1204.62,-4375.62 1209.38,-4381.3 1211.89,-4377.09"/>
+<text xml:space="preserve" text-anchor="middle" x="1302.09" y="-4420.1" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I3&#45;&gt;I8 -->
+<g id="edge14" class="edge">
+<title>I3-&gt;I8</title>
+<path fill="none" stroke="black" d="M1427.92,-4470.87C1427.92,-4438.53 1427.92,-4390.7 1427.92,-4349 1427.92,-4349 1427.92,-4349 1427.92,-3961 1427.92,-3882.89 1406.61,-3865.71 1389.92,-3789.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1446.83" y="-4120.9" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I9 -->
+<g id="node10" class="node">
+<title>I9</title>
+<path fill="#f4f7fb" stroke="black" d="M1695.44,-4374.4C1695.44,-4374.4 1516.4,-4374.4 1516.4,-4374.4 1510.4,-4374.4 1504.4,-4368.4 1504.4,-4362.4 1504.4,-4362.4 1504.4,-4333.6 1504.4,-4333.6 1504.4,-4327.6 1510.4,-4321.6 1516.4,-4321.6 1516.4,-4321.6 1695.44,-4321.6 1695.44,-4321.6 1701.44,-4321.6 1707.44,-4327.6 1707.44,-4333.6 1707.44,-4333.6 1707.44,-4362.4 1707.44,-4362.4 1707.44,-4368.4 1701.44,-4374.4 1695.44,-4374.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1605.92" y="-4351" font-family="Helvetica,sans-Serif" font-size="10.00">I_9</text>
+<text xml:space="preserve" text-anchor="middle" x="1605.92" y="-4339" font-family="Helvetica,sans-Serif" font-size="10.00">P -&gt; big_bang Cu muerte_termica . (r1)</text>
+</g>
+<!-- I3&#45;&gt;I9 -->
+<g id="edge9" class="edge">
+<title>I3-&gt;I9</title>
+<path fill="none" stroke="black" d="M1470.11,-4470.78C1500.92,-4443.15 1542.19,-4406.15 1571.12,-4380.2"/>
+<polygon fill="black" stroke="black" points="1572.4,-4382.35 1575.97,-4375.85 1569.13,-4378.7 1572.4,-4382.35"/>
+<text xml:space="preserve" text-anchor="middle" x="1565.39" y="-4420.1" font-family="Courier,monospace" font-size="9.00">muerte_termica</text>
+</g>
+<!-- I10 -->
+<g id="node11" class="node">
+<title>I10</title>
+<path fill="#f4f7fb" stroke="black" d="M405.41,-2058C405.41,-2058 326.43,-2058 326.43,-2058 320.43,-2058 314.43,-2052 314.43,-2046 314.43,-2046 314.43,-2017.2 314.43,-2017.2 314.43,-2011.2 320.43,-2005.2 326.43,-2005.2 326.43,-2005.2 405.41,-2005.2 405.41,-2005.2 411.41,-2005.2 417.41,-2011.2 417.41,-2017.2 417.41,-2017.2 417.41,-2046 417.41,-2046 417.41,-2052 411.41,-2058 405.41,-2058"/>
+<text xml:space="preserve" text-anchor="middle" x="365.92" y="-2034.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_10</text>
+<text xml:space="preserve" text-anchor="middle" x="365.92" y="-2022.6" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; Cu C . (r2)</text>
+</g>
+<!-- I3&#45;&gt;I10 -->
+<g id="edge10" class="edge">
+<title>I3-&gt;I10</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M350.92,-2111.4C358.68,-2097.87 362.52,-2081.09 364.38,-2066.5"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="366.8,-2066.93 365.11,-2059.7 361.93,-2066.41 366.8,-2066.93"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M146.92,-2198.2C170.07,-2174.76 180.94,-2174.46 210.92,-2160.8 270.7,-2133.56 318.26,-2170.4 350.92,-2113.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M326.92,-4347C256.56,-4228.32 165.66,-4253.36 105.92,-4129 -58.22,-3787.29 17.92,-3659.69 17.92,-3280.6 17.92,-3280.6 17.92,-3280.6 17.92,-2446.6 17.92,-2322.99 60.06,-2288.15 146.92,-2200.2"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1335.42,-4504.5C1074.6,-4491.72 350.62,-4447.47 326.92,-4349"/>
+<text xml:space="preserve" text-anchor="middle" x="20.62" y="-3276.9" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I11 -->
+<g id="node12" class="node">
+<title>I11</title>
+<path fill="#f4f7fb" stroke="black" d="M1061.4,-1902.4C1061.4,-1902.4 950.44,-1902.4 950.44,-1902.4 944.44,-1902.4 938.44,-1896.4 938.44,-1890.4 938.44,-1890.4 938.44,-1861.6 938.44,-1861.6 938.44,-1855.6 944.44,-1849.6 950.44,-1849.6 950.44,-1849.6 1061.4,-1849.6 1061.4,-1849.6 1067.4,-1849.6 1073.4,-1855.6 1073.4,-1861.6 1073.4,-1861.6 1073.4,-1890.4 1073.4,-1890.4 1073.4,-1896.4 1067.4,-1902.4 1061.4,-1902.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1005.92" y="-1879" font-family="Helvetica,sans-Serif" font-size="10.00">I_11</text>
+<text xml:space="preserve" text-anchor="middle" x="1005.92" y="-1867" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta TI . id = E ;</text>
+</g>
+<!-- I5&#45;&gt;I11 -->
+<g id="edge15" class="edge">
+<title>I5-&gt;I11</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M867.18,-1998.77C897.47,-1972.19 940.39,-1934.52 970.45,-1908.13"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="971.88,-1910.14 975.52,-1903.68 968.65,-1906.46 971.88,-1910.14"/>
+<text xml:space="preserve" text-anchor="middle" x="929.07" y="-1948.1" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">TI</text>
+</g>
+<!-- I12 -->
+<g id="node13" class="node">
+<title>I12</title>
+<path fill="#f4f7fb" stroke="black" d="M876.08,-1902.4C876.08,-1902.4 793.76,-1902.4 793.76,-1902.4 787.76,-1902.4 781.76,-1896.4 781.76,-1890.4 781.76,-1890.4 781.76,-1861.6 781.76,-1861.6 781.76,-1855.6 787.76,-1849.6 793.76,-1849.6 793.76,-1849.6 876.08,-1849.6 876.08,-1849.6 882.08,-1849.6 888.08,-1855.6 888.08,-1861.6 888.08,-1861.6 888.08,-1890.4 888.08,-1890.4 888.08,-1896.4 882.08,-1902.4 876.08,-1902.4"/>
+<text xml:space="preserve" text-anchor="middle" x="834.92" y="-1879" font-family="Helvetica,sans-Serif" font-size="10.00">I_12</text>
+<text xml:space="preserve" text-anchor="middle" x="834.92" y="-1867" font-family="Helvetica,sans-Serif" font-size="10.00">TI -&gt; rocoso . (r9)</text>
+</g>
+<!-- I5&#45;&gt;I12 -->
+<g id="edge16" class="edge">
+<title>I5-&gt;I12</title>
+<path fill="none" stroke="black" d="M831.75,-1998.77C832.42,-1973.2 833.35,-1937.34 834.03,-1911.16"/>
+<polygon fill="black" stroke="black" points="836.48,-1911.26 834.21,-1904.2 831.58,-1911.13 836.48,-1911.26"/>
+<text xml:space="preserve" text-anchor="middle" x="849.24" y="-1948.1" font-family="Courier,monospace" font-size="9.00">rocoso</text>
+</g>
+<!-- I13 -->
+<g id="node14" class="node">
+<title>I13</title>
+<path fill="#f4f7fb" stroke="black" d="M547.76,-1902.4C547.76,-1902.4 452.09,-1902.4 452.09,-1902.4 446.09,-1902.4 440.09,-1896.4 440.09,-1890.4 440.09,-1890.4 440.09,-1861.6 440.09,-1861.6 440.09,-1855.6 446.09,-1849.6 452.09,-1849.6 452.09,-1849.6 547.76,-1849.6 547.76,-1849.6 553.76,-1849.6 559.76,-1855.6 559.76,-1861.6 559.76,-1861.6 559.76,-1890.4 559.76,-1890.4 559.76,-1896.4 553.76,-1902.4 547.76,-1902.4"/>
+<text xml:space="preserve" text-anchor="middle" x="499.92" y="-1879" font-family="Helvetica,sans-Serif" font-size="10.00">I_13</text>
+<text xml:space="preserve" text-anchor="middle" x="499.92" y="-1867" font-family="Helvetica,sans-Serif" font-size="10.00">TI -&gt; gaseoso . (r10)</text>
+</g>
+<!-- I5&#45;&gt;I13 -->
+<g id="edge17" class="edge">
+<title>I5-&gt;I13</title>
+<path fill="none" stroke="black" d="M763.14,-1999.15C704.49,-1971.93 620.34,-1932.88 563.08,-1906.31"/>
+<polygon fill="black" stroke="black" points="564.29,-1904.17 556.91,-1903.45 562.23,-1908.62 564.29,-1904.17"/>
+<text xml:space="preserve" text-anchor="middle" x="684.33" y="-1948.1" font-family="Courier,monospace" font-size="9.00">gaseoso</text>
+</g>
+<!-- I14 -->
+<g id="node15" class="node">
+<title>I14</title>
+<path fill="#f4f7fb" stroke="black" d="M720.15,-1902.4C720.15,-1902.4 621.7,-1902.4 621.7,-1902.4 615.7,-1902.4 609.7,-1896.4 609.7,-1890.4 609.7,-1890.4 609.7,-1861.6 609.7,-1861.6 609.7,-1855.6 615.7,-1849.6 621.7,-1849.6 621.7,-1849.6 720.15,-1849.6 720.15,-1849.6 726.15,-1849.6 732.15,-1855.6 732.15,-1861.6 732.15,-1861.6 732.15,-1890.4 732.15,-1890.4 732.15,-1896.4 726.15,-1902.4 720.15,-1902.4"/>
+<text xml:space="preserve" text-anchor="middle" x="670.92" y="-1879" font-family="Helvetica,sans-Serif" font-size="10.00">I_14</text>
+<text xml:space="preserve" text-anchor="middle" x="670.92" y="-1867" font-family="Helvetica,sans-Serif" font-size="10.00">TI -&gt; nebulosa . (r11)</text>
+</g>
+<!-- I5&#45;&gt;I14 -->
+<g id="edge18" class="edge">
+<title>I5-&gt;I14</title>
+<path fill="none" stroke="black" d="M797.77,-1998.77C770.2,-1972.31 731.16,-1934.83 703.7,-1908.46"/>
+<polygon fill="black" stroke="black" points="705.51,-1906.81 698.77,-1903.73 702.12,-1910.35 705.51,-1906.81"/>
+<text xml:space="preserve" text-anchor="middle" x="772.53" y="-1948.1" font-family="Courier,monospace" font-size="9.00">nebulosa</text>
+</g>
+<!-- I15 -->
+<g id="node16" class="node">
+<title>I15</title>
+<path fill="#f4f7fb" stroke="black" d="M1990.29,-1806.6C1990.29,-1806.6 1891.56,-1806.6 1891.56,-1806.6 1885.56,-1806.6 1879.56,-1800.6 1879.56,-1794.6 1879.56,-1794.6 1879.56,-1765.8 1879.56,-1765.8 1879.56,-1759.8 1885.56,-1753.8 1891.56,-1753.8 1891.56,-1753.8 1990.29,-1753.8 1990.29,-1753.8 1996.29,-1753.8 2002.29,-1759.8 2002.29,-1765.8 2002.29,-1765.8 2002.29,-1794.6 2002.29,-1794.6 2002.29,-1800.6 1996.29,-1806.6 1990.29,-1806.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1940.92" y="-1783.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_15</text>
+<text xml:space="preserve" text-anchor="middle" x="1940.92" y="-1771.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; estrella id . = E ;</text>
+</g>
+<!-- I6&#45;&gt;I15 -->
+<g id="edge19" class="edge">
+<title>I6-&gt;I15</title>
+<path fill="none" stroke="black" d="M1938.23,-2004.85C1938.78,-1959.55 1939.91,-1865.65 1940.51,-1815.13"/>
+<polygon fill="black" stroke="black" points="1942.96,-1815.35 1940.6,-1808.32 1938.06,-1815.29 1942.96,-1815.35"/>
+<text xml:space="preserve" text-anchor="middle" x="1944.32" y="-1948.1" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I16 -->
+<g id="node17" class="node">
+<title>I16</title>
+<path fill="#f4f7fb" stroke="black" d="M1207.76,-4224.8C1207.76,-4224.8 1112.08,-4224.8 1112.08,-4224.8 1106.08,-4224.8 1100.08,-4218.8 1100.08,-4212.8 1100.08,-4212.8 1100.08,-4184 1100.08,-4184 1100.08,-4178 1106.08,-4172 1112.08,-4172 1112.08,-4172 1207.76,-4172 1207.76,-4172 1213.76,-4172 1219.76,-4178 1219.76,-4184 1219.76,-4184 1219.76,-4212.8 1219.76,-4212.8 1219.76,-4218.8 1213.76,-4224.8 1207.76,-4224.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1159.92" y="-4201.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_16</text>
+<text xml:space="preserve" text-anchor="middle" x="1159.92" y="-4189.4" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; orbita id . { Cu }</text>
+</g>
+<!-- I7&#45;&gt;I16 -->
+<g id="edge20" class="edge">
+<title>I7-&gt;I16</title>
+<path fill="none" stroke="black" d="M1159.92,-4321.29C1159.92,-4296.84 1159.92,-4259.93 1159.92,-4233.13"/>
+<polygon fill="black" stroke="black" points="1162.37,-4233.33 1159.92,-4226.33 1157.47,-4233.33 1162.37,-4233.33"/>
+<text xml:space="preserve" text-anchor="middle" x="1165.32" y="-4270.5" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I17 -->
+<g id="node18" class="node">
+<title>I17</title>
+<path fill="#f4f7fb" stroke="black" d="M2577.17,-3578.4C2577.17,-3578.4 2398.67,-3578.4 2398.67,-3578.4 2392.67,-3578.4 2386.67,-3572.4 2386.67,-3566.4 2386.67,-3566.4 2386.67,-3513.6 2386.67,-3513.6 2386.67,-3507.6 2392.67,-3501.6 2398.67,-3501.6 2398.67,-3501.6 2577.17,-3501.6 2577.17,-3501.6 2583.17,-3501.6 2589.17,-3507.6 2589.17,-3513.6 2589.17,-3513.6 2589.17,-3566.4 2589.17,-3566.4 2589.17,-3572.4 2583.17,-3578.4 2577.17,-3578.4"/>
+<text xml:space="preserve" text-anchor="middle" x="2487.92" y="-3555" font-family="Helvetica,sans-Serif" font-size="10.00">I_17</text>
+<text xml:space="preserve" text-anchor="middle" x="2487.92" y="-3543" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( . E ) { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="2487.92" y="-3531" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( . E ) { Cu } despeje { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="2487.92" y="-3519" font-family="Helvetica,sans-Serif" font-size="10.00">(+10 items en cerradura)</text>
+</g>
+<!-- I8&#45;&gt;I17 -->
+<g id="edge21" class="edge">
+<title>I8-&gt;I17</title>
+<path fill="none" stroke="black" d="M1454.64,-3691.76C1667.51,-3660.7 2158.35,-3589.08 2378.09,-3557.03"/>
+<polygon fill="black" stroke="black" points="2378.36,-3559.46 2384.93,-3556.03 2377.65,-3554.61 2378.36,-3559.46"/>
+<text xml:space="preserve" text-anchor="middle" x="1923.12" y="-3624.1" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I18 -->
+<g id="node19" class="node">
+<title>I18</title>
+<path fill="#f4f7fb" stroke="black" d="M1061.4,-1710.8C1061.4,-1710.8 950.44,-1710.8 950.44,-1710.8 944.44,-1710.8 938.44,-1704.8 938.44,-1698.8 938.44,-1698.8 938.44,-1670 938.44,-1670 938.44,-1664 944.44,-1658 950.44,-1658 950.44,-1658 1061.4,-1658 1061.4,-1658 1067.4,-1658 1073.4,-1664 1073.4,-1670 1073.4,-1670 1073.4,-1698.8 1073.4,-1698.8 1073.4,-1704.8 1067.4,-1710.8 1061.4,-1710.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1005.92" y="-1687.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_18</text>
+<text xml:space="preserve" text-anchor="middle" x="1005.92" y="-1675.4" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta TI id . = E ;</text>
+</g>
+<!-- I11&#45;&gt;I18 -->
+<g id="edge22" class="edge">
+<title>I11-&gt;I18</title>
+<path fill="none" stroke="black" d="M1005.92,-1849.43C1005.92,-1815.79 1005.92,-1756.57 1005.92,-1719.24"/>
+<polygon fill="black" stroke="black" points="1008.37,-1719.68 1005.92,-1712.68 1003.47,-1719.68 1008.37,-1719.68"/>
+<text xml:space="preserve" text-anchor="middle" x="1011.32" y="-1777.5" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I19 -->
+<g id="node20" class="node">
+<title>I19</title>
+<path fill="#f4f7fb" stroke="black" d="M2002.21,-1561.2C2002.21,-1561.2 1887.64,-1561.2 1887.64,-1561.2 1881.64,-1561.2 1875.64,-1555.2 1875.64,-1549.2 1875.64,-1549.2 1875.64,-1508.4 1875.64,-1508.4 1875.64,-1502.4 1881.64,-1496.4 1887.64,-1496.4 1887.64,-1496.4 2002.21,-1496.4 2002.21,-1496.4 2008.21,-1496.4 2014.21,-1502.4 2014.21,-1508.4 2014.21,-1508.4 2014.21,-1549.2 2014.21,-1549.2 2014.21,-1555.2 2008.21,-1561.2 2002.21,-1561.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1537.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_19</text>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1525.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; estrella id = . E ;</text>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1513.8" font-family="Helvetica,sans-Serif" font-size="10.00">(+10 items en cerradura)</text>
+</g>
+<!-- I15&#45;&gt;I19 -->
+<g id="edge23" class="edge">
+<title>I15-&gt;I19</title>
+<path fill="none" stroke="black" d="M1941.34,-1753.45C1942.03,-1709.95 1943.45,-1621.6 1944.28,-1569.92"/>
+<polygon fill="black" stroke="black" points="1946.72,-1570.2 1944.39,-1563.16 1941.83,-1570.12 1946.72,-1570.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1945.54" y="-1681.7" font-family="Courier,monospace" font-size="9.00">=</text>
+</g>
+<!-- I20 -->
+<g id="node21" class="node">
+<title>I20</title>
+<path fill="#f4f7fb" stroke="black" d="M1307.43,-4075.2C1307.43,-4075.2 1198.42,-4075.2 1198.42,-4075.2 1192.42,-4075.2 1186.42,-4069.2 1186.42,-4063.2 1186.42,-4063.2 1186.42,-4022.4 1186.42,-4022.4 1186.42,-4016.4 1192.42,-4010.4 1198.42,-4010.4 1198.42,-4010.4 1307.43,-4010.4 1307.43,-4010.4 1313.43,-4010.4 1319.43,-4016.4 1319.43,-4022.4 1319.43,-4022.4 1319.43,-4063.2 1319.43,-4063.2 1319.43,-4069.2 1313.43,-4075.2 1307.43,-4075.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1252.92" y="-4051.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_20</text>
+<text xml:space="preserve" text-anchor="middle" x="1252.92" y="-4039.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; orbita id { . Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1252.92" y="-4027.8" font-family="Helvetica,sans-Serif" font-size="10.00">(+7 items en cerradura)</text>
+</g>
+<!-- I16&#45;&gt;I20 -->
+<g id="edge24" class="edge">
+<title>I16-&gt;I20</title>
+<path fill="none" stroke="black" d="M1175.49,-4171.69C1190.2,-4147.39 1212.48,-4110.59 1229.37,-4082.7"/>
+<polygon fill="black" stroke="black" points="1231.45,-4084 1232.98,-4076.74 1227.25,-4081.46 1231.45,-4084"/>
+<text xml:space="preserve" text-anchor="middle" x="1209.12" y="-4120.9" font-family="Courier,monospace" font-size="9.00">{</text>
+</g>
+<!-- I21 -->
+<g id="node22" class="node">
+<title>I21</title>
+<path fill="#f4f7fb" stroke="black" d="M2587.17,-3404.8C2587.17,-3404.8 2408.67,-3404.8 2408.67,-3404.8 2402.67,-3404.8 2396.67,-3398.8 2396.67,-3392.8 2396.67,-3392.8 2396.67,-3340 2396.67,-3340 2396.67,-3334 2402.67,-3328 2408.67,-3328 2408.67,-3328 2587.17,-3328 2587.17,-3328 2593.17,-3328 2599.17,-3334 2599.17,-3340 2599.17,-3340 2599.17,-3392.8 2599.17,-3392.8 2599.17,-3398.8 2593.17,-3404.8 2587.17,-3404.8"/>
+<text xml:space="preserve" text-anchor="middle" x="2497.92" y="-3381.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_21</text>
+<text xml:space="preserve" text-anchor="middle" x="2497.92" y="-3369.4" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E . ) { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="2497.92" y="-3357.4" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E . ) { Cu } despeje { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="2497.92" y="-3345.4" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E . superposicion T</text>
+</g>
+<!-- I17&#45;&gt;I21 -->
+<g id="edge25" class="edge">
+<title>I17-&gt;I21</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2490.12,-3501.34C2491.62,-3475.5 2493.63,-3441.05 2495.23,-3413.56"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2497.67,-3413.91 2495.63,-3406.78 2492.77,-3413.62 2497.67,-3413.91"/>
+<text xml:space="preserve" text-anchor="middle" x="2495.92" y="-3450.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">E</text>
+</g>
+<!-- I22 -->
+<g id="node23" class="node">
+<title>I22</title>
+<path fill="#fdebd0" stroke="#b4342a" stroke-width="1.8" d="M1997.48,-1399.6C1997.48,-1399.6 1892.37,-1399.6 1892.37,-1399.6 1886.37,-1399.6 1880.37,-1393.6 1880.37,-1387.6 1880.37,-1387.6 1880.37,-1346.8 1880.37,-1346.8 1880.37,-1340.8 1886.37,-1334.8 1892.37,-1334.8 1892.37,-1334.8 1997.48,-1334.8 1997.48,-1334.8 2003.48,-1334.8 2009.48,-1340.8 2009.48,-1346.8 2009.48,-1346.8 2009.48,-1387.6 2009.48,-1387.6 2009.48,-1393.6 2003.48,-1399.6 1997.48,-1399.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1376.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_22</text>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1364.2" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; T . (r13)</text>
+<text xml:space="preserve" text-anchor="middle" x="1944.92" y="-1352.2" font-family="Helvetica,sans-Serif" font-size="10.00">T -&gt; T . interferencia U</text>
+</g>
+<!-- I17&#45;&gt;I22 -->
+<g id="edge26" class="edge">
+<title>I17-&gt;I22</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2985.92,-2521.4C2981.98,-2488.18 2962.54,-2485.47 2954.52,-2453 2945.43,-2416.18 2949.92,-2405.72 2949.92,-2367.8 2949.92,-2367.8 2949.92,-2367.8 2949.92,-2111.4 2949.92,-2039.94 2924.46,-2025.72 2907.92,-1956.2 2889.54,-1878.95 2871.92,-1860.61 2871.92,-1781.2 2871.92,-1781.2 2871.92,-1781.2 2871.92,-1527.8 2871.92,-1441.34 2237.53,-1388.71 2018.35,-1373.1"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2018.77,-1370.68 2011.62,-1372.63 2018.43,-1375.56 2018.77,-1370.68"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2589.6,-3524.99C2735.25,-3502.03 2985.92,-3450.45 2985.92,-3367.4 2985.92,-3367.4 2985.92,-3367.4 2985.92,-2677 2985.92,-2608.73 2992.97,-2591.3 2985.92,-2523.4"/>
+<text xml:space="preserve" text-anchor="middle" x="2957.22" y="-2444.9" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">T</text>
+</g>
+<!-- I23 -->
+<g id="node24" class="node">
+<title>I23</title>
+<path fill="#fdebd0" stroke="#b4342a" stroke-width="1.8" d="M1074.54,-376C1074.54,-376 963.3,-376 963.3,-376 957.3,-376 951.3,-370 951.3,-364 951.3,-364 951.3,-323.2 951.3,-323.2 951.3,-317.2 957.3,-311.2 963.3,-311.2 963.3,-311.2 1074.54,-311.2 1074.54,-311.2 1080.54,-311.2 1086.54,-317.2 1086.54,-323.2 1086.54,-323.2 1086.54,-364 1086.54,-364 1086.54,-370 1080.54,-376 1074.54,-376"/>
+<text xml:space="preserve" text-anchor="middle" x="1018.92" y="-352.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_23</text>
+<text xml:space="preserve" text-anchor="middle" x="1018.92" y="-340.6" font-family="Helvetica,sans-Serif" font-size="10.00">T -&gt; U . (r15)</text>
+<text xml:space="preserve" text-anchor="middle" x="1018.92" y="-328.6" font-family="Helvetica,sans-Serif" font-size="10.00">U -&gt; U . convergencia V</text>
+</g>
+<!-- I17&#45;&gt;I23 -->
+<g id="edge27" class="edge">
+<title>I17-&gt;I23</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M615.92,-827.4C656.2,-606.5 740.82,-558.14 921.92,-425.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1973.92,-3365.4C1719.84,-3215.65 1624.29,-3234.71 1379.92,-3069.6 1307.51,-3020.67 1311.63,-2976.99 1232.92,-2939 1132.97,-2890.75 1072.33,-2966.89 986.92,-2896 937.18,-2854.72 935.92,-2824.44 935.92,-2759.8 935.92,-2759.8 935.92,-2759.8 935.92,-2446.6 935.92,-2323.14 1062.12,-2347.22 1118.92,-2237.6 1145.05,-2187.18 1148.92,-2170.19 1148.92,-2113.4 1148.92,-2113.4 1148.92,-2113.4 1148.92,-1779.2 1148.92,-1720.76 1138.19,-1700.35 1097.92,-1658 1061.81,-1620.02 714.79,-1484.93 672.92,-1453.4 636.57,-1426.02 534.92,-1296.45 534.92,-1287.4 534.92,-1287.4 534.92,-1287.4 534.92,-1043 534.92,-941.47 586.69,-926.63 615.92,-829.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2386.28,-3520.65C2277.63,-3497.62 2103.53,-3450.67 1973.92,-3367.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1151.62" y="-1948.1" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I24 -->
+<g id="node25" class="node">
+<title>I24</title>
+<path fill="#f4f7fb" stroke="black" d="M2689.36,-370C2689.36,-370 2626.49,-370 2626.49,-370 2620.49,-370 2614.49,-364 2614.49,-358 2614.49,-358 2614.49,-329.2 2614.49,-329.2 2614.49,-323.2 2620.49,-317.2 2626.49,-317.2 2626.49,-317.2 2689.36,-317.2 2689.36,-317.2 2695.36,-317.2 2701.36,-323.2 2701.36,-329.2 2701.36,-329.2 2701.36,-358 2701.36,-358 2701.36,-364 2695.36,-370 2689.36,-370"/>
+<text xml:space="preserve" text-anchor="middle" x="2657.92" y="-346.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_24</text>
+<text xml:space="preserve" text-anchor="middle" x="2657.92" y="-334.6" font-family="Helvetica,sans-Serif" font-size="10.00">U -&gt; V . (r17)</text>
+</g>
+<!-- I17&#45;&gt;I24 -->
+<g id="edge28" class="edge">
+<title>I17-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M3348.92,-2030.6C3353.33,-2017.46 3354.92,-1795.06 3354.92,-1781.2 3354.92,-1781.2 3354.92,-1781.2 3354.92,-1123.8 3354.92,-765.65 3262.14,-606.1 2952.92,-425.4"/>
+<text xml:space="preserve" text-anchor="middle" x="3355.54" y="-1948.1" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I25 -->
+<g id="node26" class="node">
+<title>I25</title>
+<path fill="#f4f7fb" stroke="black" d="M1864.43,-1076.4C1864.43,-1076.4 1755.42,-1076.4 1755.42,-1076.4 1749.42,-1076.4 1743.42,-1070.4 1743.42,-1064.4 1743.42,-1064.4 1743.42,-1023.6 1743.42,-1023.6 1743.42,-1017.6 1749.42,-1011.6 1755.42,-1011.6 1755.42,-1011.6 1864.43,-1011.6 1864.43,-1011.6 1870.43,-1011.6 1876.43,-1017.6 1876.43,-1023.6 1876.43,-1023.6 1876.43,-1064.4 1876.43,-1064.4 1876.43,-1070.4 1870.43,-1076.4 1864.43,-1076.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1809.92" y="-1053" font-family="Helvetica,sans-Serif" font-size="10.00">I_25</text>
+<text xml:space="preserve" text-anchor="middle" x="1809.92" y="-1041" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; oscuridad . V</text>
+<text xml:space="preserve" text-anchor="middle" x="1809.92" y="-1029" font-family="Helvetica,sans-Serif" font-size="10.00">(+4 items en cerradura)</text>
+</g>
+<!-- I17&#45;&gt;I25 -->
+<g id="edge29" class="edge">
+<title>I17-&gt;I25</title>
+<path fill="none" stroke="black" d="M1973.92,-3365.4C1662.74,-3143.61 1799.92,-2905.53 1799.92,-2523.4 1799.92,-2523.4 1799.92,-2523.4 1799.92,-1204.6 1799.92,-1163.82 1803.21,-1117.3 1806.02,-1085.05"/>
+<polygon fill="black" stroke="black" points="1808.44,-1085.46 1806.62,-1078.27 1803.56,-1085.02 1808.44,-1085.46"/>
+<text xml:space="preserve" text-anchor="middle" x="1824.23" y="-2283.3" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I26 -->
+<g id="node27" class="node">
+<title>I26</title>
+<path fill="#f4f7fb" stroke="black" d="M2121.21,-860.8C2121.21,-860.8 2006.64,-860.8 2006.64,-860.8 2000.64,-860.8 1994.64,-854.8 1994.64,-848.8 1994.64,-848.8 1994.64,-808 1994.64,-808 1994.64,-802 2000.64,-796 2006.64,-796 2006.64,-796 2121.21,-796 2121.21,-796 2127.21,-796 2133.21,-802 2133.21,-808 2133.21,-808 2133.21,-848.8 2133.21,-848.8 2133.21,-854.8 2127.21,-860.8 2121.21,-860.8"/>
+<text xml:space="preserve" text-anchor="middle" x="2063.92" y="-837.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_26</text>
+<text xml:space="preserve" text-anchor="middle" x="2063.92" y="-825.4" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; ( . E )</text>
+<text xml:space="preserve" text-anchor="middle" x="2063.92" y="-813.4" font-family="Helvetica,sans-Serif" font-size="10.00">(+10 items en cerradura)</text>
+</g>
+<!-- I17&#45;&gt;I26 -->
+<g id="edge30" class="edge">
+<title>I17-&gt;I26</title>
+<path fill="none" stroke="black" d="M3156.92,-2285C3158.85,-2256.5 3127.66,-2262.42 3113.52,-2237.6 3084.98,-2187.48 3075.92,-2171.07 3075.92,-2113.4 3075.92,-2113.4 3075.92,-2113.4 3075.92,-1608.6 3075.92,-1203.33 2818.86,-1123.44 2458.92,-937.2"/>
+<path fill="none" stroke="black" d="M2985.92,-2521.4C2970.23,-2393.41 3135.94,-2414.24 3156.92,-2287"/>
+<text xml:space="preserve" text-anchor="middle" x="3116.22" y="-2196.5" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I27 -->
+<g id="node28" class="node">
+<title>I27</title>
+<path fill="#f4f7fb" stroke="black" d="M2169.64,-52.8C2169.64,-52.8 2106.21,-52.8 2106.21,-52.8 2100.21,-52.8 2094.21,-46.8 2094.21,-40.8 2094.21,-40.8 2094.21,-12 2094.21,-12 2094.21,-6 2100.21,0 2106.21,0 2106.21,0 2169.64,0 2169.64,0 2175.64,0 2181.64,-6 2181.64,-12 2181.64,-12 2181.64,-40.8 2181.64,-40.8 2181.64,-46.8 2175.64,-52.8 2169.64,-52.8"/>
+<text xml:space="preserve" text-anchor="middle" x="2137.92" y="-29.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_27</text>
+<text xml:space="preserve" text-anchor="middle" x="2137.92" y="-17.4" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; id . (r20)</text>
+</g>
+<!-- I17&#45;&gt;I27 -->
+<g id="edge31" class="edge">
+<title>I17-&gt;I27</title>
+<path fill="none" stroke="black" d="M3348.92,-2030.6C3388.26,-1916.39 3456.92,-1901.99 3456.92,-1781.2 3456.92,-1781.2 3456.92,-1781.2 3456.92,-746.6 3456.92,-675.67 3468.08,-657.05 3456.92,-587"/>
+<text xml:space="preserve" text-anchor="middle" x="3462.32" y="-1777.5" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I28 -->
+<g id="node29" class="node">
+<title>I28</title>
+<path fill="#f4f7fb" stroke="black" d="M1216.47,-52.8C1216.47,-52.8 1141.37,-52.8 1141.37,-52.8 1135.37,-52.8 1129.37,-46.8 1129.37,-40.8 1129.37,-40.8 1129.37,-12 1129.37,-12 1129.37,-6 1135.37,0 1141.37,0 1141.37,0 1216.47,0 1216.47,0 1222.47,0 1228.47,-6 1228.47,-12 1228.47,-12 1228.47,-40.8 1228.47,-40.8 1228.47,-46.8 1222.47,-52.8 1216.47,-52.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1178.92" y="-29.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_28</text>
+<text xml:space="preserve" text-anchor="middle" x="1178.92" y="-17.4" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; num . (r21)</text>
+</g>
+<!-- I17&#45;&gt;I28 -->
+<g id="edge32" class="edge">
+<title>I17-&gt;I28</title>
+<path fill="none" stroke="black" d="M3348.92,-2030.6C3368.67,-1974.59 3252.92,-1840.59 3252.92,-1781.2 3252.92,-1781.2 3252.92,-1781.2 3252.92,-1123.8 3252.92,-951.21 3359.49,-911.29 3324.92,-742.2 3314.49,-691.16 3308.45,-677.32 3278.92,-634.4 3220.38,-549.31 3197.53,-530.58 3111.92,-472.8 3063.14,-439.88 3045.08,-442.05 2990.92,-419 2873.93,-369.21 2845.48,-354.48 2725.92,-311.2 2666.71,-289.76 2649.22,-292.01 2590.92,-268.2 2439.3,-206.26 2414.38,-162.05 2261.92,-102.2"/>
+<path fill="none" stroke="black" d="M3156.92,-2285C3180.97,-2146.12 3282.67,-2157 3348.92,-2032.6"/>
+<text xml:space="preserve" text-anchor="middle" x="3265.18" y="-1777.5" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I29 -->
+<g id="node30" class="node">
+<title>I29</title>
+<path fill="#f4f7fb" stroke="black" d="M1136.21,-1561.2C1136.21,-1561.2 1021.64,-1561.2 1021.64,-1561.2 1015.64,-1561.2 1009.64,-1555.2 1009.64,-1549.2 1009.64,-1549.2 1009.64,-1508.4 1009.64,-1508.4 1009.64,-1502.4 1015.64,-1496.4 1021.64,-1496.4 1021.64,-1496.4 1136.21,-1496.4 1136.21,-1496.4 1142.21,-1496.4 1148.21,-1502.4 1148.21,-1508.4 1148.21,-1508.4 1148.21,-1549.2 1148.21,-1549.2 1148.21,-1555.2 1142.21,-1561.2 1136.21,-1561.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1537.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_29</text>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1525.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta TI id = . E ;</text>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1513.8" font-family="Helvetica,sans-Serif" font-size="10.00">(+10 items en cerradura)</text>
+</g>
+<!-- I18&#45;&gt;I29 -->
+<g id="edge33" class="edge">
+<title>I18-&gt;I29</title>
+<path fill="none" stroke="black" d="M1018.14,-1657.69C1029.64,-1633.49 1047.03,-1596.91 1060.27,-1569.06"/>
+<polygon fill="black" stroke="black" points="1062.44,-1570.19 1063.23,-1562.82 1058.01,-1568.09 1062.44,-1570.19"/>
+<text xml:space="preserve" text-anchor="middle" x="1045.12" y="-1606.9" font-family="Courier,monospace" font-size="9.00">=</text>
+</g>
+<!-- I19&#45;&gt;I22 -->
+<g id="edge35" class="edge">
+<title>I19-&gt;I22</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1944.92,-1496.27C1944.92,-1471.27 1944.92,-1436.14 1944.92,-1409"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1947.37,-1409 1944.92,-1402 1942.47,-1409 1947.37,-1409"/>
+<text xml:space="preserve" text-anchor="middle" x="1947.62" y="-1445.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">T</text>
+</g>
+<!-- I19&#45;&gt;I23 -->
+<g id="edge36" class="edge">
+<title>I19-&gt;I23</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1456.92,-1447C1443.72,-1444.31 1440.3,-1444.23 1426.92,-1442.6 1329.18,-1430.67 1068.29,-1453.55 985.92,-1399.6 917.15,-1354.55 916.59,-1317.57 895.92,-1238 891.42,-1220.66 872.14,-463.36 921.92,-425.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1875.36,-1519.08C1780.28,-1506.58 1604.65,-1481.47 1456.92,-1449"/>
+<text xml:space="preserve" text-anchor="middle" x="891.57" y="-933.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I19&#45;&gt;I24 -->
+<g id="edge37" class="edge">
+<title>I19-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2928.92,-1285.4C2894.48,-1195.62 2971.68,-1171.65 2984.92,-1076.4 3015.26,-858.12 3066.12,-788.11 2991.92,-580.6 2977.53,-540.34 2926.53,-548.73 2930.92,-506.2"/>
+<text xml:space="preserve" text-anchor="middle" x="3017.92" y="-933.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I19&#45;&gt;I25 -->
+<g id="edge38" class="edge">
+<title>I19-&gt;I25</title>
+<path fill="none" stroke="black" d="M1456.92,-1447C1317.53,-1416.2 1328.22,-1187.57 1456.92,-1125.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1381.4" y="-1283.7" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I19&#45;&gt;I26 -->
+<g id="edge39" class="edge">
+<title>I19-&gt;I26</title>
+<path fill="none" stroke="black" d="M2928.92,-1285.4C2894.71,-1226.67 2845.81,-1265.19 2783.52,-1238 2702.73,-1202.73 2455,-1131.28 2436.92,-1045"/>
+<path fill="none" stroke="black" d="M2928.92,-1366.2C2939.51,-1332.82 2941.47,-1320.1 2928.92,-1287.4"/>
+<path fill="none" stroke="black" d="M2014.58,-1523.37C2234.47,-1508.5 2900.97,-1456.3 2928.92,-1368.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2786.22" y="-1202.9" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I19&#45;&gt;I27 -->
+<g id="edge40" class="edge">
+<title>I19-&gt;I27</title>
+<path fill="none" stroke="black" d="M3456.92,-585C3478.23,-514.82 3393.32,-518.45 3335.92,-472.8 3256.48,-409.62 3198.68,-431.92 3146.92,-344.6"/>
+<path fill="none" stroke="black" d="M2928.92,-1366.2C3238.64,-1126.86 3187.4,-950.01 3418.92,-634.4 3434.89,-612.63 3453.82,-613.82 3456.92,-587"/>
+<text xml:space="preserve" text-anchor="middle" x="3351.53" y="-744.9" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I19&#45;&gt;I28 -->
+<g id="edge41" class="edge">
+<title>I19-&gt;I28</title>
+<path fill="none" stroke="black" d="M1875.31,-1525.97C1618.49,-1518.31 738.92,-1483.63 738.92,-1368.2 738.92,-1368.2 738.92,-1368.2 738.92,-1123.8 738.92,-973.29 696.27,-940.43 653.92,-796 615.78,-665.93 558.92,-641.74 558.92,-506.2 558.92,-506.2 558.92,-506.2 558.92,-181 558.92,-65.97 966.07,-36.51 1120.49,-29.47"/>
+<polygon fill="black" stroke="black" points="1120.58,-31.92 1127.46,-29.16 1120.36,-27.02 1120.58,-31.92"/>
+<text xml:space="preserve" text-anchor="middle" x="646.78" y="-744.9" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I30 -->
+<g id="node31" class="node">
+<title>I30</title>
+<path fill="#f4f7fb" stroke="black" d="M1669.82,-1399.6C1669.82,-1399.6 1558.03,-1399.6 1558.03,-1399.6 1552.03,-1399.6 1546.03,-1393.6 1546.03,-1387.6 1546.03,-1387.6 1546.03,-1346.8 1546.03,-1346.8 1546.03,-1340.8 1552.03,-1334.8 1558.03,-1334.8 1558.03,-1334.8 1669.82,-1334.8 1669.82,-1334.8 1675.82,-1334.8 1681.82,-1340.8 1681.82,-1346.8 1681.82,-1346.8 1681.82,-1387.6 1681.82,-1387.6 1681.82,-1393.6 1675.82,-1399.6 1669.82,-1399.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1613.92" y="-1376.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_30</text>
+<text xml:space="preserve" text-anchor="middle" x="1613.92" y="-1364.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; estrella id = E . ;</text>
+<text xml:space="preserve" text-anchor="middle" x="1613.92" y="-1352.2" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E . superposicion T</text>
+</g>
+<!-- I19&#45;&gt;I30 -->
+<g id="edge34" class="edge">
+<title>I19-&gt;I30</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1879.13,-1496.08C1823.83,-1469.41 1744.84,-1431.33 1687.47,-1403.66"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1688.6,-1401.49 1681.23,-1400.66 1686.48,-1405.9 1688.6,-1401.49"/>
+<text xml:space="preserve" text-anchor="middle" x="1792.05" y="-1445.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">E</text>
+</g>
+<!-- I20&#45;&gt;I4 -->
+<g id="edge43" class="edge">
+<title>I20-&gt;I4</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2165.92,-3030.2C2230.67,-2814.32 2145.55,-2745.5 2183.92,-2523.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1319.72,-4028.21C1388.6,-4011.32 1495.85,-3976.71 1567.92,-3913.6 1747.28,-3756.54 1700.01,-3645.04 1833.92,-3447.8 1900.32,-3350 2130.95,-3145.12 2165.92,-3032.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2124.65" y="-3115.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I20&#45;&gt;I5 -->
+<g id="edge44" class="edge">
+<title>I20-&gt;I5</title>
+<path fill="none" stroke="black" d="M1186.08,-4039.2C1091.33,-4032.17 917.22,-4006.51 806.92,-3913.6 741.37,-3858.38 756.59,-3818.82 722.92,-3740 667.43,-3610.11 303.99,-2687.81 278.92,-2548.8 244.91,-2360.16 423.88,-2127.71 452.92,-2113.4"/>
+<text xml:space="preserve" text-anchor="middle" x="477.7" y="-3028.5" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I20&#45;&gt;I6 -->
+<g id="edge45" class="edge">
+<title>I20-&gt;I6</title>
+<path fill="none" stroke="black" d="M2063.92,-2446.6C2083.76,-2417.74 2045.74,-2397.73 2063.92,-2367.8"/>
+<path fill="none" stroke="black" d="M1342.92,-3961C1427.13,-3885.95 1529.92,-3902.2 1529.92,-3789.4 1529.92,-3789.4 1529.92,-3789.4 1529.92,-3452.2 1529.92,-3272.57 1412.92,-3316.98 1762.92,-2645.6 1802.2,-2570.26 1810.71,-2542.33 1881.92,-2496 1951.99,-2450.42 2016.58,-2517.49 2063.92,-2448.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1615.12" y="-3028.5" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I20&#45;&gt;I7 -->
+<g id="edge46" class="edge">
+<title>I20-&gt;I7</title>
+<path fill="none" stroke="black" d="M1344.92,-4274.2C1305.38,-4297.17 1257.21,-4315.87 1219.94,-4328.56"/>
+<path fill="none" stroke="black" d="M1273.78,-4075.35C1307.89,-4128.65 1369.97,-4233.91 1350.73,-4266.18"/>
+<polygon fill="black" stroke="black" points="1349.07,-4264.37 1345.97,-4271.11 1352.6,-4267.78 1349.07,-4264.37"/>
+<text xml:space="preserve" text-anchor="middle" x="1365.64" y="-4195.7" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I20&#45;&gt;I8 -->
+<g id="edge47" class="edge">
+<title>I20-&gt;I8</title>
+<path fill="none" stroke="black" d="M1389.92,-3787.4C1388.45,-3773.71 1383.34,-3759.79 1377.37,-3747.53"/>
+<polygon fill="black" stroke="black" points="1379.64,-3746.58 1374.26,-3741.47 1375.28,-3748.82 1379.64,-3746.58"/>
+<path fill="none" stroke="black" d="M1342.92,-3961C1362.56,-3941.5 1342.02,-3862.57 1352.12,-3836.8 1361.95,-3811.71 1392.8,-3816.19 1389.92,-3789.4"/>
+<path fill="none" stroke="black" d="M1289.4,-4010.12C1305.81,-3995.8 1325.4,-3978.61 1342.92,-3963"/>
+<text xml:space="preserve" text-anchor="middle" x="1371.02" y="-3872.5" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I31 -->
+<g id="node32" class="node">
+<title>I31</title>
+<path fill="#f4f7fb" stroke="black" d="M953.43,-3913.6C953.43,-3913.6 844.42,-3913.6 844.42,-3913.6 838.42,-3913.6 832.42,-3907.6 832.42,-3901.6 832.42,-3901.6 832.42,-3848.8 832.42,-3848.8 832.42,-3842.8 838.42,-3836.8 844.42,-3836.8 844.42,-3836.8 953.43,-3836.8 953.43,-3836.8 959.43,-3836.8 965.43,-3842.8 965.43,-3848.8 965.43,-3848.8 965.43,-3901.6 965.43,-3901.6 965.43,-3907.6 959.43,-3913.6 953.43,-3913.6"/>
+<text xml:space="preserve" text-anchor="middle" x="898.92" y="-3890.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_31</text>
+<text xml:space="preserve" text-anchor="middle" x="898.92" y="-3878.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; orbita id { Cu . }</text>
+<text xml:space="preserve" text-anchor="middle" x="898.92" y="-3866.2" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; Cu . C</text>
+<text xml:space="preserve" text-anchor="middle" x="898.92" y="-3854.2" font-family="Helvetica,sans-Serif" font-size="10.00">(+5 items en cerradura)</text>
+</g>
+<!-- I20&#45;&gt;I31 -->
+<g id="edge42" class="edge">
+<title>I20-&gt;I31</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1185.92,-4010.46C1125.25,-3982.07 1036,-3940.33 973.18,-3910.94"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="974.4,-3908.8 967.02,-3908.06 972.32,-3913.24 974.4,-3908.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1091.94" y="-3959.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">Cu</text>
+</g>
+<!-- I32 -->
+<g id="node33" class="node">
+<title>I32</title>
+<path fill="#f4f7fb" stroke="black" d="M2575.17,-3231.2C2575.17,-3231.2 2396.67,-3231.2 2396.67,-3231.2 2390.67,-3231.2 2384.67,-3225.2 2384.67,-3219.2 2384.67,-3219.2 2384.67,-3178.4 2384.67,-3178.4 2384.67,-3172.4 2390.67,-3166.4 2396.67,-3166.4 2396.67,-3166.4 2575.17,-3166.4 2575.17,-3166.4 2581.17,-3166.4 2587.17,-3172.4 2587.17,-3178.4 2587.17,-3178.4 2587.17,-3219.2 2587.17,-3219.2 2587.17,-3225.2 2581.17,-3231.2 2575.17,-3231.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2485.92" y="-3207.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_32</text>
+<text xml:space="preserve" text-anchor="middle" x="2485.92" y="-3195.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) . { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="2485.92" y="-3183.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) . { Cu } despeje { Cu }</text>
+</g>
+<!-- I21&#45;&gt;I32 -->
+<g id="edge48" class="edge">
+<title>I21-&gt;I32</title>
+<path fill="none" stroke="black" d="M2495.2,-3327.82C2493.3,-3301.65 2490.78,-3266.77 2488.84,-3240.03"/>
+<polygon fill="black" stroke="black" points="2491.29,-3239.97 2488.34,-3233.17 2486.4,-3240.32 2491.29,-3239.97"/>
+<text xml:space="preserve" text-anchor="middle" x="2494.62" y="-3276.9" font-family="Courier,monospace" font-size="9.00">)</text>
+</g>
+<!-- I33 -->
+<g id="node34" class="node">
+<title>I33</title>
+<path fill="#f4f7fb" stroke="black" d="M2021.82,-537.6C2021.82,-537.6 1910.03,-537.6 1910.03,-537.6 1904.03,-537.6 1898.03,-531.6 1898.03,-525.6 1898.03,-525.6 1898.03,-484.8 1898.03,-484.8 1898.03,-478.8 1904.03,-472.8 1910.03,-472.8 1910.03,-472.8 2021.82,-472.8 2021.82,-472.8 2027.82,-472.8 2033.82,-478.8 2033.82,-484.8 2033.82,-484.8 2033.82,-525.6 2033.82,-525.6 2033.82,-531.6 2027.82,-537.6 2021.82,-537.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1965.92" y="-514.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_33</text>
+<text xml:space="preserve" text-anchor="middle" x="1965.92" y="-502.2" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E superposicion . T</text>
+<text xml:space="preserve" text-anchor="middle" x="1965.92" y="-490.2" font-family="Helvetica,sans-Serif" font-size="10.00">(+8 items en cerradura)</text>
+</g>
+<!-- I21&#45;&gt;I33 -->
+<g id="edge49" class="edge">
+<title>I21-&gt;I33</title>
+<path fill="none" stroke="black" d="M2599.63,-3359.49C2702.97,-3347.34 2847.92,-3310.55 2847.92,-3199.8 2847.92,-3199.8 2847.92,-3199.8 2847.92,-2111.4 2847.92,-1973.16 2886.55,-1942.85 2909.92,-1806.6 2940.81,-1626.58 2954.22,-1581.81 2966.92,-1399.6 2973.93,-1299.06 3007.17,-1258.77 2953.92,-1173.2 2724.16,-803.98 2424.18,-986.73 2097.92,-699.2 2047.64,-654.89 2007.32,-587.47 1985.02,-545.17"/>
+<polygon fill="black" stroke="black" points="1987.3,-544.25 1981.9,-539.17 1982.96,-546.51 1987.3,-544.25"/>
+<text xml:space="preserve" text-anchor="middle" x="2909.02" y="-1948.1" font-family="Courier,monospace" font-size="9.00">superposicion</text>
+</g>
+<!-- I34 -->
+<g id="node35" class="node">
+<title>I34</title>
+<path fill="#f4f7fb" stroke="black" d="M1997.43,-1238C1997.43,-1238 1888.42,-1238 1888.42,-1238 1882.42,-1238 1876.42,-1232 1876.42,-1226 1876.42,-1226 1876.42,-1185.2 1876.42,-1185.2 1876.42,-1179.2 1882.42,-1173.2 1888.42,-1173.2 1888.42,-1173.2 1997.43,-1173.2 1997.43,-1173.2 2003.43,-1173.2 2009.43,-1179.2 2009.43,-1185.2 2009.43,-1185.2 2009.43,-1226 2009.43,-1226 2009.43,-1232 2003.43,-1238 1997.43,-1238"/>
+<text xml:space="preserve" text-anchor="middle" x="1942.92" y="-1214.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_34</text>
+<text xml:space="preserve" text-anchor="middle" x="1942.92" y="-1202.6" font-family="Helvetica,sans-Serif" font-size="10.00">T -&gt; T interferencia . U</text>
+<text xml:space="preserve" text-anchor="middle" x="1942.92" y="-1190.6" font-family="Helvetica,sans-Serif" font-size="10.00">(+6 items en cerradura)</text>
+</g>
+<!-- I22&#45;&gt;I34 -->
+<g id="edge50" class="edge">
+<title>I22-&gt;I34</title>
+<path fill="none" stroke="black" d="M1944.52,-1333.9C1944.2,-1308.75 1943.76,-1273.7 1943.43,-1246.75"/>
+<polygon fill="black" stroke="black" points="1945.88,-1246.79 1943.34,-1239.82 1940.98,-1246.85 1945.88,-1246.79"/>
+<text xml:space="preserve" text-anchor="middle" x="1979.09" y="-1283.7" font-family="Courier,monospace" font-size="9.00">interferencia</text>
+</g>
+<!-- I35 -->
+<g id="node36" class="node">
+<title>I35</title>
+<path fill="#f4f7fb" stroke="black" d="M1234.54,-214.4C1234.54,-214.4 1123.3,-214.4 1123.3,-214.4 1117.3,-214.4 1111.3,-208.4 1111.3,-202.4 1111.3,-202.4 1111.3,-161.6 1111.3,-161.6 1111.3,-155.6 1117.3,-149.6 1123.3,-149.6 1123.3,-149.6 1234.54,-149.6 1234.54,-149.6 1240.54,-149.6 1246.54,-155.6 1246.54,-161.6 1246.54,-161.6 1246.54,-202.4 1246.54,-202.4 1246.54,-208.4 1240.54,-214.4 1234.54,-214.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1178.92" y="-191" font-family="Helvetica,sans-Serif" font-size="10.00">I_35</text>
+<text xml:space="preserve" text-anchor="middle" x="1178.92" y="-179" font-family="Helvetica,sans-Serif" font-size="10.00">U -&gt; U convergencia . V</text>
+<text xml:space="preserve" text-anchor="middle" x="1178.92" y="-167" font-family="Helvetica,sans-Serif" font-size="10.00">(+4 items en cerradura)</text>
+</g>
+<!-- I23&#45;&gt;I35 -->
+<g id="edge51" class="edge">
+<title>I23-&gt;I35</title>
+<path fill="none" stroke="black" d="M1051.3,-310.3C1077.39,-284.28 1114.09,-247.67 1141.45,-220.38"/>
+<polygon fill="black" stroke="black" points="1142.84,-222.45 1146.07,-215.77 1139.38,-218.98 1142.84,-222.45"/>
+<text xml:space="preserve" text-anchor="middle" x="1136.12" y="-260.1" font-family="Courier,monospace" font-size="9.00">convergencia</text>
+</g>
+<!-- I25&#45;&gt;I25 -->
+<g id="edge53" class="edge">
+<title>I25-&gt;I25</title>
+<path fill="none" stroke="black" d="M1876.67,-1059.05C1903.69,-1059.94 1926.43,-1054.93 1926.43,-1044 1926.43,-1034.22 1908.24,-1029.18 1885.06,-1028.87"/>
+<polygon fill="black" stroke="black" points="1885.16,-1026.41 1878.19,-1028.94 1885.21,-1031.31 1885.16,-1026.41"/>
+<text xml:space="preserve" text-anchor="middle" x="1950.73" y="-1041.3" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I25&#45;&gt;I26 -->
+<g id="edge54" class="edge">
+<title>I25-&gt;I26</title>
+<path fill="none" stroke="black" d="M1833.78,-1011.19C1860.93,-975.53 1904.12,-920.51 1924.52,-903.8 1943.22,-888.49 1965.56,-874.9 1986.83,-863.67"/>
+<polygon fill="black" stroke="black" points="1987.86,-865.89 1992.95,-860.49 1985.61,-861.54 1987.86,-865.89"/>
+<text xml:space="preserve" text-anchor="middle" x="1927.22" y="-933.5" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I25&#45;&gt;I27 -->
+<g id="edge55" class="edge">
+<title>I25-&gt;I27</title>
+<path fill="none" stroke="black" d="M1876.86,-1030.79C1928.32,-1019.57 2000,-999.85 2056.92,-968.6 2342.98,-811.54 2366.25,-661.56 2443.92,-344.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2417.58" y="-502.5" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I25&#45;&gt;I28 -->
+<g id="edge56" class="edge">
+<title>I25-&gt;I28</title>
+<path fill="none" stroke="black" d="M1751.37,-1011.14C1700.63,-980.04 1630.14,-927.7 1595.92,-860.8 1458.07,-591.3 1513.63,-485.33 1528.92,-183"/>
+<text xml:space="preserve" text-anchor="middle" x="1514.3" y="-502.5" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I36 -->
+<g id="node37" class="node">
+<title>I36</title>
+<path fill="#f4f7fb" stroke="black" d="M1741.15,-854.8C1741.15,-854.8 1632.7,-854.8 1632.7,-854.8 1626.7,-854.8 1620.7,-848.8 1620.7,-842.8 1620.7,-842.8 1620.7,-814 1620.7,-814 1620.7,-808 1626.7,-802 1632.7,-802 1632.7,-802 1741.15,-802 1741.15,-802 1747.15,-802 1753.15,-808 1753.15,-814 1753.15,-814 1753.15,-842.8 1753.15,-842.8 1753.15,-848.8 1747.15,-854.8 1741.15,-854.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1686.92" y="-831.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_36</text>
+<text xml:space="preserve" text-anchor="middle" x="1686.92" y="-819.4" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; oscuridad V . (r18)</text>
+</g>
+<!-- I25&#45;&gt;I36 -->
+<g id="edge52" class="edge">
+<title>I25-&gt;I36</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1791.77,-1011.48C1768.75,-971.5 1729.23,-902.87 1705.84,-862.26"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1708.04,-861.17 1702.43,-856.32 1703.8,-863.61 1708.04,-861.17"/>
+<text xml:space="preserve" text-anchor="middle" x="1769.33" y="-933.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I26&#45;&gt;I22 -->
+<g id="edge58" class="edge">
+<title>I26-&gt;I22</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2113.47,-860.98C2129.06,-872.86 2145.24,-887.5 2156.92,-903.8 2218.03,-989.11 2268.08,-1035.01 2223.92,-1130.2 2181.42,-1221.82 2083.88,-1290.76 2016.2,-1329.79"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2015.1,-1327.59 2010.24,-1333.19 2017.53,-1331.85 2015.1,-1327.59"/>
+<text xml:space="preserve" text-anchor="middle" x="2231.3" y="-1122.1" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">T</text>
+</g>
+<!-- I26&#45;&gt;I23 -->
+<g id="edge59" class="edge">
+<title>I26-&gt;I23</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2002.66,-795.5C1967.21,-777.99 1921.35,-756.91 1878.92,-742.2 1801.62,-715.4 1776.56,-727.86 1699.92,-699.2 1457.79,-608.64 1191.68,-451.78 1076.89,-381.05"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1078.42,-379.11 1071.17,-377.51 1075.84,-383.28 1078.42,-379.11"/>
+<text xml:space="preserve" text-anchor="middle" x="1450.49" y="-583.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I26&#45;&gt;I24 -->
+<g id="edge60" class="edge">
+<title>I26-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2930.92,-504.2C2938.88,-468.72 2984.32,-443.75 2952.92,-425.4"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2133.51,-808.68C2336.1,-753.25 2912.4,-588.77 2930.92,-506.2"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2952.92,-423.4C2875.55,-378.19 2771.73,-358.32 2710.12,-350.05"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2710.48,-347.62 2703.22,-349.15 2709.85,-352.48 2710.48,-347.62"/>
+<text xml:space="preserve" text-anchor="middle" x="2825.15" y="-583.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I26&#45;&gt;I25 -->
+<g id="edge61" class="edge">
+<title>I26-&gt;I25</title>
+<path fill="none" stroke="black" d="M2037.7,-861.24C2012.25,-891.02 1971.61,-935.72 1930.92,-968.6 1913.76,-982.47 1893.8,-995.74 1875.11,-1007.13"/>
+<polygon fill="black" stroke="black" points="1874.31,-1004.75 1869.58,-1010.46 1876.84,-1008.95 1874.31,-1004.75"/>
+<text xml:space="preserve" text-anchor="middle" x="2020.46" y="-933.5" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I26&#45;&gt;I26 -->
+<g id="edge62" class="edge">
+<title>I26-&gt;I26</title>
+<path fill="none" stroke="black" d="M2133.46,-843.48C2160.6,-844.2 2183.21,-839.17 2183.21,-828.4 2183.21,-818.77 2165.12,-813.73 2141.88,-813.28"/>
+<polygon fill="black" stroke="black" points="2141.97,-810.83 2134.98,-813.31 2141.99,-815.73 2141.97,-810.83"/>
+<text xml:space="preserve" text-anchor="middle" x="2185.91" y="-825.7" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I26&#45;&gt;I27 -->
+<g id="edge63" class="edge">
+<title>I26-&gt;I27</title>
+<path fill="none" stroke="black" d="M2551.92,-181C2541.71,-123.55 2491.95,-139.31 2446.92,-102.2"/>
+<path fill="none" stroke="black" d="M2310.92,-504.2C2285.34,-415.48 2437.49,-436.71 2443.92,-344.6"/>
+<path fill="none" stroke="black" d="M2443.92,-342.6C2438.06,-257.15 2566.91,-267.33 2551.92,-183"/>
+<text xml:space="preserve" text-anchor="middle" x="2383.75" y="-421.7" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I26&#45;&gt;I28 -->
+<g id="edge64" class="edge">
+<title>I26-&gt;I28</title>
+<path fill="none" stroke="black" d="M2261.92,-100.2C2168.56,-57.42 1449,-34.71 1237.32,-28.91"/>
+<polygon fill="black" stroke="black" points="1237.39,-26.46 1230.32,-28.72 1237.25,-31.36 1237.39,-26.46"/>
+<path fill="none" stroke="black" d="M2133.56,-805.4C2183.73,-785.78 2248.57,-751.87 2283.92,-699.2 2332.19,-627.28 2318.25,-592.5 2310.92,-506.2"/>
+<path fill="none" stroke="black" d="M2310.92,-504.2C2309.66,-481.74 2282.38,-111.57 2261.92,-102.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2313.2" y="-421.7" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I37 -->
+<g id="node38" class="node">
+<title>I37</title>
+<path fill="#f4f7fb" stroke="black" d="M2246.82,-699.2C2246.82,-699.2 2135.03,-699.2 2135.03,-699.2 2129.03,-699.2 2123.03,-693.2 2123.03,-687.2 2123.03,-687.2 2123.03,-646.4 2123.03,-646.4 2123.03,-640.4 2129.03,-634.4 2135.03,-634.4 2135.03,-634.4 2246.82,-634.4 2246.82,-634.4 2252.82,-634.4 2258.82,-640.4 2258.82,-646.4 2258.82,-646.4 2258.82,-687.2 2258.82,-687.2 2258.82,-693.2 2252.82,-699.2 2246.82,-699.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2190.92" y="-675.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_37</text>
+<text xml:space="preserve" text-anchor="middle" x="2190.92" y="-663.8" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; ( E . )</text>
+<text xml:space="preserve" text-anchor="middle" x="2190.92" y="-651.8" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E . superposicion T</text>
+</g>
+<!-- I26&#45;&gt;I37 -->
+<g id="edge57" class="edge">
+<title>I26-&gt;I37</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2089.01,-795.87C2109.56,-770.05 2138.7,-733.43 2160.56,-705.96"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2162.28,-707.73 2164.72,-700.72 2158.45,-704.68 2162.28,-707.73"/>
+<text xml:space="preserve" text-anchor="middle" x="2133.93" y="-744.9" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">E</text>
+</g>
+<!-- I29&#45;&gt;I22 -->
+<g id="edge66" class="edge">
+<title>I29-&gt;I22</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1148.59,-1507.67C1215.92,-1488.78 1321.03,-1460.79 1413.52,-1442.6 1457.53,-1433.94 1736.08,-1396.2 1871.37,-1378.04"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1871.56,-1380.48 1878.18,-1377.13 1870.91,-1375.63 1871.56,-1380.48"/>
+<text xml:space="preserve" text-anchor="middle" x="1416.22" y="-1445.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">T</text>
+</g>
+<!-- I29&#45;&gt;I23 -->
+<g id="edge67" class="edge">
+<title>I29-&gt;I23</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M921.92,-423.4C939.29,-410.16 957.99,-395.15 974.29,-381.81"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="975.62,-383.89 979.48,-377.55 972.52,-380.1 975.62,-383.89"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1009.47,-1520.15C914.85,-1508.72 751.41,-1485.09 700.92,-1453.4 660.81,-1428.23 636.92,-1415.56 636.92,-1368.2 636.92,-1368.2 636.92,-1368.2 636.92,-1123.8 636.92,-992.62 592.48,-958.46 615.92,-829.4"/>
+<text xml:space="preserve" text-anchor="middle" x="618.3" y="-933.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I29&#45;&gt;I24 -->
+<g id="edge68" class="edge">
+<title>I29-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2517.92,-1285.4C2583.66,-1237.33 2634.91,-1293.05 2694.92,-1238 2921.71,-1029.95 2800.89,-865.94 2930.92,-587"/>
+<text xml:space="preserve" text-anchor="middle" x="2856.16" y="-933.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I29&#45;&gt;I25 -->
+<g id="edge69" class="edge">
+<title>I29-&gt;I25</title>
+<path fill="none" stroke="black" d="M1102.35,-1495.97C1163.15,-1413.63 1323.41,-1198.28 1354.92,-1173.2 1394.04,-1142.07 1410.41,-1144.11 1456.92,-1125.8"/>
+<path fill="none" stroke="black" d="M1456.92,-1123.8C1546.89,-1080.68 1661.15,-1060.73 1734.89,-1051.8"/>
+<polygon fill="black" stroke="black" points="1735.07,-1054.25 1741.73,-1050.99 1734.5,-1049.38 1735.07,-1054.25"/>
+<text xml:space="preserve" text-anchor="middle" x="1285.82" y="-1283.7" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I29&#45;&gt;I26 -->
+<g id="edge70" class="edge">
+<title>I29-&gt;I26</title>
+<path fill="none" stroke="black" d="M2436.92,-1043C2430.95,-995.34 2501.58,-959.27 2458.92,-937.2"/>
+<path fill="none" stroke="black" d="M1148.39,-1519.36C1338.31,-1496.13 1863.4,-1430.95 2034.92,-1399.6 2251.71,-1359.98 2353.49,-1434.13 2517.92,-1287.4"/>
+<path fill="none" stroke="black" d="M2458.92,-935.2C2356.21,-882.05 2224.26,-853.7 2141.89,-840.11"/>
+<polygon fill="black" stroke="black" points="2142.37,-837.71 2135.07,-839.01 2141.59,-842.55 2142.37,-837.71"/>
+<path fill="none" stroke="black" d="M2517.92,-1285.4C2539.98,-1267.25 2487.38,-1263.51 2474.52,-1238 2435.19,-1159.96 2447.79,-1131.71 2436.92,-1045"/>
+<text xml:space="preserve" text-anchor="middle" x="2477.22" y="-1202.9" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I29&#45;&gt;I27 -->
+<g id="edge71" class="edge">
+<title>I29-&gt;I27</title>
+<path fill="none" stroke="black" d="M2517.92,-1285.4C2633.1,-1201.3 2557.55,-1110.76 2568.92,-968.6 2571.22,-939.89 2571.39,-932.49 2568.92,-903.8 2562.68,-831.18 2555.79,-813.56 2540.92,-742.2 2503.82,-564.13 2397.09,-520.36 2443.92,-344.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2548.59" y="-744.9" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I29&#45;&gt;I28 -->
+<g id="edge72" class="edge">
+<title>I29-&gt;I28</title>
+<path fill="none" stroke="black" d="M1009.18,-1525.28C842.13,-1517.34 432.92,-1485.89 432.92,-1368.2 432.92,-1368.2 432.92,-1368.2 432.92,-181 432.92,-40.74 945.25,-27.46 1120.76,-27.03"/>
+<polygon fill="black" stroke="black" points="1120.6,-29.48 1127.59,-27.02 1120.59,-24.58 1120.6,-29.48"/>
+<text xml:space="preserve" text-anchor="middle" x="441.02" y="-744.9" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I38 -->
+<g id="node39" class="node">
+<title>I38</title>
+<path fill="#f4f7fb" stroke="black" d="M1134.82,-1399.6C1134.82,-1399.6 1023.03,-1399.6 1023.03,-1399.6 1017.03,-1399.6 1011.03,-1393.6 1011.03,-1387.6 1011.03,-1387.6 1011.03,-1346.8 1011.03,-1346.8 1011.03,-1340.8 1017.03,-1334.8 1023.03,-1334.8 1023.03,-1334.8 1134.82,-1334.8 1134.82,-1334.8 1140.82,-1334.8 1146.82,-1340.8 1146.82,-1346.8 1146.82,-1346.8 1146.82,-1387.6 1146.82,-1387.6 1146.82,-1393.6 1140.82,-1399.6 1134.82,-1399.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1376.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_38</text>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1364.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta TI id = E . ;</text>
+<text xml:space="preserve" text-anchor="middle" x="1078.92" y="-1352.2" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E . superposicion T</text>
+</g>
+<!-- I29&#45;&gt;I38 -->
+<g id="edge65" class="edge">
+<title>I29-&gt;I38</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1078.92,-1496.27C1078.92,-1470.99 1078.92,-1435.37 1078.92,-1408.11"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1081.37,-1408.45 1078.92,-1401.45 1076.47,-1408.45 1081.37,-1408.45"/>
+<text xml:space="preserve" text-anchor="middle" x="1081.62" y="-1445.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">E</text>
+</g>
+<!-- I30&#45;&gt;I33 -->
+<g id="edge74" class="edge">
+<title>I30-&gt;I33</title>
+<path fill="none" stroke="black" d="M1545.73,-1364.4C1492.38,-1358.96 1421.35,-1341.94 1384.92,-1291.8 1374.93,-1278.04 1289.25,-1470.19 1418.92,-1119.4 1475.73,-965.71 1489.92,-920.94 1595.92,-796 1688.15,-687.29 1826.85,-591.97 1905.61,-542.41"/>
+<polygon fill="black" stroke="black" points="1906.66,-544.64 1911.29,-538.85 1904.06,-540.49 1906.66,-544.64"/>
+<text xml:space="preserve" text-anchor="middle" x="1548.96" y="-933.5" font-family="Courier,monospace" font-size="9.00">superposicion</text>
+</g>
+<!-- I39 -->
+<g id="node40" class="node">
+<title>I39</title>
+<path fill="#f4f7fb" stroke="black" d="M1672.45,-1232C1672.45,-1232 1555.39,-1232 1555.39,-1232 1549.39,-1232 1543.39,-1226 1543.39,-1220 1543.39,-1220 1543.39,-1191.2 1543.39,-1191.2 1543.39,-1185.2 1549.39,-1179.2 1555.39,-1179.2 1555.39,-1179.2 1672.45,-1179.2 1672.45,-1179.2 1678.45,-1179.2 1684.45,-1185.2 1684.45,-1191.2 1684.45,-1191.2 1684.45,-1220 1684.45,-1220 1684.45,-1226 1678.45,-1232 1672.45,-1232"/>
+<text xml:space="preserve" text-anchor="middle" x="1613.92" y="-1208.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_39</text>
+<text xml:space="preserve" text-anchor="middle" x="1613.92" y="-1196.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; estrella id = E ; . (r5)</text>
+</g>
+<!-- I30&#45;&gt;I39 -->
+<g id="edge73" class="edge">
+<title>I30-&gt;I39</title>
+<path fill="none" stroke="black" d="M1613.92,-1334.67C1613.92,-1307.5 1613.92,-1268.38 1613.92,-1240.53"/>
+<polygon fill="black" stroke="black" points="1616.37,-1240.79 1613.92,-1233.79 1611.47,-1240.79 1616.37,-1240.79"/>
+<text xml:space="preserve" text-anchor="middle" x="1616.62" y="-1283.7" font-family="Courier,monospace" font-size="9.00">;</text>
+</g>
+<!-- I31&#45;&gt;I5 -->
+<g id="edge77" class="edge">
+<title>I31-&gt;I5</title>
+<path fill="none" stroke="black" d="M1015.92,-2111.4C993.24,-2073.21 947.41,-2053.51 907.04,-2043.37"/>
+<polygon fill="black" stroke="black" points="907.63,-2040.99 900.26,-2041.75 906.5,-2045.76 907.63,-2040.99"/>
+<path fill="none" stroke="black" d="M1037.92,-2285C1037.24,-2263.65 1032.9,-2258.76 1029.92,-2237.6 1026.05,-2210.1 1030.1,-2137.28 1015.92,-2113.4"/>
+<path fill="none" stroke="black" d="M731.92,-3117C695.38,-3050.06 731.92,-3021.67 731.92,-2945.4 731.92,-2945.4 731.92,-2945.4 731.92,-2596.2 731.92,-2458.43 789.6,-2419.53 897.92,-2334.4 949.57,-2293.81 1012.33,-2347.5 1037.92,-2287"/>
+<text xml:space="preserve" text-anchor="middle" x="750.83" y="-2941.7" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I31&#45;&gt;I6 -->
+<g id="edge78" class="edge">
+<title>I31-&gt;I6</title>
+<path fill="none" stroke="black" d="M1478.92,-2111.4C1545.05,-2075.74 1757.08,-2050.33 1868.31,-2039.08"/>
+<polygon fill="black" stroke="black" points="1868.24,-2041.55 1874.96,-2038.41 1867.75,-2036.67 1868.24,-2041.55"/>
+<path fill="none" stroke="black" d="M923.52,-3836.47C939.7,-3810.27 960.33,-3774.09 973.92,-3740 1109.97,-3398.78 969.16,-3241.4 1177.72,-2939 1196.59,-2911.63 1223.59,-2925.5 1238.92,-2896 1257.12,-2860.98 1247.93,-2845.63 1238.92,-2807.2 1227.97,-2760.45 1201.88,-2757.15 1190.92,-2710.4 1169.18,-2617.62 1162.61,-2586.98 1190.92,-2496 1254.17,-2292.78 1291.58,-2214.41 1478.92,-2113.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1199.32" y="-2941.7" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I31&#45;&gt;I7 -->
+<g id="edge79" class="edge">
+<title>I31-&gt;I7</title>
+<path fill="none" stroke="black" d="M832.22,-3889.03C788.99,-3900.37 734.03,-3920.85 696.92,-3956.6 640.37,-4011.08 641.73,-4041.37 625.52,-4118.2 618.81,-4149.95 628.74,-4160.42 632.17,-4189.21"/>
+<polygon fill="black" stroke="black" points="629.71,-4189.14 632.78,-4195.89 634.59,-4188.7 629.71,-4189.14"/>
+<text xml:space="preserve" text-anchor="middle" x="641.72" y="-4120.9" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I31&#45;&gt;I8 -->
+<g id="edge80" class="edge">
+<title>I31-&gt;I8</title>
+<path fill="none" stroke="black" d="M965.91,-3849.77C1043.13,-3821.6 1170.6,-3775.1 1258.01,-3743.22"/>
+<polygon fill="black" stroke="black" points="1258.65,-3745.59 1264.39,-3740.89 1256.97,-3740.99 1258.65,-3745.59"/>
+<text xml:space="preserve" text-anchor="middle" x="1158.44" y="-3785.7" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I31&#45;&gt;I10 -->
+<g id="edge76" class="edge">
+<title>I31-&gt;I10</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M731.92,-3117C663.85,-2994.83 590.92,-3008.56 507.92,-2896 495,-2878.47 131.45,-2215.52 146.92,-2200.2"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M832.22,-3840.3C786.81,-3811.98 734.92,-3766.87 734.92,-3708.6 734.92,-3708.6 734.92,-3708.6 734.92,-3452.2 734.92,-3304.11 765.92,-3263.14 731.92,-3119"/>
+<text xml:space="preserve" text-anchor="middle" x="558.22" y="-2941.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I40 -->
+<g id="node41" class="node">
+<title>I40</title>
+<path fill="#f4f7fb" stroke="black" d="M936.93,-3734C936.93,-3734 822.92,-3734 822.92,-3734 816.92,-3734 810.92,-3728 810.92,-3722 810.92,-3722 810.92,-3693.2 810.92,-3693.2 810.92,-3687.2 816.92,-3681.2 822.92,-3681.2 822.92,-3681.2 936.93,-3681.2 936.93,-3681.2 942.93,-3681.2 948.93,-3687.2 948.93,-3693.2 948.93,-3693.2 948.93,-3722 948.93,-3722 948.93,-3728 942.93,-3734 936.93,-3734"/>
+<text xml:space="preserve" text-anchor="middle" x="879.92" y="-3710.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_40</text>
+<text xml:space="preserve" text-anchor="middle" x="879.92" y="-3698.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; orbita id { Cu } . (r6)</text>
+</g>
+<!-- I31&#45;&gt;I40 -->
+<g id="edge75" class="edge">
+<title>I31-&gt;I40</title>
+<path fill="none" stroke="black" d="M894.61,-3836.62C891.37,-3808.34 886.96,-3769.91 883.82,-3742.55"/>
+<polygon fill="black" stroke="black" points="886.29,-3742.62 883.06,-3735.95 881.42,-3743.18 886.29,-3742.62"/>
+<text xml:space="preserve" text-anchor="middle" x="892.12" y="-3785.7" font-family="Courier,monospace" font-size="9.00">}</text>
+</g>
+<!-- I41 -->
+<g id="node42" class="node">
+<title>I41</title>
+<path fill="#f4f7fb" stroke="black" d="M2073.17,-3069.6C2073.17,-3069.6 1894.67,-3069.6 1894.67,-3069.6 1888.67,-3069.6 1882.67,-3063.6 1882.67,-3057.6 1882.67,-3057.6 1882.67,-3004.8 1882.67,-3004.8 1882.67,-2998.8 1888.67,-2992.8 1894.67,-2992.8 1894.67,-2992.8 2073.17,-2992.8 2073.17,-2992.8 2079.17,-2992.8 2085.17,-2998.8 2085.17,-3004.8 2085.17,-3004.8 2085.17,-3057.6 2085.17,-3057.6 2085.17,-3063.6 2079.17,-3069.6 2073.17,-3069.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1983.92" y="-3046.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_41</text>
+<text xml:space="preserve" text-anchor="middle" x="1983.92" y="-3034.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { . Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1983.92" y="-3022.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { . Cu } despeje { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1983.92" y="-3010.2" font-family="Helvetica,sans-Serif" font-size="10.00">(+7 items en cerradura)</text>
+</g>
+<!-- I32&#45;&gt;I41 -->
+<g id="edge81" class="edge">
+<title>I32-&gt;I41</title>
+<path fill="none" stroke="black" d="M2384.36,-3191.93C2267.44,-3183.35 2084.44,-3163.81 2029.52,-3123.4 2014.31,-3112.21 2003.86,-3094.51 1996.84,-3077.67"/>
+<polygon fill="black" stroke="black" points="1999.24,-3077.06 1994.41,-3071.43 1994.67,-3078.84 1999.24,-3077.06"/>
+<text xml:space="preserve" text-anchor="middle" x="2032.22" y="-3115.3" font-family="Courier,monospace" font-size="9.00">{</text>
+</g>
+<!-- I33&#45;&gt;I23 -->
+<g id="edge83" class="edge">
+<title>I33-&gt;I23</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1897.82,-492.72C1726.05,-463.77 1276.04,-387.93 1095.5,-357.51"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1096.17,-355.13 1088.86,-356.39 1095.35,-359.97 1096.17,-355.13"/>
+<text xml:space="preserve" text-anchor="middle" x="1523.52" y="-421.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I33&#45;&gt;I24 -->
+<g id="edge84" class="edge">
+<title>I33-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2034.2,-489.21C2058.69,-483.92 2086.52,-477.99 2111.92,-472.8 2210.39,-452.68 2235.94,-452.15 2333.92,-429.8 2430.72,-407.72 2542.48,-377.21 2606.22,-359.32"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2606.59,-361.76 2612.67,-357.51 2605.27,-357.04 2606.59,-361.76"/>
+<text xml:space="preserve" text-anchor="middle" x="2380.97" y="-421.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I33&#45;&gt;I25 -->
+<g id="edge85" class="edge">
+<title>I33-&gt;I25</title>
+<path fill="none" stroke="black" d="M1965.92,-587C1955.78,-613.58 1938.05,-610.31 1922.92,-634.4 1844.46,-759.38 1819.59,-939.23 1812.49,-1011.34"/>
+<path fill="none" stroke="black" d="M1971,-537.82C1971.92,-550.06 1971.71,-564.22 1968.4,-577.14"/>
+<polygon fill="black" stroke="black" points="1966.15,-576.14 1966.38,-583.56 1970.82,-577.62 1966.15,-576.14"/>
+<text xml:space="preserve" text-anchor="middle" x="1895.16" y="-744.9" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I33&#45;&gt;I26 -->
+<g id="edge86" class="edge">
+<title>I33-&gt;I26</title>
+<path fill="none" stroke="black" d="M1965.92,-587C1942.86,-654.08 1909.58,-703.5 1965.92,-746.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1950.32" y="-664.1" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I33&#45;&gt;I27 -->
+<g id="edge87" class="edge">
+<title>I33-&gt;I27</title>
+<path fill="none" stroke="black" d="M2446.92,-100.2C2415.6,-60.39 2269.97,-40.22 2190.32,-32.01"/>
+<polygon fill="black" stroke="black" points="2190.6,-29.57 2183.39,-31.31 2190.11,-34.45 2190.6,-29.57"/>
+<path fill="none" stroke="black" d="M2026.92,-423.4C2115.6,-346.32 2519.58,-194.54 2446.92,-102.2"/>
+<text xml:space="preserve" text-anchor="middle" x="2316.43" y="-260.1" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I33&#45;&gt;I28 -->
+<g id="edge88" class="edge">
+<title>I33-&gt;I28</title>
+<path fill="none" stroke="black" d="M1991.43,-472.43C2002.59,-458.23 2015.67,-441.18 2026.92,-425.4"/>
+<path fill="none" stroke="black" d="M2026.92,-423.4C2075.68,-355.04 1948.8,-351.11 1874.92,-311.2 1802.78,-272.22 1512.42,-263.32 1528.92,-183"/>
+<text xml:space="preserve" text-anchor="middle" x="1697.44" y="-260.1" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I42 -->
+<g id="node43" class="node">
+<title>I42</title>
+<path fill="#fdebd0" stroke="#b4342a" stroke-width="1.8" d="M1837.76,-376C1837.76,-376 1702.08,-376 1702.08,-376 1696.08,-376 1690.08,-370 1690.08,-364 1690.08,-364 1690.08,-323.2 1690.08,-323.2 1690.08,-317.2 1696.08,-311.2 1702.08,-311.2 1702.08,-311.2 1837.76,-311.2 1837.76,-311.2 1843.76,-311.2 1849.76,-317.2 1849.76,-323.2 1849.76,-323.2 1849.76,-364 1849.76,-364 1849.76,-370 1843.76,-376 1837.76,-376"/>
+<text xml:space="preserve" text-anchor="middle" x="1769.92" y="-352.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_42</text>
+<text xml:space="preserve" text-anchor="middle" x="1769.92" y="-340.6" font-family="Helvetica,sans-Serif" font-size="10.00">E -&gt; E superposicion T . (r12)</text>
+<text xml:space="preserve" text-anchor="middle" x="1769.92" y="-328.6" font-family="Helvetica,sans-Serif" font-size="10.00">T -&gt; T . interferencia U</text>
+</g>
+<!-- I33&#45;&gt;I42 -->
+<g id="edge82" class="edge">
+<title>I33-&gt;I42</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1927.2,-472.67C1895.3,-446.69 1849.98,-409.79 1816.17,-382.26"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1817.72,-380.36 1810.75,-377.84 1814.63,-384.16 1817.72,-380.36"/>
+<text xml:space="preserve" text-anchor="middle" x="1876.5" y="-421.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">T</text>
+</g>
+<!-- I34&#45;&gt;I24 -->
+<g id="edge90" class="edge">
+<title>I34-&gt;I24</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2930.92,-585C2944.83,-552.86 2927.32,-541.04 2930.92,-506.2"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2185.92,-1123.8C2336.33,-954.52 2337.01,-870.62 2523.52,-742.2 2568.26,-711.39 2587.14,-718.48 2637.92,-699.2 2713.13,-670.65 2731.8,-663.16 2806.92,-634.4 2862.02,-613.31 2907.5,-641.15 2930.92,-587"/>
+<text xml:space="preserve" text-anchor="middle" x="2526.22" y="-744.9" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I34&#45;&gt;I25 -->
+<g id="edge91" class="edge">
+<title>I34-&gt;I25</title>
+<path fill="none" stroke="black" d="M1916.65,-1173.07C1895.13,-1147.25 1864.61,-1110.63 1841.72,-1083.16"/>
+<polygon fill="black" stroke="black" points="1843.7,-1081.71 1837.34,-1077.9 1839.94,-1084.85 1843.7,-1081.71"/>
+<text xml:space="preserve" text-anchor="middle" x="1904.71" y="-1122.1" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I34&#45;&gt;I26 -->
+<g id="edge92" class="edge">
+<title>I34-&gt;I26</title>
+<path fill="none" stroke="black" d="M2009.92,-1203.26C2067.04,-1198.13 2146.06,-1180.71 2185.92,-1125.8"/>
+<path fill="none" stroke="black" d="M2185.92,-1123.8C2201.71,-1102.05 2123.23,-943.68 2084.5,-868.64"/>
+<polygon fill="black" stroke="black" points="2086.75,-867.65 2081.35,-862.56 2082.4,-869.9 2086.75,-867.65"/>
+<text xml:space="preserve" text-anchor="middle" x="2180.9" y="-1041.3" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I34&#45;&gt;I27 -->
+<g id="edge93" class="edge">
+<title>I34-&gt;I27</title>
+<path fill="none" stroke="black" d="M2009.45,-1196.63C2136.46,-1180.14 2406.91,-1138.58 2474.92,-1076.4 2590.65,-970.61 2472.58,-848.41 2587.92,-742.2 2646.21,-688.53 2687.12,-728.01 2760.92,-699.2 2853.9,-662.91 2882.17,-656.38 2957.92,-591.4 2984.14,-568.91 3160.69,-376.28 3146.92,-344.6"/>
+<path fill="none" stroke="black" d="M3146.92,-342.6C2994.61,-115.09 2638.78,-442.65 2551.92,-183"/>
+<text xml:space="preserve" text-anchor="middle" x="2974.61" y="-583.3" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I34&#45;&gt;I28 -->
+<g id="edge94" class="edge">
+<title>I34-&gt;I28</title>
+<path fill="none" stroke="black" d="M1528.92,-181C1536.67,-54.73 1338.78,-31.34 1237.23,-27.63"/>
+<polygon fill="black" stroke="black" points="1237.49,-25.19 1230.41,-27.41 1237.33,-30.09 1237.49,-25.19"/>
+<path fill="none" stroke="black" d="M1876,-1195.34C1738,-1176.17 1434.27,-1133.67 1429.92,-1130.2 1189.96,-938.28 1092.9,-754.37 1215.92,-472.8 1253.87,-385.94 1539.57,-277.19 1528.92,-183"/>
+<text xml:space="preserve" text-anchor="middle" x="1185.85" y="-583.3" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I43 -->
+<g id="node44" class="node">
+<title>I43</title>
+<path fill="#fdebd0" stroke="#b4342a" stroke-width="1.8" d="M1205.42,-968.6C1205.42,-968.6 1076.42,-968.6 1076.42,-968.6 1070.42,-968.6 1064.42,-962.6 1064.42,-956.6 1064.42,-956.6 1064.42,-915.8 1064.42,-915.8 1064.42,-909.8 1070.42,-903.8 1076.42,-903.8 1076.42,-903.8 1205.42,-903.8 1205.42,-903.8 1211.42,-903.8 1217.42,-909.8 1217.42,-915.8 1217.42,-915.8 1217.42,-956.6 1217.42,-956.6 1217.42,-962.6 1211.42,-968.6 1205.42,-968.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1140.92" y="-945.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_43</text>
+<text xml:space="preserve" text-anchor="middle" x="1140.92" y="-933.2" font-family="Helvetica,sans-Serif" font-size="10.00">T -&gt; T interferencia U . (r14)</text>
+<text xml:space="preserve" text-anchor="middle" x="1140.92" y="-921.2" font-family="Helvetica,sans-Serif" font-size="10.00">U -&gt; U . convergencia V</text>
+</g>
+<!-- I34&#45;&gt;I43 -->
+<g id="edge89" class="edge">
+<title>I34-&gt;I43</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1876.16,-1195.37C1829.59,-1188.99 1765.99,-1180.39 1709.92,-1173.2 1552.98,-1153.08 1510.43,-1166.92 1356.52,-1130.2 1288.2,-1113.9 1260.04,-1123.49 1207.92,-1076.4 1178.79,-1050.07 1161.06,-1008.33 1151.23,-977.41"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1153.61,-976.83 1149.22,-970.85 1148.92,-978.26 1153.61,-976.83"/>
+<text xml:space="preserve" text-anchor="middle" x="1359.22" y="-1122.1" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">U</text>
+</g>
+<!-- I35&#45;&gt;I25 -->
+<g id="edge96" class="edge">
+<title>I35-&gt;I25</title>
+<path fill="none" stroke="black" d="M1181.98,-214.62C1191.72,-304.22 1227.74,-565.46 1330.92,-753 1331.17,-753.45 1529.49,-968.34 1529.92,-968.6 1593.07,-1006.67 1675.72,-1025.54 1734.82,-1034.71"/>
+<polygon fill="black" stroke="black" points="1734.22,-1037.1 1741.51,-1035.72 1734.95,-1032.25 1734.22,-1037.1"/>
+<text xml:space="preserve" text-anchor="middle" x="1285.89" y="-583.3" font-family="Courier,monospace" font-size="9.00">oscuridad</text>
+</g>
+<!-- I35&#45;&gt;I26 -->
+<g id="edge97" class="edge">
+<title>I35-&gt;I26</title>
+<path fill="none" stroke="black" d="M1965.92,-748.6C1982.35,-765.51 2002.36,-782.18 2020.01,-795.8"/>
+<path fill="none" stroke="black" d="M1233.69,-214.87C1255.43,-227.78 1280.54,-243.01 1302.92,-257.4 1608.69,-454 1670.23,-528.27 1959.48,-741.85"/>
+<polygon fill="black" stroke="black" points="1957.62,-743.52 1964.7,-745.7 1960.53,-739.57 1957.62,-743.52"/>
+<text xml:space="preserve" text-anchor="middle" x="1696.6" y="-502.5" font-family="Courier,monospace" font-size="9.00">(</text>
+</g>
+<!-- I35&#45;&gt;I27 -->
+<g id="edge98" class="edge">
+<title>I35-&gt;I27</title>
+<path fill="none" stroke="black" d="M1246.74,-170.14C1428.33,-141.05 1922.82,-61.85 2085.36,-35.82"/>
+<polygon fill="black" stroke="black" points="2085.74,-38.24 2092.27,-34.71 2084.97,-33.4 2085.74,-38.24"/>
+<text xml:space="preserve" text-anchor="middle" x="1692.58" y="-98.5" font-family="Courier,monospace" font-size="9.00">id</text>
+</g>
+<!-- I35&#45;&gt;I28 -->
+<g id="edge99" class="edge">
+<title>I35-&gt;I28</title>
+<path fill="none" stroke="black" d="M1178.92,-149.17C1178.92,-123.6 1178.92,-87.74 1178.92,-61.56"/>
+<polygon fill="black" stroke="black" points="1181.37,-61.6 1178.92,-54.6 1176.47,-61.6 1181.37,-61.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1187.02" y="-98.5" font-family="Courier,monospace" font-size="9.00">num</text>
+</g>
+<!-- I44 -->
+<g id="node45" class="node">
+<title>I44</title>
+<path fill="#f4f7fb" stroke="black" d="M590.49,-52.8C590.49,-52.8 455.36,-52.8 455.36,-52.8 449.36,-52.8 443.36,-46.8 443.36,-40.8 443.36,-40.8 443.36,-12 443.36,-12 443.36,-6 449.36,0 455.36,0 455.36,0 590.49,0 590.49,0 596.49,0 602.49,-6 602.49,-12 602.49,-12 602.49,-40.8 602.49,-40.8 602.49,-46.8 596.49,-52.8 590.49,-52.8"/>
+<text xml:space="preserve" text-anchor="middle" x="522.92" y="-29.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_44</text>
+<text xml:space="preserve" text-anchor="middle" x="522.92" y="-17.4" font-family="Helvetica,sans-Serif" font-size="10.00">U -&gt; U convergencia V . (r16)</text>
+</g>
+<!-- I35&#45;&gt;I44 -->
+<g id="edge95" class="edge">
+<title>I35-&gt;I44</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1110.88,-165.07C991.3,-137.07 743.57,-79.06 611.06,-48.04"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="611.74,-45.68 604.36,-46.47 610.62,-50.45 611.74,-45.68"/>
+<text xml:space="preserve" text-anchor="middle" x="853.62" y="-98.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">V</text>
+</g>
+<!-- I37&#45;&gt;I33 -->
+<g id="edge101" class="edge">
+<title>I37-&gt;I33</title>
+<path fill="none" stroke="black" d="M2146.2,-634.08C2109.01,-607.7 2056.06,-570.14 2017.16,-542.55"/>
+<polygon fill="black" stroke="black" points="2018.92,-540.79 2011.79,-538.74 2016.09,-544.79 2018.92,-540.79"/>
+<text xml:space="preserve" text-anchor="middle" x="2120.27" y="-583.3" font-family="Courier,monospace" font-size="9.00">superposicion</text>
+</g>
+<!-- I45 -->
+<g id="node46" class="node">
+<title>I45</title>
+<path fill="#f4f7fb" stroke="black" d="M2223.19,-531.6C2223.19,-531.6 2148.66,-531.6 2148.66,-531.6 2142.66,-531.6 2136.66,-525.6 2136.66,-519.6 2136.66,-519.6 2136.66,-490.8 2136.66,-490.8 2136.66,-484.8 2142.66,-478.8 2148.66,-478.8 2148.66,-478.8 2223.19,-478.8 2223.19,-478.8 2229.19,-478.8 2235.19,-484.8 2235.19,-490.8 2235.19,-490.8 2235.19,-519.6 2235.19,-519.6 2235.19,-525.6 2229.19,-531.6 2223.19,-531.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2185.92" y="-508.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_45</text>
+<text xml:space="preserve" text-anchor="middle" x="2185.92" y="-496.2" font-family="Helvetica,sans-Serif" font-size="10.00">V -&gt; ( E ) . (r19)</text>
+</g>
+<!-- I37&#45;&gt;I45 -->
+<g id="edge100" class="edge">
+<title>I37-&gt;I45</title>
+<path fill="none" stroke="black" d="M2189.93,-634.27C2189.08,-607.1 2187.86,-567.98 2186.99,-540.13"/>
+<polygon fill="black" stroke="black" points="2189.44,-540.31 2186.77,-533.39 2184.54,-540.46 2189.44,-540.31"/>
+<text xml:space="preserve" text-anchor="middle" x="2191.27" y="-583.3" font-family="Courier,monospace" font-size="9.00">)</text>
+</g>
+<!-- I38&#45;&gt;I33 -->
+<g id="edge103" class="edge">
+<title>I38-&gt;I33</title>
+<path fill="none" stroke="black" d="M1089.76,-1334.46C1101.34,-1295.67 1115.99,-1228.37 1099.92,-1173.2 1062.74,-1045.52 897.38,-1015.4 969.71,-903.8 1075.77,-740.16 1675.04,-578.16 1889.55,-524.64"/>
+<polygon fill="black" stroke="black" points="1889.96,-527.06 1896.16,-522.99 1888.78,-522.31 1889.96,-527.06"/>
+<text xml:space="preserve" text-anchor="middle" x="1004.82" y="-933.5" font-family="Courier,monospace" font-size="9.00">superposicion</text>
+</g>
+<!-- I46 -->
+<g id="node47" class="node">
+<title>I46</title>
+<path fill="#f4f7fb" stroke="black" d="M1062.57,-1232C1062.57,-1232 933.28,-1232 933.28,-1232 927.28,-1232 921.28,-1226 921.28,-1220 921.28,-1220 921.28,-1191.2 921.28,-1191.2 921.28,-1185.2 927.28,-1179.2 933.28,-1179.2 933.28,-1179.2 1062.57,-1179.2 1062.57,-1179.2 1068.57,-1179.2 1074.57,-1185.2 1074.57,-1191.2 1074.57,-1191.2 1074.57,-1220 1074.57,-1220 1074.57,-1226 1068.57,-1232 1062.57,-1232"/>
+<text xml:space="preserve" text-anchor="middle" x="997.92" y="-1208.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_46</text>
+<text xml:space="preserve" text-anchor="middle" x="997.92" y="-1196.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; planeta TI id = E ; . (r4)</text>
+</g>
+<!-- I38&#45;&gt;I46 -->
+<g id="edge102" class="edge">
+<title>I38-&gt;I46</title>
+<path fill="none" stroke="black" d="M1062.92,-1334.67C1049.01,-1307.27 1028.93,-1267.7 1014.78,-1239.81"/>
+<polygon fill="black" stroke="black" points="1016.99,-1238.76 1011.64,-1233.63 1012.62,-1240.98 1016.99,-1238.76"/>
+<text xml:space="preserve" text-anchor="middle" x="1043.55" y="-1283.7" font-family="Courier,monospace" font-size="9.00">;</text>
+</g>
+<!-- I41&#45;&gt;I4 -->
+<g id="edge105" class="edge">
+<title>I41-&gt;I4</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2183.92,-2521.4C2197.27,-2417.28 2190.99,-2292.61 2186.73,-2233.91"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2189.19,-2234.05 2186.23,-2227.25 2184.31,-2234.41 2189.19,-2234.05"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M2099.92,-2677C2102.09,-2599.22 2170.73,-2600.08 2183.92,-2523.4"/>
+<text xml:space="preserve" text-anchor="middle" x="2147.39" y="-2594.5" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I41&#45;&gt;I5 -->
+<g id="edge106" class="edge">
+<title>I41-&gt;I5</title>
+<path fill="none" stroke="black" d="M2099.92,-2677C2100.97,-2638.51 2086.35,-2629.5 2063.92,-2598.2"/>
+<path fill="none" stroke="black" d="M2063.92,-2596.2C2055.22,-2584.05 1607.36,-2340.95 1593.92,-2334.4 1359.82,-2220.33 1297.61,-2198.81 1053.92,-2107 1005.38,-2088.71 950.08,-2070.25 906.69,-2056.29"/>
+<polygon fill="black" stroke="black" points="907.58,-2054 900.17,-2054.2 906.09,-2058.67 907.58,-2054"/>
+<path fill="none" stroke="black" d="M2004.6,-2992.31C2037.08,-2929.33 2096.69,-2798.23 2099.92,-2679"/>
+<text xml:space="preserve" text-anchor="middle" x="2002.33" y="-2519.7" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I41&#45;&gt;I6 -->
+<g id="edge107" class="edge">
+<title>I41-&gt;I6</title>
+<path fill="none" stroke="black" d="M2063.92,-2596.2C2027.86,-2541.4 2027.35,-2503.06 2063.92,-2448.6"/>
+<text xml:space="preserve" text-anchor="middle" x="2061.88" y="-2519.7" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I41&#45;&gt;I7 -->
+<g id="edge108" class="edge">
+<title>I41-&gt;I7</title>
+<path fill="none" stroke="black" d="M1859.92,-3119C1782.32,-3196.46 1871.92,-3255.76 1871.92,-3365.4 1871.92,-3963 1871.92,-3963 1871.92,-3963 1871.92,-4234.56 1579.74,-4135.8 1344.92,-4272.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1888.12" y="-3704.9" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I41&#45;&gt;I8 -->
+<g id="edge109" class="edge">
+<title>I41-&gt;I8</title>
+<path fill="none" stroke="black" d="M1859.92,-3119C1835.62,-3137.11 1423.58,-3422.2 1427.92,-3452.2"/>
+<path fill="none" stroke="black" d="M1926.45,-3070.09C1907.51,-3082.9 1886.29,-3097.61 1866.75,-3111.95"/>
+<polygon fill="black" stroke="black" points="1865.31,-3109.97 1861.14,-3116.1 1868.22,-3113.91 1865.31,-3109.97"/>
+<text xml:space="preserve" text-anchor="middle" x="1583.38" y="-3363.7" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I47 -->
+<g id="node48" class="node">
+<title>I47</title>
+<path fill="#f4f7fb" stroke="black" d="M1202.17,-2896C1202.17,-2896 1023.67,-2896 1023.67,-2896 1017.67,-2896 1011.67,-2890 1011.67,-2884 1011.67,-2884 1011.67,-2819.2 1011.67,-2819.2 1011.67,-2813.2 1017.67,-2807.2 1023.67,-2807.2 1023.67,-2807.2 1202.17,-2807.2 1202.17,-2807.2 1208.17,-2807.2 1214.17,-2813.2 1214.17,-2819.2 1214.17,-2819.2 1214.17,-2884 1214.17,-2884 1214.17,-2890 1208.17,-2896 1202.17,-2896"/>
+<text xml:space="preserve" text-anchor="middle" x="1112.92" y="-2872.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_47</text>
+<text xml:space="preserve" text-anchor="middle" x="1112.92" y="-2860.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu . }</text>
+<text xml:space="preserve" text-anchor="middle" x="1112.92" y="-2848.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu . } despeje { Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1112.92" y="-2836.6" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; Cu . C</text>
+<text xml:space="preserve" text-anchor="middle" x="1112.92" y="-2824.6" font-family="Helvetica,sans-Serif" font-size="10.00">(+5 items en cerradura)</text>
+</g>
+<!-- I41&#45;&gt;I47 -->
+<g id="edge104" class="edge">
+<title>I41-&gt;I47</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1882.3,-3009.48C1717.4,-2975.85 1392.86,-2909.68 1222.8,-2875"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="1223.4,-2872.63 1216.05,-2873.63 1222.42,-2877.43 1223.4,-2872.63"/>
+<text xml:space="preserve" text-anchor="middle" x="1579.94" y="-2941.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">Cu</text>
+</g>
+<!-- I42&#45;&gt;I34 -->
+<g id="edge110" class="edge">
+<title>I42-&gt;I34</title>
+<path fill="none" stroke="black" d="M1689.23,-369.63C1631.01,-390.55 1552.95,-424.74 1495.92,-472.8 1387.88,-563.86 1298.8,-619.71 1345.71,-753 1429.15,-990.07 1727.21,-1126.64 1868.11,-1179.29"/>
+<polygon fill="black" stroke="black" points="1867.09,-1181.53 1874.51,-1181.66 1868.79,-1176.93 1867.09,-1181.53"/>
+<text xml:space="preserve" text-anchor="middle" x="1380.82" y="-744.9" font-family="Courier,monospace" font-size="9.00">interferencia</text>
+</g>
+<!-- I43&#45;&gt;I35 -->
+<g id="edge111" class="edge">
+<title>I43-&gt;I35</title>
+<path fill="none" stroke="black" d="M1072.06,-902.92C977.74,-857.63 819.92,-777.53 819.92,-748.6 819.92,-748.6 819.92,-748.6 819.92,-342.6 819.92,-219.91 997.17,-190.84 1102.57,-184.4"/>
+<polygon fill="black" stroke="black" points="1102.61,-186.85 1109.46,-184.01 1102.34,-181.96 1102.61,-186.85"/>
+<text xml:space="preserve" text-anchor="middle" x="852.33" y="-583.3" font-family="Courier,monospace" font-size="9.00">convergencia</text>
+</g>
+<!-- I47&#45;&gt;I5 -->
+<g id="edge114" class="edge">
+<title>I47-&gt;I5</title>
+<path fill="none" stroke="black" d="M1037.92,-2757.8C889.24,-2610.57 1046.04,-2496.09 1037.92,-2287"/>
+<text xml:space="preserve" text-anchor="middle" x="1034.53" y="-2444.9" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I47&#45;&gt;I6 -->
+<g id="edge115" class="edge">
+<title>I47-&gt;I6</title>
+<path fill="none" stroke="black" d="M2183.92,-2111.4C2144.19,-2056.53 2065.68,-2038.98 2008,-2033.81"/>
+<polygon fill="black" stroke="black" points="2008.33,-2031.38 2001.16,-2033.25 2007.94,-2036.26 2008.33,-2031.38"/>
+<path fill="none" stroke="black" d="M2063.92,-2365.8C2120.29,-2290.72 2061.42,-2237.95 2114.92,-2160.8 2136.12,-2130.23 2205.74,-2143.53 2183.92,-2113.4"/>
+<path fill="none" stroke="black" d="M1214.59,-2819.28C1282.71,-2795.54 1372.47,-2758.73 1442.92,-2710.4 1554.72,-2633.7 1542.99,-2564.62 1659.92,-2496 1822.39,-2400.66 1928.22,-2498.46 2063.92,-2367.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1928.59" y="-2444.9" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I47&#45;&gt;I7 -->
+<g id="edge116" class="edge">
+<title>I47-&gt;I7</title>
+<path fill="none" stroke="black" d="M1011.43,-2869.72C962.43,-2882.2 905.42,-2903.39 863.92,-2939 836.13,-2962.85 481.65,-3474.45 528.98,-3698.43"/>
+<polygon fill="black" stroke="black" points="526.57,-3698.88 530.57,-3705.13 531.34,-3697.75 526.57,-3698.88"/>
+<text xml:space="preserve" text-anchor="middle" x="542.2" y="-3624.1" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I47&#45;&gt;I8 -->
+<g id="edge117" class="edge">
+<title>I47-&gt;I8</title>
+<path fill="none" stroke="black" d="M1132.67,-2896.48C1169.9,-2977.1 1255.5,-3152.66 1352.12,-3285 1379.38,-3322.34 1413.89,-3317.96 1425.94,-3357.49"/>
+<polygon fill="black" stroke="black" points="1423.48,-3357.74 1427.55,-3363.93 1428.23,-3356.55 1423.48,-3357.74"/>
+<path fill="none" stroke="black" d="M1427.92,-3367.4C1435.37,-3404.34 1417.25,-3416.05 1427.92,-3452.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1371.02" y="-3276.9" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I47&#45;&gt;I10 -->
+<g id="edge113" class="edge">
+<title>I47-&gt;I10</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1081.42,-2807.08C1068.86,-2791.24 1053.65,-2773.81 1037.92,-2759.8"/>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1037.92,-2757.8C1008.76,-2731.82 994.51,-2734.68 963.92,-2710.4 814.99,-2592.18 255.68,-2277.98 350.92,-2113.4"/>
+<text xml:space="preserve" text-anchor="middle" x="594.7" y="-2444.9" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I48 -->
+<g id="node49" class="node">
+<title>I48</title>
+<path fill="#fdebd0" stroke="#b4342a" stroke-width="1.8" d="M1406.17,-2710.4C1406.17,-2710.4 1227.67,-2710.4 1227.67,-2710.4 1221.67,-2710.4 1215.67,-2704.4 1215.67,-2698.4 1215.67,-2698.4 1215.67,-2657.6 1215.67,-2657.6 1215.67,-2651.6 1221.67,-2645.6 1227.67,-2645.6 1227.67,-2645.6 1406.17,-2645.6 1406.17,-2645.6 1412.17,-2645.6 1418.17,-2651.6 1418.17,-2657.6 1418.17,-2657.6 1418.17,-2698.4 1418.17,-2698.4 1418.17,-2704.4 1412.17,-2710.4 1406.17,-2710.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1316.92" y="-2687" font-family="Helvetica,sans-Serif" font-size="10.00">I_48</text>
+<text xml:space="preserve" text-anchor="middle" x="1316.92" y="-2675" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } . (r7)</text>
+<text xml:space="preserve" text-anchor="middle" x="1316.92" y="-2663" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } . despeje { Cu }</text>
+</g>
+<!-- I47&#45;&gt;I48 -->
+<g id="edge112" class="edge">
+<title>I47-&gt;I48</title>
+<path fill="none" stroke="black" d="M1164.93,-2806.85C1198.13,-2778.93 1240.72,-2743.1 1272.36,-2716.48"/>
+<polygon fill="black" stroke="black" points="1273.6,-2718.64 1277.38,-2712.26 1270.45,-2714.89 1273.6,-2718.64"/>
+<text xml:space="preserve" text-anchor="middle" x="1229.84" y="-2756.1" font-family="Courier,monospace" font-size="9.00">}</text>
+</g>
+<!-- I49 -->
+<g id="node50" class="node">
+<title>I49</title>
+<path fill="#f4f7fb" stroke="black" d="M1406.17,-2548.8C1406.17,-2548.8 1227.67,-2548.8 1227.67,-2548.8 1221.67,-2548.8 1215.67,-2542.8 1215.67,-2536.8 1215.67,-2536.8 1215.67,-2508 1215.67,-2508 1215.67,-2502 1221.67,-2496 1227.67,-2496 1227.67,-2496 1406.17,-2496 1406.17,-2496 1412.17,-2496 1418.17,-2502 1418.17,-2508 1418.17,-2508 1418.17,-2536.8 1418.17,-2536.8 1418.17,-2542.8 1412.17,-2548.8 1406.17,-2548.8"/>
+<text xml:space="preserve" text-anchor="middle" x="1316.92" y="-2525.4" font-family="Helvetica,sans-Serif" font-size="10.00">I_49</text>
+<text xml:space="preserve" text-anchor="middle" x="1316.92" y="-2513.4" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } despeje . { Cu }</text>
+</g>
+<!-- I48&#45;&gt;I49 -->
+<g id="edge118" class="edge">
+<title>I48-&gt;I49</title>
+<path fill="none" stroke="black" d="M1316.92,-2644.8C1316.92,-2619.19 1316.92,-2583.46 1316.92,-2557.4"/>
+<polygon fill="black" stroke="black" points="1319.37,-2557.47 1316.92,-2550.47 1314.47,-2557.47 1319.37,-2557.47"/>
+<text xml:space="preserve" text-anchor="middle" x="1335.83" y="-2594.5" font-family="Courier,monospace" font-size="9.00">despeje</text>
+</g>
+<!-- I50 -->
+<g id="node51" class="node">
+<title>I50</title>
+<path fill="#f4f7fb" stroke="black" d="M1557.17,-2399.2C1557.17,-2399.2 1378.67,-2399.2 1378.67,-2399.2 1372.67,-2399.2 1366.67,-2393.2 1366.67,-2387.2 1366.67,-2387.2 1366.67,-2346.4 1366.67,-2346.4 1366.67,-2340.4 1372.67,-2334.4 1378.67,-2334.4 1378.67,-2334.4 1557.17,-2334.4 1557.17,-2334.4 1563.17,-2334.4 1569.17,-2340.4 1569.17,-2346.4 1569.17,-2346.4 1569.17,-2387.2 1569.17,-2387.2 1569.17,-2393.2 1563.17,-2399.2 1557.17,-2399.2"/>
+<text xml:space="preserve" text-anchor="middle" x="1467.92" y="-2375.8" font-family="Helvetica,sans-Serif" font-size="10.00">I_50</text>
+<text xml:space="preserve" text-anchor="middle" x="1467.92" y="-2363.8" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } despeje { . Cu }</text>
+<text xml:space="preserve" text-anchor="middle" x="1467.92" y="-2351.8" font-family="Helvetica,sans-Serif" font-size="10.00">(+7 items en cerradura)</text>
+</g>
+<!-- I49&#45;&gt;I50 -->
+<g id="edge119" class="edge">
+<title>I49-&gt;I50</title>
+<path fill="none" stroke="black" d="M1342.2,-2495.69C1366.49,-2470.97 1403.5,-2433.34 1431.07,-2405.28"/>
+<polygon fill="black" stroke="black" points="1432.59,-2407.24 1435.75,-2400.53 1429.09,-2403.8 1432.59,-2407.24"/>
+<text xml:space="preserve" text-anchor="middle" x="1395.12" y="-2444.9" font-family="Courier,monospace" font-size="9.00">{</text>
+</g>
+<!-- I50&#45;&gt;I4 -->
+<g id="edge121" class="edge">
+<title>I50-&gt;I4</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1569.4,-2349.12C1649.07,-2335.42 1762.57,-2314.55 1860.92,-2291.4 1957.47,-2268.68 2068.43,-2235.85 2131.95,-2216.4"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="2132.41,-2218.82 2138.39,-2214.43 2130.98,-2214.14 2132.41,-2218.82"/>
+<text xml:space="preserve" text-anchor="middle" x="1898.99" y="-2283.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I50&#45;&gt;I5 -->
+<g id="edge122" class="edge">
+<title>I50-&gt;I5</title>
+<path fill="none" stroke="black" d="M1366.4,-2348.11C1249.69,-2321.22 1067.55,-2257.09 1015.92,-2113.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1126.62" y="-2196.5" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I50&#45;&gt;I6 -->
+<g id="edge123" class="edge">
+<title>I50-&gt;I6</title>
+<path fill="none" stroke="black" d="M1456.1,-2334.28C1436.88,-2277.07 1407.7,-2157.92 1478.92,-2113.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1462.82" y="-2196.5" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I50&#45;&gt;I7 -->
+<g id="edge124" class="edge">
+<title>I50-&gt;I7</title>
+<path fill="none" stroke="black" d="M1475.92,-2852.6C1074.6,-3180.88 1300.51,-3497.69 990.92,-3913.6 930.3,-3995.04 624.77,-4096.21 632.92,-4197.4"/>
+<path fill="none" stroke="black" d="M1527.58,-2399.55C1542.89,-2410.83 1557.42,-2425.07 1565.92,-2442.2 1647.35,-2606.25 1622.93,-2732.17 1482.27,-2845.55"/>
+<polygon fill="black" stroke="black" points="1481.06,-2843.38 1477.11,-2849.66 1484.11,-2847.22 1481.06,-2843.38"/>
+<text xml:space="preserve" text-anchor="middle" x="1219.42" y="-3363.7" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I50&#45;&gt;I8 -->
+<g id="edge125" class="edge">
+<title>I50-&gt;I8</title>
+<path fill="none" stroke="black" d="M1475.92,-2852.6C1306.18,-3006.17 1381.13,-3141.33 1427.92,-3365.4"/>
+<text xml:space="preserve" text-anchor="middle" x="1398.68" y="-3028.5" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I51 -->
+<g id="node52" class="node">
+<title>I51</title>
+<path fill="#f4f7fb" stroke="black" d="M719.17,-2237.6C719.17,-2237.6 540.67,-2237.6 540.67,-2237.6 534.67,-2237.6 528.67,-2231.6 528.67,-2225.6 528.67,-2225.6 528.67,-2172.8 528.67,-2172.8 528.67,-2166.8 534.67,-2160.8 540.67,-2160.8 540.67,-2160.8 719.17,-2160.8 719.17,-2160.8 725.17,-2160.8 731.17,-2166.8 731.17,-2172.8 731.17,-2172.8 731.17,-2225.6 731.17,-2225.6 731.17,-2231.6 725.17,-2237.6 719.17,-2237.6"/>
+<text xml:space="preserve" text-anchor="middle" x="629.92" y="-2214.2" font-family="Helvetica,sans-Serif" font-size="10.00">I_51</text>
+<text xml:space="preserve" text-anchor="middle" x="629.92" y="-2202.2" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } despeje { Cu . }</text>
+<text xml:space="preserve" text-anchor="middle" x="629.92" y="-2190.2" font-family="Helvetica,sans-Serif" font-size="10.00">Cu -&gt; Cu . C</text>
+<text xml:space="preserve" text-anchor="middle" x="629.92" y="-2178.2" font-family="Helvetica,sans-Serif" font-size="10.00">(+5 items en cerradura)</text>
+</g>
+<!-- I50&#45;&gt;I51 -->
+<g id="edge120" class="edge">
+<title>I50-&gt;I51</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M1366.55,-2352.88C1269.29,-2339.82 1118.52,-2317.82 989.12,-2291.4 904.75,-2274.17 810.42,-2250.03 739.6,-2230.91"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="740.38,-2228.59 732.98,-2229.12 739.1,-2233.32 740.38,-2228.59"/>
+<text xml:space="preserve" text-anchor="middle" x="994.52" y="-2283.3" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">Cu</text>
+</g>
+<!-- I51&#45;&gt;I5 -->
+<g id="edge128" class="edge">
+<title>I51-&gt;I5</title>
+<path fill="none" stroke="black" d="M670.03,-2160.49C688.32,-2143.71 710.45,-2123.95 731.12,-2107 746.61,-2094.29 763.98,-2081.02 779.83,-2069.27"/>
+<polygon fill="black" stroke="black" points="781.13,-2071.36 785.3,-2065.23 778.22,-2067.41 781.13,-2071.36"/>
+<text xml:space="preserve" text-anchor="middle" x="750.02" y="-2109.7" font-family="Courier,monospace" font-size="9.00">planeta</text>
+</g>
+<!-- I51&#45;&gt;I6 -->
+<g id="edge129" class="edge">
+<title>I51-&gt;I6</title>
+<path fill="none" stroke="black" d="M731.47,-2185.34C986.89,-2153.01 1651.09,-2068.91 1868.16,-2041.43"/>
+<polygon fill="black" stroke="black" points="1868.18,-2043.9 1874.81,-2040.59 1867.56,-2039.04 1868.18,-2043.9"/>
+<text xml:space="preserve" text-anchor="middle" x="1344.74" y="-2109.7" font-family="Courier,monospace" font-size="9.00">estrella</text>
+</g>
+<!-- I51&#45;&gt;I7 -->
+<g id="edge130" class="edge">
+<title>I51-&gt;I7</title>
+<path fill="none" stroke="black" d="M632.92,-4199.4C630.22,-4295.44 960.72,-4331.86 1099.62,-4342.91"/>
+<path fill="none" stroke="black" d="M530.92,-3708.6C547.35,-3898.17 565.93,-3944.36 611.92,-4129 619.61,-4159.86 628.96,-4165.85 632.92,-4197.4"/>
+<path fill="none" stroke="black" d="M629.92,-2287C613.05,-2318.53 587.48,-2306.66 564.92,-2334.4 419.37,-2513.33 399.57,-2581.73 350.92,-2807.2 307.93,-3006.44 476.53,-3510.16 530.92,-3706.6"/>
+<path fill="none" stroke="black" d="M637.41,-2237.98C638.41,-2250.73 637.81,-2264.91 633.28,-2277.44"/>
+<polygon fill="black" stroke="black" points="631.13,-2276.22 630.54,-2283.62 635.61,-2278.21 631.13,-2276.22"/>
+<text xml:space="preserve" text-anchor="middle" x="427.42" y="-3276.9" font-family="Courier,monospace" font-size="9.00">orbita</text>
+</g>
+<!-- I51&#45;&gt;I8 -->
+<g id="edge131" class="edge">
+<title>I51-&gt;I8</title>
+<path fill="none" stroke="black" d="M1427.92,-3454.2C1448.69,-3534.29 1402.6,-3627.3 1373.81,-3674.93"/>
+<path fill="none" stroke="black" d="M629.92,-2287C474.64,-2608.11 577.92,-2403.59 591.92,-2453 693.07,-2810.03 1064.87,-3322.11 1186.92,-3404.8 1277.3,-3466.03 1397.01,-3347.5 1427.92,-3452.2"/>
+<text xml:space="preserve" text-anchor="middle" x="845.89" y="-2941.7" font-family="Courier,monospace" font-size="9.00">eclipse</text>
+</g>
+<!-- I51&#45;&gt;I10 -->
+<g id="edge127" class="edge">
+<title>I51-&gt;I10</title>
+<path fill="none" stroke="#183a6c" stroke-dasharray="5,2" d="M569.69,-2160.42C522.55,-2130.85 457.86,-2090.27 414.12,-2062.83"/>
+<polygon fill="#183a6c" stroke="#183a6c" points="415.53,-2060.83 408.3,-2059.18 412.93,-2064.98 415.53,-2060.83"/>
+<text xml:space="preserve" text-anchor="middle" x="500.62" y="-2109.7" font-family="Courier,monospace" font-size="9.00" fill="#183a6c">C</text>
+</g>
+<!-- I52 -->
+<g id="node53" class="node">
+<title>I52</title>
+<path fill="#f4f7fb" stroke="black" d="M701.34,-2058C701.34,-2058 504.51,-2058 504.51,-2058 498.51,-2058 492.51,-2052 492.51,-2046 492.51,-2046 492.51,-2017.2 492.51,-2017.2 492.51,-2011.2 498.51,-2005.2 504.51,-2005.2 504.51,-2005.2 701.34,-2005.2 701.34,-2005.2 707.34,-2005.2 713.34,-2011.2 713.34,-2017.2 713.34,-2017.2 713.34,-2046 713.34,-2046 713.34,-2052 707.34,-2058 701.34,-2058"/>
+<text xml:space="preserve" text-anchor="middle" x="602.92" y="-2034.6" font-family="Helvetica,sans-Serif" font-size="10.00">I_52</text>
+<text xml:space="preserve" text-anchor="middle" x="602.92" y="-2022.6" font-family="Helvetica,sans-Serif" font-size="10.00">C -&gt; eclipse ( E ) { Cu } despeje { Cu } . (r8)</text>
+</g>
+<!-- I51&#45;&gt;I52 -->
+<g id="edge126" class="edge">
+<title>I51-&gt;I52</title>
+<path fill="none" stroke="black" d="M623.8,-2160.62C619.18,-2132.34 612.92,-2093.91 608.46,-2066.55"/>
+<polygon fill="black" stroke="black" points="610.92,-2066.45 607.38,-2059.94 606.09,-2067.24 610.92,-2066.45"/>
+<text xml:space="preserve" text-anchor="middle" x="619.12" y="-2109.7" font-family="Courier,monospace" font-size="9.00">}</text>
+</g>
+</g>
+</svg>
