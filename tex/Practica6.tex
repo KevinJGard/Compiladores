@@ -15,7 +15,6 @@
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
-\usepackage{gensymb}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead[L]{Compiladores}
@@ -53,6 +52,12 @@
         {Ü}{{\"U}}1
 }
 
+
+% ---- macros para los simbolos de la gramatica ----
+\newcommand{\nt}[1]{\textit{#1}}
+\newcommand{\tl}[1]{\texttt{#1}}
+\newcommand{\der}{\ensuremath{\rightarrow}}
+\newcommand{\pto}{\ensuremath{\bullet}}
 
 \title{
     \vspace*{-2.5cm}
@@ -103,26 +108,166 @@
 \maketitle
 \vspace*{-2.5cm}
 
-\subsection*{Diseño de Solución}
+\section{Proceso Analítico LALR(1)}
+
+\subsection{Gramática}
+
+\begin{center}
+\begin{tabular}{r l c l @{\hspace{1.5cm}} r l c l}
+\toprule
+1 & \nt{S'} & \der & \nt{S} &
+4 & \nt{L}  & \der & \tl{*} \nt{R} \\
+2 & \nt{S}  & \der & \nt{L} \tl{=} \nt{R} &
+5 & \nt{L}  & \der & \tl{id} \\
+3 & \nt{S}  & \der & \nt{R} &
+6 & \nt{R}  & \der & \nt{L} \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+\noindent $V_N = \{S', S, L, R\}$, \quad $V_T = \{\tl{=}, \tl{*}, \tl{id}, \tl{\$}\}$.
+ 
+\subsection{Autómata LR(1): colección canónica}
+Se obtienen \textbf{14 estados}:
+ 
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}l l@{}}
+\toprule
+Estado & Ítems LR(1) \\
+\midrule
+$I_0$ & $[S' \der \pto S,\ \tl{\$}]$,\ \ $[S \der \pto L \tl{=} R,\ \tl{\$}]$,\ \ $[S \der \pto R,\ \tl{\$}]$, \\
+      & $[R \der \pto L,\ \tl{\$}]$,\ \ $[L \der \pto \tl{*} R,\ \tl{=}/\tl{\$}]$,\ \ $[L \der \pto \tl{id},\ \tl{=}/\tl{\$}]$ \\
+\midrule
+$I_1$ & $[L \der \tl{*} \pto R,\ \tl{=}/\tl{\$}]$,\ \ $[R \der \pto L,\ \tl{=}/\tl{\$}]$, \\
+      & $[L \der \pto \tl{*} R,\ \tl{=}/\tl{\$}]$,\ \ $[L \der \pto \tl{id},\ \tl{=}/\tl{\$}]$ \\
+\midrule
+$I_2$ & $[S \der L \pto \tl{=} R,\ \tl{\$}]$,\ \ $[R \der L \pto,\ \tl{\$}]$ \\
+$I_3$ & $[S \der R \pto,\ \tl{\$}]$ \\
+$I_4$ & $[S' \der S \pto,\ \tl{\$}]$ \\
+$I_5$ & $[L \der \tl{id} \pto,\ \tl{=}/\tl{\$}]$ \\
+$I_6$ & $[R \der L \pto,\ \tl{=}/\tl{\$}]$ \\
+$I_7$ & $[L \der \tl{*} R \pto,\ \tl{=}/\tl{\$}]$ \\
+\midrule
+$I_8$ & $[S \der L \tl{=} \pto R,\ \tl{\$}]$,\ \ $[R \der \pto L,\ \tl{\$}]$, \\
+      & $[L \der \pto \tl{*} R,\ \tl{\$}]$,\ \ $[L \der \pto \tl{id},\ \tl{\$}]$ \\
+\midrule
+$I_9$ & $[L \der \tl{*} \pto R,\ \tl{\$}]$,\ \ $[R \der \pto L,\ \tl{\$}]$, \\
+      & $[L \der \pto \tl{*} R,\ \tl{\$}]$,\ \ $[L \der \pto \tl{id},\ \tl{\$}]$ \\
+\midrule
+$I_{10}$ & $[R \der L \pto,\ \tl{\$}]$ \\
+$I_{11}$ & $[S \der L \tl{=} R \pto,\ \tl{\$}]$ \\
+$I_{12}$ & $[L \der \tl{id} \pto,\ \tl{\$}]$ \\
+$I_{13}$ & $[L \der \tl{*} R \pto,\ \tl{\$}]$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+\paragraph{Transiciones \emph{Goto}.}
+ 
+\begin{center}
+\begin{tabular}{l l}
+\toprule
+Estado & Transiciones \\
+\midrule
+$I_0$ & $\tl{*} \to I_1$,\ \ $\tl{id} \to I_5$,\ \ $S \to I_4$,\ \ $L \to I_2$,\ \ $R \to I_3$ \\
+$I_1$ & $\tl{*} \to I_1$,\ \ $\tl{id} \to I_5$,\ \ $L \to I_6$,\ \ $R \to I_7$ \\
+$I_2$ & $\tl{=} \to I_8$ \\
+$I_8$ & $\tl{*} \to I_9$,\ \ $\tl{id} \to I_{12}$,\ \ $L \to I_{10}$,\ \ $R \to I_{11}$ \\
+$I_9$ & $\tl{*} \to I_9$,\ \ $\tl{id} \to I_{12}$,\ \ $L \to I_{10}$,\ \ $R \to I_{13}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+\noindent Los estados que nos quedan contienen un único ítem completo y
+carecen de transiciones salientes. Las transiciones $I_1 \xrightarrow{\tl{*}} I_1$ e $I_9 \xrightarrow{\tl{*}} I_9$
+corresponden a la indirección múltiple (\tl{**id}).
+ 
+\subsection{Fusión de kernels}
+ 
+ 
+\begin{center}
+\begin{tabular}{l l l l}
+\toprule
+Estados LR(1) & Kernel común & Lookaheads & Estado LALR(1) \\
+\midrule
+$I_1$, $I_9$    & $\{L \der \tl{*} \pto R\}$ & $\{\tl{=},\tl{\$}\} \cup \{\tl{\$}\}$ & $I_1$ \\
+$I_5$, $I_{12}$ & $\{L \der \tl{id} \pto\}$  & $\{\tl{=},\tl{\$}\} \cup \{\tl{\$}\}$ & $I_5$ \\
+$I_6$, $I_{10}$ & $\{R \der L \pto\}$        & $\{\tl{=},\tl{\$}\} \cup \{\tl{\$}\}$ & $I_6$ \\
+$I_7$, $I_{13}$ & $\{L \der \tl{*} R \pto\}$ & $\{\tl{=},\tl{\$}\} \cup \{\tl{\$}\}$ & $I_7$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+\noindent Los estados $I_0$, $I_2$, $I_3$, $I_4$, $I_8$ e $I_{11}$ tienen
+kernel único y se conservan sin cambio ($I_{11}$ se renumera como $I_9$).
+El autómata pasa de \textbf{14 a 10 estados}.
+ 
+
+\subsection{Tabla LALR(1)}
+ 
+\begin{center}
+\begin{tabular}{c cccc c ccc}
+\toprule
+ & \multicolumn{4}{c}{\textbf{Acción}} & & \multicolumn{3}{c}{\textbf{Ir\_a}} \\
+\cmidrule(lr){2-5}\cmidrule(lr){7-9}
+Estado & \tl{*} & \tl{id} & \tl{=} & \tl{\$} & & \nt{S} & \nt{L} & \nt{R} \\
+\midrule
+$I_0$ & d1 & d5 & --  & --  & & 4 & 2 & 3 \\
+$I_1$ & d1 & d5 & --  & --  & & -- & 6 & 7 \\
+$I_2$ & -- & --  & d8  & r6  & & -- & -- & -- \\
+$I_3$ & -- & --  & --  & r3  & & -- & -- & -- \\
+$I_4$ & -- & --  & --  & \textbf{accep} & & -- & -- & -- \\
+$I_5$ & -- & --  & r5  & r5  & & -- & -- & -- \\
+$I_6$ & -- & --  & r6  & r6  & & -- & -- & -- \\
+$I_7$ & -- & --  & r4  & r4  & & -- & -- & -- \\
+$I_8$ & d1 & d5  & --  & --  & & -- & 6 & 9 \\
+$I_9$ & -- & --  & --  & r2  & & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+
+ 
+\subsection{Resolución del conflicto SLR(1)}
+\label{sec:demo2}
+ 
+El estado alcanzado desde el inicial mediante \nt{L} contiene los ítems
+$[S \der L \pto \tl{=} R]$ y $[R \der L \pto]$: el primero exige
+desplazar ante \tl{=}, el segundo habilita una reducción por
+$R \der L$.
+ 
+\paragraph{En SLR(1) hay conflicto.} SLR(1) coloca la reducción en todas
+las columnas de $\mathrm{Follow}(R) = \{\tl{=}, \tl{\$}\}$, incluida la
+de \tl{=}, donde ya figuraba el desplazamiento. El terminal \tl{=} entra
+en $\mathrm{Follow}(R)$ por una cadena indirecta: de $S \der L \tl{=} R$
+se sigue $\tl{=} \in \mathrm{Follow}(L)$, y de $L \der \tl{*} R$, con
+\nt{R} en última posición, se sigue
+$\mathrm{Follow}(L) \subseteq \mathrm{Follow}(R)$. Es decir, \tl{=}
+proviene de un contexto ajeno al del estado: el de una \nt{R} anidada
+dentro de una indirección $\tl{*} R$, no el de la \nt{R} que se pretende
+reducir. $\mathrm{Follow}$ es un conjunto global y no distingue ambos
+casos.
+ 
+\paragraph{En LALR(1) no lo hay.} El estado homólogo es $I_2$, cuyos
+ítems son $[S \der L \pto \tl{=} R,\ \tl{\$}]$ y
+$[R \der L \pto,\ \tl{\$}]$. El lookahead del ítem completo es
+exactamente $\{\tl{\$}\}$: procede de la cerradura
+$[S \der \pto R,\ \tl{\$}] \Rightarrow [R \der \pto L,\ \tl{\$}]$ en
+$I_0$, donde $\mathrm{First}(\epsilon\,\tl{\$}) = \{\tl{\$}\}$, y se
+conserva al desplazar el punto. Como $I_2$ no se fusiona con ningún otro
+estado, la compactación no amplía ese conjunto. La reducción se registra
+sólo bajo \tl{\$} y el desplazamiento sólo bajo \tl{=}: celdas distintas,
+sin conflicto.
+ 
+
+
 
 \newpage
 
-\subsection*{Tabla de Pruebas y Resultados}
+\section{Diseño de Solución}
 
 
-\textbf{Comandos de compilación y ejecución:}
-
-Construir la imagen del contenedor:
-\begin{lstlisting}[style=bashstyle]
-docker build -t parser-lr .
-\end{lstlisting}
-Ejecutar el motor de análisis:
-\begin{lstlisting}[style=bashstyle]
-docker run --rm parser-lr
-\end{lstlisting}
-
-\textbf{Enlace al repositorio público:} 
-\url{https://github.com/KevinJGard/Compiladores}
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
@@ -142,13 +287,26 @@ docker run --rm parser-lr
     
     \item \textbf{Antonio Tonatiuh González Gutiérrez}:
     
-    IMG
+     
+   \begin{center}
+    {\includegraphics[height=20cm]{images/ATGGV6.jpeg}}
+\end{center}
+
+\begin{center}
+    {\includegraphics[height=20cm]{images/ATGGV62.jpeg}}
+\end{center}
 
     \newpage
     
     \item \textbf{Rodrigo Zaldivar Alanis}:
     
-    IMG
+    \begin{center}
+        {\includegraphics[height=20cm]{images/zar61.jpg}}
+    \end{center}
+
+    \begin{center}
+        {\includegraphics[height=20cm]{images/zar62.jpg}}
+    \end{center}
     
 \end{itemize}
 
