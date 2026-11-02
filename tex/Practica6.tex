@@ -6,15 +6,21 @@
 \usepackage{array}
 \usepackage{enumitem}
 \usepackage{float}
-\usepackage{listings}
-\usepackage{url}
-\usepackage{xcolor}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{listings}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, babel}
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
+\usepackage{gensymb}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead[L]{Compiladores}
@@ -270,6 +276,73 @@ sin conflicto.
 
 \section{Diseño de Solución}
 
+Para la implementación del motor de ejecución (\textit{driver}) del analizador sintáctico ascendente LALR(1), se utilizó una arquitectura modular donde el motor de análisis funciona de manera independiente a la gramática, consultando las tablas precalculadas exportadas desde un archivo separado.
+
+Nuestra implementación prescinde de un analizador léxico externo interactuando con archivos físicos. En su lugar, el punto de entrada principal provee los tokens y lexemas de prueba inyectados mediante secuencias directamente en código. El núcleo (\texttt{motor.c}) manipula pilas de arreglos estáticos (\texttt{MAX\_PILA = 8192}) para rastrear la máquina de estados y construir el Árbol de Sintaxis Abstracta (AST) invocando a los constructores definidos en \texttt{ast.c}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2.5cm, auto, >=stealth, thick]
+
+% Nodos de arquitectura
+\node (entrada) [rectangle, draw=black, text width=3.2cm, text centered, minimum height=1.2cm] {Cadenas de prueba\\(tokens y lexemas)\\\texttt{main.c}};
+\node (motor) [rectangle, draw=black, fill=gray!10, text width=3.5cm, text centered, minimum height=1.2cm, right=of entrada, xshift=0.8cm] {\textbf{Motor LALR(1)}\\\texttt{motor.c}};
+\node (salida) [rectangle, draw=black, text width=3.5cm, text centered, minimum height=1.2cm, right=of motor, xshift=0.8cm] {Salida:\\AST válido o\\\texttt{ErrorSintactico}};
+
+\node (pilas) [rectangle, draw=black, text width=3.7cm, text centered, minimum height=1.2cm, below=of motor, xshift=-2.6cm, yshift=-0.5cm] {Pilas (\texttt{MAX\_PILA})\\ \texttt{estados[]} y \texttt{nodos[]}\\(Constructores AST)};
+\node (tablas) [rectangle, draw=black, text width=3.8cm, text centered, minimum height=1.2cm, below=of motor, xshift=2.6cm, yshift=-0.5cm] {Estructura\\\texttt{GRAM\_APUNTADORES}\\(\texttt{gram\_apuntadores.c})};
+
+% Flechas
+\draw[->] (entrada) -- node[above, text width=2cm, align=center] {\scriptsize secuencias\\hardcodeadas} (motor);
+\draw[->] (motor) -- node[above] {\scriptsize evalúa} (salida);
+\draw[<->] (motor) -- node[left, align=right] {\scriptsize tope / push / pop\;} (pilas);
+\draw[<->] (motor) -- node[right, align=left] {\;consulta tabla} (tablas);
+
+\end{tikzpicture}
+\caption{Arquitectura del parser: \texttt{main.c} simula al lexer inyectando los tokens. El motor interpreta \texttt{GRAM\_APUNTADORES} y estructura la memoria para devolver el AST final.}
+\end{figure}
+
+El ciclo principal evalúa las reglas dictaminadas por los enteros de la tabla. Las acciones se dirigen dependiendo del valor $a = \texttt{accion[s][t]}$: $0$ representa un error sintáctico llenando el registro \texttt{ErrorSintactico}, $9999$ (\texttt{ACEPTAR}) indica el final exitoso del análisis devolviendo el AST raíz, los valores $> 0$ representan un \textit{Shift} (creando \texttt{nodo\_terminal}), y los valores $< 0$ indican un \textit{Reduce} (extrayendo elementos de la pila para acoplarlos bajo un \texttt{nodo\_no\_terminal}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2.2cm, >=stealth, thick]
+
+% Estilos de los nodos
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2.5cm, minimum height=0.8cm, text centered, draw=black, fill=gray!20]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=4.8cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, aspect=2, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+
+% Nodos
+\node (start) [startstop] {Inicio};
+\node (init) [process, below of=start, yshift=0.3cm] {\texttt{tope = 0}, \texttt{ip = 0}\\ \texttt{estados[0] = 0}\\ \texttt{nodos[0] = NULL}};
+\node (read) [process, below of=init, yshift=0.3cm] {\texttt{s = estados[tope]}\\ \texttt{t = tokens[ip]}};
+\node (decide) [decision, below of=read, yshift=-0.5cm] {\texttt{a = accion[s][t]}};
+
+\node (shift) [process, left of=decide, xshift=-3.5cm, text width=4.3cm] {\textbf{Shift ($a > 0$)}\\1. \texttt{estados[++tope] = a}\\2. \texttt{nodos[tope] =}\\\quad \texttt{nodo\_terminal()}\\3. \texttt{ip++}};
+\node (reduce) [process, right of=decide, xshift=3.5cm, text width=4.8cm] {\textbf{Reduce ($a < 0$)}\\1. $k = -a$, pop $largo$ elementos\\2. \texttt{dest = ir\_a[estado][lhs]}\\3. \texttt{estados[++tope] = dest}\\4. \texttt{nodos[tope] =}\\\quad \texttt{nodo\_no\_terminal()}};
+
+\node (accept) [startstop, below of=decide, yshift=-1.5cm, xshift=-2.8cm, text width=2.5cm] {\textbf{Accept (9999)}\\Retorna 1 y AST};
+\node (error) [startstop, below of=decide, yshift=-1.5cm, xshift=2.8cm, text width=3.5cm] {\textbf{Error (0)}\\Llena \texttt{ErrorSintactico}\\Retorna 0};
+
+% Rutas
+\draw[->] (start) -- (init);
+\draw[->] (init) -- (read);
+\draw[->] (read) -- (decide);
+
+\draw[->] (decide) -- node[above] {$a > 0$} (shift);
+\draw[->] (decide) -- node[above] {$a < 0$} (reduce);
+\draw[->] (decide) -- node[left] {$a == 9999\,$} (accept);
+\draw[->] (decide) -- node[right] {$\,a == 0$} (error);
+
+% Retornos al ciclo
+\draw[->] (shift) |- (read);
+\draw[->] (reduce) |- (read);
+
+\end{tikzpicture}
+\caption{Ciclo del motor de análisis sintáctico evaluando variables de estado. Se muestra cómo se integran las llamadas a la librería del AST dentro del ciclo Shift-Reduce.}
+\end{figure}
+
 \newpage
 
 \section{Vectores de Prueba}
@@ -404,11 +477,11 @@ docker run --rm motor-lalr1
 \begin{itemize}
     \item ¿Qué aspecto de esta práctica fue tu favorito o te resultó más revelador?
     
-    \textbf{Respuesta:}
+    \textbf{Respuesta:} Lo más revelador para nosotros fue cómo los conjuntos de anticipación (\textit{lookaheads}) en los ítems LR(1) logran resolver conflictos que el análisis SLR(1) global no puede manejar. Fue interesante ver cómo el algoritmo de compactación y la fusión de kernels redujeron el autómata de 14 a 10 estados manteniendo el poder analítico intacto.
 
     \item ¿Qué cambiarías o mejorarías de esta práctica para futuras generaciones?
     
-    \textbf{Respuesta:}
+    \textbf{Respuesta:} Tal vez poder contar con un archivo de texto con casos de prueba estandarizados agilizaría mucho la etapa de implementación del motor, permitiéndonos enfocar la mayor parte del tiempo en el análisis teórico y la fusión de los estados.
     
 \end{itemize}
 
