@@ -52,6 +52,9 @@
         {Ü}{{\"U}}1
 }
 
+\definecolor{accent}{RGB}{180, 40, 40}
+\definecolor{primary}{RGB}{0, 100, 0}
+
 
 % ---- macros para los simbolos de la gramatica ----
 \newcommand{\nt}[1]{\textit{#1}}
@@ -267,7 +270,47 @@ sin conflicto.
 
 \section{Diseño de Solución}
 
+\newpage
 
+\section{Vectores de Prueba}
+
+La siguiente tabla muestra las 10 cadenas de prueba (5 válidas y 5 inválidas) que se utilizaron para validar el funcionamiento del motor ante la gramática que nos dieron.
+
+\begin{table}[h!]
+    \centering
+    \small
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{c p{3.5cm} c p{6cm}}
+        \toprule
+        \textbf{\#} & \textbf{Cadena de Entrada} & \textbf{Resultado} & \textbf{Justificación} \\
+        \midrule
+        1 & \texttt{id = id} & \textbf{\color{primary}Aceptada} & Es una asignación simple. \\
+        2 & \texttt{* id = id} & \textbf{\color{primary}Aceptada} & La expresión representa la asignación de un valor a un apuntador. \\
+        3 & \texttt{* * id = * id} & \textbf{\color{primary}Aceptada} & El motor permite la asignación de valores a apuntadores anidados. \\
+        4 & \texttt{id} & \textbf{\color{primary}Aceptada} & Es un identificador válido. \\
+        5 & \texttt{* id} & \textbf{\color{primary}Aceptada} & Es una referencia a un apuntador. \\
+        6 & \texttt{id =} & \textbf{\color{accent}Rechazada} & Falta el operando derecho después del igual. \\
+        7 & \texttt{* = id} & \textbf{\color{accent}Rechazada} & El asterisco necesita un operando a su derecha. \\
+        8 & \texttt{id id} & \textbf{\color{accent}Rechazada} & Después del primer id el motor espera un operador o el final de la expresión. \\
+        9 & \texttt{= id} & \textbf{\color{accent}Rechazada} & El operador de asignación necesita un operando a su izquierda. \\
+        10 & \texttt{id = *} & \textbf{\color{accent}Rechazada} & Falta el operando derecho después del igual y del asterisco. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\textbf{Comandos de compilación y ejecución:}
+
+Construir la imagen del contenedor:
+\begin{lstlisting}[style=bashstyle]
+docker build -t motor-lalr1 .
+\end{lstlisting}
+Ejecutar el motor de análisis:
+\begin{lstlisting}[style=bashstyle]
+docker run --rm motor-lalr1
+\end{lstlisting}
+
+\textbf{Enlace al repositorio público:} 
+\url{https://github.com/KevinJGard/Compiladores}
 
 \newpage
 \subsection*{Validación de Trabajo Presencial / Reposición Teórica}
@@ -287,7 +330,17 @@ sin conflicto.
 
     \item \textbf{Kevin Jonathan Garduño Escobar}:
     
-    IMG
+    \begin{center}
+        {\includegraphics[height=20cm]{images/KG61.jpeg}}
+    \end{center}
+
+    \begin{center}
+        {\includegraphics[height=20cm]{images/KG62.jpeg}}
+    \end{center}
+
+    \begin{center}
+        {\includegraphics[height=20cm]{images/KG63.jpeg}}
+    \end{center}
 
     \newpage
     
