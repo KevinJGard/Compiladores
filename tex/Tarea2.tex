@@ -10,6 +10,10 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{tabularx}
+\usepackage{listings}
+\lstset{mathescape=true,
+    basicstyle=\ttfamily,}
 \usetikzlibrary{automata, positioning, arrows.meta}
 % ---- agregado para los ejercicios 1, 2 y 4 ----
 \usepackage{forest}
@@ -597,12 +601,169 @@ $\Follow(X)$, se concluye $\Follow(X) \subseteq \Follow(Y)$.
     \begin{verbatim}
         S := S or T | T
         T := T and F | F
-        F := not F | ( E ) | True | False
+        F := not F | ( S ) | True | False
     \end{verbatim}
     \begin{enumerate}[label=(\alph*)]
         \item Elimina la recursión izquierda.
+        
+        La gramática resultante es:
+        \begin{lstlisting}
+    S := T S'
+    S' := or T S' | $\epsilon$
+    T := F T'
+    T' := and F T' | $\epsilon$
+    F := not F | ( S ) | True | False
+        \end{lstlisting}
         \item Construye la tabla para parsing LL(1).
-        \item Usa el parser LL(1) para parsear las siguientes expresiones: a) \textbf{\texttt{True or not False;}} b) \textbf{\texttt{False and not (True or False);}} y c) \textbf{\texttt{True or (False and (not True and False)).}}
+        
+        La función \textsc{Null} queda de la siguiente manera:
+        \begin{lstlisting}
+    Null(S) = False
+    Null(S') = True
+    Null(T) = False
+    Null(T') = True
+    Null(F) = False
+        \end{lstlisting}
+        La función \textsc{First} queda de la siguiente manera:
+        \begin{lstlisting}
+    First(S) = {not, (, True, False}
+    First(S') = {or, $\epsilon$}
+    First(T) = {not, (, True, False}
+    First(T') = {and, $\epsilon$}
+    First(F) = {not, (, True, False}
+        \end{lstlisting}
+        La función \textsc{Follow} queda de la siguiente manera:
+        \begin{verbatim}
+     Follow(S) = {), $}
+     Follow(S') = {), $}
+     Follow(T) = {or, ), $}
+     Follow(T') = {or, ), $}
+     Follow(F) = {and, or, ), $}
+        \end{verbatim}
+        Con esto la tabla de parsing LL(1) queda de la siguiente manera:
+        \begin{table}[H]
+            \centering
+            \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|X|X|X|}
+                \hline
+                            & \textbf{or}   & \textbf{and}   & \textbf{not} & \textbf{(} & \textbf{)}    & \textbf{True} & \textbf{False} & \textbf{\$}   \\ \hline
+                \textbf{S}  & -             & -              & S := T S'    & S := T S'  & -             & S := T S'     & S := T S'      & -             \\ \hline
+                \textbf{S'} & S' := or T S' & -              & -            & -          & S' := $\epsilon$ & -             & -              & S' := $\epsilon$ \\ \hline
+                \textbf{T}  & -             & -              & T := F T'    & T := F T'  & -             & T := F T'     & T := F T'      & -             \\ \hline
+                \textbf{T'} & T' := $\epsilon$ & T' := and F T' & -            & -          & T' := $\epsilon$ & -             & -              & T' := $\epsilon$ \\ \hline
+                \textbf{F}  & -             & -              & F := not F   & F := ( S ) & -             & F := True     & F := False     & -             \\ \hline
+            \end{tabularx}
+        \end{table}
+        \item Usa el parser LL(1) para parsear las siguientes expresiones: a) \textbf{\texttt{True or not False}}; b) \textbf{\texttt{False and not (True or False)}}; y c) \textbf{\texttt{True or (False and (not True and False))}}.
+        \begin{enumerate}[label=(\alph*)]
+            \item La cadena \texttt{True or not False} es aceptada por el parser LL(1).
+            
+            La tabla de parseo para la cadena es la siguiente:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                                & \textbf{Pila} & \textbf{Input}       \\ \hline
+                    \textbf{1-}  & \$S           & True or not False \$ \\ \hline
+                    \textbf{2-}  & \$S' T        & True or not False \$ \\ \hline
+                    \textbf{3-}  & \$S' T' F     & True or not False \$ \\ \hline
+                    \textbf{4-}  & \$S' T' True  & True or not False \$ \\ \hline
+                    \textbf{5-}  & \$S' T'       & or not False \$      \\ \hline
+                    \textbf{6-}  & \$S'          & or not False \$      \\ \hline
+                    \textbf{7-}  & \$S' T or     & or not False \$      \\ \hline
+                    \textbf{8-}  & \$S' T        & not False \$         \\ \hline
+                    \textbf{9-}  & \$S' T' F     & not False \$         \\ \hline
+                    \textbf{10-} & \$S' T' F not & not False \$         \\ \hline
+                    \textbf{11-} & \$S' T' F     & False \$             \\ \hline
+                    \textbf{12-} & \$S' T' False & False \$             \\ \hline
+                    \textbf{13-} & \$S' T'       & \$                   \\ \hline
+                    \textbf{14-} & \$S'          & \$                   \\ \hline
+                    \textbf{15-} & \$            & \$                   \\ \hline
+                \end{tabular}
+            \end{table}
+            \item La cadena \texttt{False and not (True or False)} es aceptada por el parser LL(1).
+            
+            La tabla de parseo para la cadena es la siguiente:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                                & \textbf{Pila}         & \textbf{Input}                   \\ \hline
+                    \textbf{1-}  & \$S                   & False and not (True or False) \$ \\ \hline
+                    \textbf{2-}  & \$S' T                & False and not (True or False) \$ \\ \hline
+                    \textbf{3-}  & \$S' T' F             & False and not (True or False) \$ \\ \hline
+                    \textbf{4-}  & \$S' T' False         & False and not (True or False) \$ \\ \hline
+                    \textbf{5-}  & \$S' T'               & and not (True or False) \$       \\ \hline
+                    \textbf{6-}  & \$S' T' F and         & and not (True or False) \$       \\ \hline
+                    \textbf{7-}  & \$S' T' F             & not (True or False) \$           \\ \hline
+                    \textbf{8-}  & \$S' T' F not         & not (True or False) \$           \\ \hline
+                    \textbf{9-}  & \$S' T' F             & (True or False) \$               \\ \hline
+                    \textbf{10-} & \$S' T' ) S (         & (True or False) \$               \\ \hline
+                    \textbf{11-} & \$S' T' ) S           & True or False) \$                \\ \hline
+                    \textbf{12-} & \$S' T' ) S' T        & True or False) \$                \\ \hline
+                    \textbf{13-} & \$S' T' ) S' T' F     & True or False) \$                \\ \hline
+                    \textbf{14-} & \$S' T' ) S' T' True  & True or False) \$                \\ \hline
+                    \textbf{15-} & \$S' T' ) S' T'       & or False) \$                     \\ \hline
+                    \textbf{16-} & \$S' T' ) S'          & or False) \$                     \\ \hline
+                    \textbf{17-} & \$S' T' ) S' T or     & or False) \$                     \\ \hline
+                    \textbf{18-} & \$S' T' ) S' T        & False) \$                        \\ \hline
+                    \textbf{19-} & \$S' T' ) S' T' F     & False) \$                        \\ \hline
+                    \textbf{20-} & \$S' T' ) S' T' False & False) \$                        \\ \hline
+                    \textbf{21-} & \$S' T' ) S' T'       & ) \$                             \\ \hline
+                    \textbf{22-} & \$S' T' ) S'          & ) \$                             \\ \hline
+                    \textbf{23-} & \$S' T' )             & ) \$                             \\ \hline
+                    \textbf{24-} & \$S' T'               & \$                               \\ \hline
+                    \textbf{25-} & \$S'                  & \$                               \\ \hline
+                    \textbf{26-} & \$                    & \$                               \\ \hline
+                \end{tabular}
+            \end{table}
+            \item La cadena \texttt{True or (False and (not True and False))} es aceptada por el parser LL(1).
+            
+            La tabla de parseo para la cadena es la siguiente:
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{|c|c|c|}
+                    \hline
+                                & \textbf{Pila}                 & \textbf{Input}                              \\ \hline
+                    \textbf{1-}  & \$S                           & True or (False and (not True and False)) \$ \\ \hline
+                    \textbf{2-}  & \$S' T                        & True or (False and (not True and False)) \$ \\ \hline
+                    \textbf{3-}  & \$S' T' F                     & True or (False and (not True and False)) \$ \\ \hline
+                    \textbf{4-}  & \$S' T' True                  & True or (False and (not True and False)) \$ \\ \hline
+                    \textbf{5-}  & \$S' T'                       & or (False and (not True and False)) \$      \\ \hline
+                    \textbf{6-}  & \$S'                          & or (False and (not True and False)) \$      \\ \hline
+                    \textbf{7-}  & \$S' T or                     & or (False and (not True and False)) \$      \\ \hline
+                    \textbf{8-}  & \$S' T                        & (False and (not True and False)) \$         \\ \hline
+                    \textbf{9-}  & \$S' T' F                     & (False and (not True and False)) \$         \\ \hline
+                    \textbf{10-} & \$S' T' ) S (                 & (False and (not True and False)) \$         \\ \hline
+                    \textbf{11-} & \$S' T' ) S                   & False and (not True and False)) \$          \\ \hline
+                    \textbf{12-} & \$S' T' ) S' T                & False and (not True and False)) \$          \\ \hline
+                    \textbf{13-} & \$S' T' ) S' T' F             & False and (not True and False)) \$          \\ \hline
+                    \textbf{14-} & \$S' T' ) S' T' False         & False and (not True and False)) \$          \\ \hline
+                    \textbf{15-} & \$S' T' ) S' T'               & and (not True and False)) \$                \\ \hline
+                    \textbf{16-} & \$S' T' ) S' T' F and         & and (not True and False)) \$                \\ \hline
+                    \textbf{17-} & \$S' T' ) S' T' F             & (not True and False)) \$                    \\ \hline
+                    \textbf{18-} & \$S' T' ) S' T' ) S (         & (not True and False)) \$                    \\ \hline
+                    \textbf{19-} & \$S' T' ) S' T' ) S           & not True and False)) \$                     \\ \hline
+                    \textbf{20-} & \$S' T' ) S' T' ) S' T        & not True and False)) \$                     \\ \hline
+                    \textbf{21-} & \$S' T' ) S' T' ) S' T' F     & not True and False)) \$                     \\ \hline
+                    \textbf{22-} & \$S' T' ) S' T' ) S' T' F not & not True and False)) \$                     \\ \hline
+                    \textbf{23-} & \$S' T' ) S' T' ) S' T' F     & True and False)) \$                         \\ \hline
+                    \textbf{24-} & \$S' T' ) S' T' ) S' T' True  & True and False)) \$                         \\ \hline
+                    \textbf{25-} & \$S' T' ) S' T' ) S' T'       & and False)) \$                              \\ \hline
+                    \textbf{26-} & \$S' T' ) S' T' ) S' T' F and & and False)) \$                              \\ \hline
+                    \textbf{27-} & \$S' T' ) S' T' ) S' T' F     & False)) \$                                  \\ \hline
+                    \textbf{28-} & \$S' T' ) S' T' ) S' T' False & False)) \$                                  \\ \hline
+                    \textbf{29-} & \$S' T' ) S' T' ) S' T'       & )) \$                                       \\ \hline
+                    \textbf{30-} & \$S' T' ) S' T' ) S'          & )) \$                                       \\ \hline
+                    \textbf{31-} & \$S' T' ) S' T' )             & )) \$                                       \\ \hline
+                    \textbf{32-} & \$S' T' ) S' T'               & ) \$                                        \\ \hline
+                    \textbf{33-} & \$S' T' ) S'                  & ) \$                                        \\ \hline
+                    \textbf{34-} & \$S' T' )                     & ) \$                                        \\ \hline
+                    \textbf{35-} & \$S' T'                       & \$                                          \\ \hline
+                    \textbf{36-} & \$S'                          & \$                                          \\ \hline
+                    \textbf{37-} & \$                            & \$                                          \\ \hline
+                \end{tabular}
+            \end{table}
+        \end{enumerate}
     \end{enumerate}
     \item Construye el autómata LR(0) para la siguiente gramática:
     \begin{verbatim}
@@ -614,6 +775,125 @@ $\Follow(X)$, se concluye $\Follow(X) \subseteq \Follow(Y)$.
         \item ** asocia por la izquierda y $\sim$ por la derecha.
     \end{itemize}
     Para obtener un parsing para la cadena 10**2 $\sim$ 3
+
+    Empezamos con nuestra gramática y añadimos un símbolo inicial \texttt{E'}:
+    \begin{verbatim}
+        E' := E
+        E := E ~ E | E ** E | int
+    \end{verbatim}
+    Ahora si empezamos a calcular los estados del autómata:
+
+    $I_0 = Closure([E' \rightarrow .E]) = \{ [E' \rightarrow .E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+    $I_1 =$ \texttt{Goto}($I_0, E$) = $Closure([E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+    $I_2 =$ \texttt{Goto}($I_0, int$) = $Closure([E \rightarrow int.]) = \{ [E \rightarrow int.] \} $\\
+    $I_3 =$ \texttt{Goto}($I_1, \sim$) = $Closure([E \rightarrow E \sim . E]) = \{ [E \rightarrow E \sim . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+    $I_4 =$ \texttt{Goto}($I_1, **$) = $Closure([E \rightarrow E ** . E]) = \{ [E \rightarrow E ** . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+    $I_5 =$ \texttt{Goto}($I_3, E$) = $Closure([E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+    \texttt{Goto}($I_3, int$) = $Closure([E \rightarrow int.]) = I_2$\\
+    $I_6 =$ \texttt{Goto}($I_4, E$) = $Closure([E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+    \texttt{Goto}($I_4, int$) = $Closure([E \rightarrow int.]) = I_2$\\
+    \texttt{Goto}($I_5, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
+    \texttt{Goto}($I_5, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
+    \texttt{Goto}($I_6, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
+    \texttt{Goto}($I_6, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
+    La automáta resultante es la siguiente:
+    \begin{center}
+        \begin{tikzpicture}[> = {Stealth[scale=1.2]},
+            shorten > = 1pt,
+            auto,
+            semithick,
+            initial text = {}]
+            \node[state, initial] (I0) at (0, 0) {$I_0$};
+            \node[state, accepting] (I1) at (3.5, 0) {$I_1$};
+            
+            % Rama superior
+            \node[state] (I3) at (7, 3) {$I_3$};
+            \node[state] (I5) at (12, 3) {$I_5$};
+            
+            % Rama inferior
+            \node[state] (I4) at (7, -3) {$I_4$};
+            \node[state] (I6) at (12, -3) {$I_6$};
+            
+            \node[state] (I2) at (10, -6.5) {$I_2$};
+
+            \path[->, every node/.style={fill=white, inner sep=2pt, font=\small}]
+                
+                % Desde I0
+                (I0) edge node {$E$} (I1)
+                (I0) edge [out=-70, in=180] node [swap, pos=0.15] {$int$} (I2)
+                
+                % Desde I1 
+                (I1) edge node [pos=0.4] {$\sim$} (I3)
+                (I1) edge node [swap, pos=0.4] {$**$} (I4)
+                
+                % Desde I3
+                (I3) edge [bend left=15] node {$E$} (I5)
+                (I3) edge node [pos=0.15, swap] {$int$} (I2)
+                
+                % Desde I4
+                (I4) edge [bend left=15] node {$E$} (I6)
+                (I4) edge node [pos=0.25, swap] {$int$} (I2)
+                
+                % Desde I5
+                (I5) edge [bend left=15] node {$\sim$} (I3)
+                (I5) edge node [pos=0.2, swap] {$**$} (I4)
+                
+                % Desde I6
+                (I6) edge node [pos=0.2] {$\sim$} (I3)
+                (I6) edge [bend left=15] node {$**$} (I4);
+        \end{tikzpicture}
+    \end{center}
+    Ahora calculamos el \textsc{Follow} de la gramática:
+    \begin{verbatim}
+        Follow(E) = {**, ~, $}
+    \end{verbatim}
+    Con esto podemos construir la tabla SLR, primero enumeramos las producciones de la gramática:
+    \begin{enumerate}[label=(\arabic*), start=0]
+        \item $E' \rightarrow E$
+        \item $E \rightarrow E \sim E$
+        \item $E \rightarrow E ** E$
+        \item $E \rightarrow int$
+    \end{enumerate}
+    Ahora si construimos la tabla SLR tomando en cuenta la precedencia y asociatividad de los operadores:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            \textbf{Estado} & $\bm{\sim}$ & $\bm{**}$ & \textbf{int} & \textbf{\$} & $\bm{E}$ \\ \hline
+            $\bm{I_0}$ & - & - & s2 & - & 1 \\ \hline
+            $\bm{I_1}$ & s3 & s4 & - & acc & - \\ \hline
+            $\bm{I_2}$ & r3 & r3 & - & r3 & - \\ \hline
+            $\bm{I_3}$ & - & - & s2 & - & 5 \\ \hline
+            $\bm{I_4}$ & - & - & s2 & - & 6 \\ \hline
+            $\bm{I_5}$ & s3 & s4 & - & r1 & - \\ \hline
+            $\bm{I_6}$ & r2 & r2 & - & r2 & - \\ \hline
+        \end{tabular}
+    \end{table}
+    Ahora seguimos con la tabla de parsing LR(0) para la cadena 10**2 $\sim$ 3 que para el lexer es int ** int $\sim$ int:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            Estados          & \textbf{Símbolos} & \textbf{Input}           & \textbf{Acción} \\ \hline
+            \textbf{0}       & \$                & int ** int $\sim$ int \$ & s2              \\ \hline
+            \textbf{0 2}     & \$ int            & ** int $\sim$ int \$     & r3              \\ \hline
+            \textbf{0}       & \$ E              & ** int $\sim$ int \$     & g1              \\ \hline
+            \textbf{0 1}     & \$ E              & ** int $\sim$ int \$     & s4              \\ \hline
+            \textbf{0 1 4}   & \$ E **           & int $\sim$ int \$        & s2              \\ \hline
+            \textbf{0 1 4 2} & \$ E ** int       & $\sim$ int \$            & r3              \\ \hline
+            \textbf{0 1 4}   & \$ E ** E         & $\sim$ int \$            & g6              \\ \hline
+            \textbf{0 1 4 6} & \$ E ** E         & $\sim$ int \$            & r2              \\ \hline
+            \textbf{0}       & \$ E              & $\sim$ int \$            & g1              \\ \hline
+            \textbf{0 1}     & \$ E              & $\sim$ int \$            & s3              \\ \hline
+            \textbf{0 1 3}   & \$ E $\sim$       & int \$                   & s2              \\ \hline
+            \textbf{0 1 3 2} & \$ E $\sim$ int   & \$                       & r3              \\ \hline
+            \textbf{0 1 3}   & \$ E $\sim$ E     & \$                       & g5              \\ \hline
+            \textbf{0 1 3 5} & \$ E $\sim$ E     & \$                       & r1              \\ \hline
+            \textbf{0}       & \$ E              & \$                       & g1              \\ \hline
+            \textbf{0 1}     & \$ E              & \$                       & acc             \\ \hline
+        \end{tabular}
+    \end{table}
+    Así, podemos ver que la cadena es aceptada.
     \item Utiliza la gramática (expresiones booleanas) del ejercicio 7 para construir las tablas de \textbf{SLR, LR(1)} y \textbf{LALR} y parsear las cadenas que se indican en ese ejercicio.
     \item A partir de la siguiente gramática:
     \begin{verbatim}
