@@ -11,6 +11,23 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning, arrows.meta}
+% ---- agregado para los ejercicios 1, 2 y 4 ----
+\usepackage{forest}
+\usetikzlibrary{babel}
+\newcommand{\tk}[1]{\mathtt{#1}}
+\newcommand{\occ}{\mathbin{\texttt{::}}}
+\newcommand{\osc}{\mathbin{;}}
+\newcommand{\ogt}{\mathbin{>}}
+\newcommand{\ohs}{\mathbin{\#}}
+\newcommand{\odg}{\mathbin{\circ}}
+\newcommand{\Null}{\textsc{Null}}
+\newcommand{\First}{\textsc{First}}
+\newcommand{\Follow}{\textsc{Follow}}
+\newcommand{\deriva}{\Rightarrow^{*}}
+\newtheorem*{lema}{Lema}
+\newtheorem*{prop}{Proposición}
+% caja de solucion debajo de cada enunciado
+\newenvironment{solucion}{\par\medskip\noindent\textbf{\large Solución}\par\smallskip}{\par\bigskip}
 \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
 %% Sets page size and margins
 \usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry}
@@ -60,7 +77,7 @@
                                                 \bottomrule
                                                 \end{tabular}\\
                                                 \vspace{0.8cm}
-                                                       {\itshape\Large Fecha de entrega: 00 de Noviembre de 2026 \par}
+                                                       {\itshape\Large Fecha de entrega: 08 de Noviembre de 2026 \par}
 \end{titlepage}
 
 \begin{enumerate}
@@ -77,6 +94,98 @@
         \end{verbatim}
         Los terminales son $a$ y $b$ más los operadores indicados:
     \end{enumerate}
+
+\begin{solucion}
+
+
+\medskip\noindent\textbf{\underline{Inciso (a)}}
+
+\[
+L \to L \occ L \mid L + \tk{element} \mid L - \tk{element} \mid \varepsilon
+\]
+
+\textbf{Niveles.} $+$ y $-$ tienen la misma precedencia y asocian por la
+izquierda; $\occ$ liga más fuerte y asocia por la derecha. Por tanto $+$ y $-$
+van arriba (mismo nivel) y $\occ$ abajo.
+
+\textbf{Gramática reescrita:}
+\[
+\begin{array}{rcl}
+L &\to& L + M \mid L - M \mid M \mid \varepsilon \\
+M &\to& N \occ M \mid N \\
+N &\to& \tk{element}
+\end{array}
+\]
+ ejemplo
+
+\begin{itemize}[leftmargin=*]
+  \item $L \to L + M$: recursión a la izquierda, así que $+$ y $-$ asocian por
+        la izquierda: $\tk{e} - \tk{e} - \tk{e}$ se agrupa como
+        $(\tk{e} - \tk{e}) - \tk{e}$.
+ 
+\end{itemize}
+
+\textbf{Ambiguedad.} En la gramática original la cadena
+$\occ\ \occ$ tiene 2 árboles, y la cadena
+$+\,\tk{element} \occ -\,\tk{element} \occ +\,\tk{element}$ tiene 7. En la
+reescrita, toda cadena tiene un único árbol.
+
+
+
+\medskip\noindent\textbf{\underline{Inciso (b)}}
+
+ La gramática es:
+\[
+S \to S \ogt S \mid S \osc S \mid S \odg S \mid S \ohs S \mid \tk{a} \mid \tk{b}
+\]
+donde $\odg$ denota el operador ``$^\circ$''.
+
+\textbf{Niveles.} La cadena de precedencia es
+``$\osc$ precede a $\ogt$, que precede a $\ohs$, que precede a $\odg$''. De
+más flojo (arriba) a más fuerte (abajo):
+
+\begin{center}
+\begin{tabular}{c c l l}
+\toprule
+Nivel & Operador & Asociatividad & Forma \\
+\midrule
+$S$ & $\odg$ & derecha       & $S \to T \odg S \mid T$ \\
+$T$ & $\ohs$ & no asociativo & $T \to U \ohs U \mid U$ \\
+$U$ & $\ogt$ & derecha       & $U \to V \ogt U \mid V$ \\
+$V$ & $\osc$ & izquierda     & $V \to V \osc W \mid W$ \\
+$W$ & ---    & ---           & $W \to \tk{a} \mid \tk{b}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Gramática reescrita:}
+\[
+\begin{array}{rcl}
+S &\to& T \odg S \mid T \\
+T &\to& U \ohs U \mid U \\
+U &\to& V \ogt U \mid V \\
+V &\to& V \osc W \mid W \\
+W &\to& \tk{a} \mid \tk{b}
+\end{array}
+\]
+
+\textbf{Ejemplos de agrupación} :
+\begin{center}
+\begin{tabular}{l l c}
+\toprule
+Cadena & Agrupación & Árboles en la original \\
+\midrule
+$\tk{a} \ogt \tk{a} \ogt \tk{a}$ & $\tk{a} \ogt (\tk{a} \ogt \tk{a})$ & 2 \\
+$\tk{a} \osc \tk{a} \osc \tk{a}$ & $(\tk{a} \osc \tk{a}) \osc \tk{a}$ & 2 \\
+$\tk{a} \osc \tk{b} \ogt \tk{a}$ & $(\tk{a} \osc \tk{b}) \ogt \tk{a}$ & 2 \\
+$\tk{a} \ogt \tk{b} \ohs \tk{a} \odg \tk{b}$ & $((\tk{a} \ogt \tk{b}) \ohs \tk{a}) \odg \tk{b}$ & 5 \\
+$\tk{a} \ohs \tk{b} \odg \tk{a} \ohs \tk{b}$ & $(\tk{a} \ohs \tk{b}) \odg (\tk{a} \ohs \tk{b})$ & 5 \\
+$\tk{a} \ohs \tk{b} \ohs \tk{a}$ & \textit{no se deriva} & 2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{solucion}
+
     \item De la siguiente gramática:
     \begin{verbatim}
         E := E + E | E - E | E * E | E / E | ( E ) | num
@@ -86,6 +195,337 @@
         \item Transforma la gramática a forma normal de Chomsky.
         \item Utiliza el método de parsing CYK para parsear las cadenas: i) `2+4.5*(1+4)'; ii) `2+4.5*1+4'; y iii) `10/5-30'
     \end{enumerate}
+
+\begin{solucion}
+\[
+E \to E + E \mid E - E \mid E * E \mid E \,/\, E \mid (\,E\,) \mid \tk{num}
+\]
+
+
+\medskip\noindent\textbf{\underline{Inciso (a): forma normal de Chomsky}}
+
+Primero sacamos los terminales de las reglas largas. En una regla de
+longitud $\geq 2$ no pueden aparecer terminales. Se crea un no terminal para
+cada uno:
+\[
+O_{+} \to +, \quad O_{-} \to -, \quad O_{*} \to *, \quad O_{/} \to /, \quad
+A \to (, \quad C \to )
+\]
+con lo que
+\[
+E \to E\,O_{+}\,E \mid E\,O_{-}\,E \mid E\,O_{*}\,E \mid E\,O_{/}\,E \mid A\,E\,C \mid \tk{num}
+\]
+
+Después se aplica la regla de los tres símbolos: cada regla
+$E \to E\,O_{+}\,E$ se divide en $E \to E\,R_{+}$ y $R_{+} \to O_{+}\,E$, donde
+$R_{+}$ representa ``el resto de una suma'': el operador seguido del segundo
+operando. Igual con los demás operadores. Para el paréntesis,
+$E \to A\,E\,C$ se divide en $E \to A\,X$ y $X \to E\,C$, donde $X$ es ``lo que
+sigue a un paréntesis que abre''.
+
+\textbf{Gramática en FNC} (12 no terminales, 17 producciones):
+\[
+\begin{array}{rcl}
+E &\to& E\,R_{+} \mid E\,R_{-} \mid E\,R_{*} \mid E\,R_{/} \mid A\,X \mid \tk{num} \\[2pt]
+R_{+} &\to& O_{+}\,E \qquad R_{-} \to O_{-}\,E \qquad R_{*} \to O_{*}\,E \qquad R_{/} \to O_{/}\,E \\[2pt]
+X &\to& E\,C \\[2pt]
+O_{+} &\to& + \qquad O_{-} \to - \qquad O_{*} \to * \qquad O_{/} \to / \qquad A \to ( \qquad C \to )
+\end{array}
+\]
+
+\medskip\noindent\textbf{\underline{Inciso (b): parsing CYK}}
+
+\textbf{Tokenización.} El enunciado indica que $\tk{num}$ cubre enteros y
+flotantes, así que \texttt{4.5} es \emph{un solo} token. Las cadenas quedan:
+
+\begin{center}
+\begin{tabular}{c l l c}
+\toprule
+ & Cadena & Tokens & $n$ \\
+\midrule
+i   & \texttt{2+4.5*(1+4)} & $\tk{num} + \tk{num} * ( \tk{num} + \tk{num} )$ & 9 \\
+ii  & \texttt{2+4.5*1+4}   & $\tk{num} + \tk{num} * \tk{num} + \tk{num}$     & 7 \\
+iii & \texttt{10/5-30}     & $\tk{num} \,/\, \tk{num} - \tk{num}$           & 5 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\medskip\noindent\textbf{Cadena i: \texttt{2+4.5*(1+4)}}
+ 
+\textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{A\}$, $T[1,6] = \{E\}$, $T[1,7] = \{O_{+}\}$, $T[1,8] = \{E\}$, $T[1,9] = \{C\}$.
+ 
+\textbf{Fila $\ell=2$} (cortes $k=1$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[2,2]$ (\texttt{+ 4.5}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item $T[2,7]$ (\texttt{+ 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item $T[2,8]$ (\texttt{4 )}): $k=1$: $\{E\} \times \{C\}$, regla $X \to E\,C$. $\Rightarrow \{X\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[2,1]$, $T[2,3]$, $T[2,4]$, $T[2,5]$, $T[2,6]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=3$} (cortes $k=1,2$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[3,1]$ (\texttt{2 + 4.5}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+  \item $T[3,6]$ (\texttt{1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[3,2]$, $T[3,3]$, $T[3,4]$, $T[3,5]$, $T[3,7]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[4,6]$ (\texttt{1 + 4 )}): $k=3$: $\{E\} \times \{C\}$, regla $X \to E\,C$. $\Rightarrow \{X\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[4,1]$, $T[4,2]$, $T[4,3]$, $T[4,4]$, $T[4,5]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[5,5]$ (\texttt{( 1 + 4 )}): $k=1$: $\{A\} \times \{X\}$, regla $E \to A\,X$. $\Rightarrow \{E\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[5,1]$, $T[5,2]$, $T[5,3]$, $T[5,4]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[6,4]$ (\texttt{* ( 1 + 4 )}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[6,1]$, $T[6,2]$, $T[6,3]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[7,3]$ (\texttt{4.5 * ( 1 + 4 )}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[7,1]$, $T[7,2]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=8$} (cortes $k=1,\dots,7$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[8,2]$ (\texttt{+ 4.5 * ( 1 + 4 )}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[8,1]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=9$} (cortes $k=1,\dots,8$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[9,1]$ (\texttt{2 + 4.5 * ( 1 + 4 )}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
+ 
+\end{itemize}
+\begin{center}
+\small
+\begin{tabular}{c|ccccccccc}
+\toprule
+$i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+ & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{(} & \texttt{1} & \texttt{+} & \texttt{4} & \texttt{)} \\
+\midrule
+$\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $A$ & $E$ & $O_{+}$ & $E$ & $C$ \\
+$\ell=2$ & -- & $R_{+}$ & -- & -- & -- & -- & $R_{+}$ & $X$ &  \\
+$\ell=3$ & $E$ & -- & -- & -- & -- & $E$ & -- &  &  \\
+$\ell=4$ & -- & -- & -- & -- & -- & $X$ &  &  &  \\
+$\ell=5$ & -- & -- & -- & -- & $E$ &  &  &  &  \\
+$\ell=6$ & -- & -- & -- & $R_{*}$ &  &  &  &  &  \\
+$\ell=7$ & -- & -- & $E$ &  &  &  &  &  &  \\
+$\ell=8$ & -- & $R_{+}$ &  &  &  &  &  &  &  \\
+$\ell=9$ & \fbox{$E$} &  &  &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+$E \in T[9,1]$: \textbf{la cadena se acepta.}
+ 
+$E$ llega a la celda final por dos cortes: $k=1$
+(\texttt{2} $\mid$ \texttt{+4.5*(1+4)}) y $k=3$
+(\texttt{2+4.5} $\mid$ \texttt{*(1+4)}). El paréntesis interno sólo se puede
+formar de una manera: $X$ = \texttt{1+4)} en $T[4,6]$ y $E$ = \texttt{(1+4)}
+en $T[5,5]$. Por eso la cadena tiene exactamente dos árboles:
+ 
+
+ 
+\medskip\noindent\textbf{Cadena ii: \texttt{2+4.5*1+4}}
+ 
+\textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{E\}$, $T[1,6] = \{O_{+}\}$, $T[1,7] = \{E\}$.
+ 
+\textbf{Fila $\ell=2$} (cortes $k=1$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[2,2]$ (\texttt{+ 4.5}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item $T[2,4]$ (\texttt{* 1}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
+ 
+  \item $T[2,6]$ (\texttt{+ 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[2,1]$, $T[2,3]$, $T[2,5]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=3$} (cortes $k=1,2$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[3,1]$ (\texttt{2 + 4.5}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+  \item $T[3,3]$ (\texttt{4.5 * 1}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
+ 
+  \item $T[3,5]$ (\texttt{1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[3,2]$, $T[3,4]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[4,2]$ (\texttt{+ 4.5 * 1}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item $T[4,4]$ (\texttt{* 1 + 4}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[4,1]$, $T[4,3]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[5,1]$ (\texttt{2 + 4.5 * 1}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
+ 
+  \item $T[5,3]$ (\texttt{4.5 * 1 + 4}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$; $k=3$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[5,2]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[6,2]$ (\texttt{+ 4.5 * 1 + 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
+ 
+  \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[6,1]$.
+ 
+\end{itemize}
+ 
+\textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
+ 
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+ 
+  \item $T[7,1]$ (\texttt{2 + 4.5 * 1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$; $k=5$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
+ 
+\end{itemize}
+\begin{center}
+\small
+\begin{tabular}{c|ccccccc}
+\toprule
+$i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+ & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{1} & \texttt{+} & \texttt{4} \\
+\midrule
+$\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $E$ & $O_{+}$ & $E$ \\
+$\ell=2$ & -- & $R_{+}$ & -- & $R_{*}$ & -- & $R_{+}$ &  \\
+$\ell=3$ & $E$ & -- & $E$ & -- & $E$ &  &  \\
+$\ell=4$ & -- & $R_{+}$ & -- & $R_{*}$ &  &  &  \\
+$\ell=5$ & $E$ & -- & $E$ &  &  &  &  \\
+$\ell=6$ & -- & $R_{+}$ &  &  &  &  &  \\
+$\ell=7$ & \fbox{$E$} &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{center}
+ 
+$E \in T[7,1]$: \textbf{la cadena se acepta.}
+ 
+
+ 
+\medskip\noindent\textbf{Cadena iii: \texttt{10/5-30} }
+ 
+\textbf{Fila $\ell=1$.} $T[1,1] = \{E\}$, $T[1,2] = \{O_{/}\}$,
+$T[1,3] = \{E\}$, $T[1,4] = \{O_{-}\}$, $T[1,5] = \{E\}$.
+ 
+\textbf{Fila $\ell=2$} (un solo corte, $k=1$):
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+  \item $T[2,1]$ (\texttt{10 /}): $\{E\} \times \{O_{/}\}$. No hay regla
+        $A \to E\,O_{/}$. $\Rightarrow \varnothing$
+  \item $T[2,2]$ (\texttt{/ 5}): $\{O_{/}\} \times \{E\}$. Regla
+        $R_{/} \to O_{/}\,E$. $\Rightarrow \{R_{/}\}$
+  \item $T[2,3]$ (\texttt{5 -}): $\{E\} \times \{O_{-}\}$. $\Rightarrow \varnothing$
+  \item $T[2,4]$ (\texttt{- 30}): $\{O_{-}\} \times \{E\}$. Regla
+        $R_{-} \to O_{-}\,E$. $\Rightarrow \{R_{-}\}$
+\end{itemize}
+ 
+\textbf{Fila $\ell=3$} (cortes $k = 1, 2$):
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+  \item $T[3,1]$ (\texttt{10 / 5}): $k=1$: $T[1,1] \times T[2,2] = \{E\} \times \{R_{/}\}$,
+        regla $E \to E\,R_{/}$. $k=2$: $T[2,1] = \varnothing$. $\Rightarrow \{E\}$
+  \item $T[3,2]$ (\texttt{/ 5 -}): $k=1$: $T[2,3] = \varnothing$.
+        $k=2$: $\{R_{/}\} \times \{O_{-}\}$, sin regla. $\Rightarrow \varnothing$
+  \item $T[3,3]$ (\texttt{5 - 30}): $k=1$: $\{E\} \times \{R_{-}\}$, regla
+        $E \to E\,R_{-}$. $\Rightarrow \{E\}$
+\end{itemize}
+ 
+\textbf{Fila $\ell=4$} (cortes $k = 1, 2, 3$):
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+  \item $T[4,1]$ (\texttt{10 / 5 -}): $k=1$: $T[3,2] = \varnothing$.
+        $k=2$: $T[2,1] = \varnothing$. $k=3$: $\{E\} \times \{O_{-}\}$, sin regla.
+        $\Rightarrow \varnothing$
+  \item $T[4,2]$ (\texttt{/ 5 - 30}): $k=1$: $\{O_{/}\} \times T[3,3] = \{O_{/}\} \times \{E\}$,
+        regla $R_{/} \to O_{/}\,E$. $k=2$: $\{R_{/}\} \times \{R_{-}\}$, sin regla.
+        $k=3$: $T[3,2] = \varnothing$. $\Rightarrow \{R_{/}\}$
+\end{itemize}
+ 
+\textbf{Fila $\ell=5$} (la cadena completa):
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+  \item $k=1$: $T[1,1] \times T[4,2] = \{E\} \times \{R_{/}\}$, regla
+        $E \to E\,R_{/}$. \quad Aporta $E$.
+  \item $k=2$: $T[2,1] = \varnothing$.
+  \item $k=3$: $T[3,1] \times T[2,4] = \{E\} \times \{R_{-}\}$, regla
+        $E \to E\,R_{-}$. \quad Aporta $E$.
+  \item $k=4$: $T[4,1] = \varnothing$.
+\end{itemize}
+$\Rightarrow T[5,1] = \{E\}$. \textbf{La cadena se acepta.}
+\begin{center}
+\small
+\begin{tabular}{c|ccccc}
+\toprule
+$i$ & 1 & 2 & 3 & 4 & 5 \\
+ & \texttt{10} & \texttt{/} & \texttt{5} & \texttt{-} & \texttt{30} \\
+\midrule
+$\ell=1$ & $E$ & $O_{/}$ & $E$ & $O_{-}$ & $E$ \\
+$\ell=2$ & -- & $R_{/}$ & -- & $R_{-}$ &  \\
+$\ell=3$ & $E$ & -- & $E$ &  &  \\
+$\ell=4$ & -- & $R_{/}$ &  &  &  \\
+$\ell=5$ & \fbox{$E$} &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{solucion}
+
     \item De la siguiente gramática:
     \begin{verbatim}
         S := a S b | a b | 
@@ -96,6 +536,49 @@
         \item Utiliza el método de parsing CYK para parsear las cadenas: i) `aabb'; ii) `aaaabbb'; y iii) `aaabbb'
     \end{enumerate}
     \item Dada la producción $X \rightarrow \alpha Y \beta$, demostrar que si \textsc{Null}$(\beta)$, entonces \textsc{Follow}$(X)$ $\subseteq$ \textsc{Follow}$(Y)$.
+
+\begin{solucion}
+\begin{lema}
+Si $\beta \deriva \varepsilon$, entonces para cualesquiera cadenas $\gamma$ y
+$\delta$ se cumple $\gamma\,\beta\,\delta \deriva \gamma\,\delta$.
+\end{lema}
+
+\begin{proof}
+En una gramática libre de contexto cada no terminal se reescribe sin importar
+lo que tenga alrededor. Los mismos pasos que llevan $\beta$ a $\varepsilon$
+pueden aplicarse dentro de $\gamma\,\beta\,\delta$ sin tocar $\gamma$ ni
+$\delta$.
+\end{proof}
+
+\begin{prop}
+Sea $X \to \alpha\, Y\, \beta$ una producción. Si $\Null(\beta)$, entonces
+$\Follow(X) \subseteq \Follow(Y)$.
+\end{prop}
+
+\begin{proof}
+Sea $t \in \Follow(X)$. Por definición existen $\gamma, \delta$ tales que
+\[
+S\,\$ \deriva \gamma\, X\, t\, \delta. \tag{1}
+\]
+Aplicando la producción $X \to \alpha\, Y\, \beta$:
+\[
+\gamma\, X\, t\, \delta \Rightarrow \gamma\, \alpha\, Y\, \beta\, t\, \delta. \tag{2}
+\]
+Como $\Null(\beta)$, por el lema (con contexto izquierdo $\gamma\alpha Y$ y
+contexto derecho $t\delta$):
+\[
+\gamma\, \alpha\, Y\, \beta\, t\, \delta \deriva \gamma\, \alpha\, Y\, t\, \delta. \tag{3}
+\]
+Encadenando (1), (2) y (3):
+\[
+S\,\$ \deriva (\gamma\alpha)\, Y\, t\, \delta.
+\]
+Así, $t$ aparece inmediatamente a la derecha de $Y$ en una forma sentencial,
+y por definición $t \in \Follow(Y)$. Como $t$ era un elemento arbitrario de
+$\Follow(X)$, se concluye $\Follow(X) \subseteq \Follow(Y)$.
+\end{proof}
+\end{solucion}
+
     \item Calcula las funciones \textsc{Null}, \textbf{First} y \textbf{Follow} de la siguiente gramática (considera finales a if, then, else, id y =):
     \begin{verbatim}
         S := S2 ; S | S2
