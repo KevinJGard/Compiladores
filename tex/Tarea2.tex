@@ -9,6 +9,7 @@
 \usepackage{float}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{tikz}
 \usepackage{tabularx}
 \usepackage{listings}
@@ -1155,10 +1156,608 @@ Ahora seguimos con la tabla de parsing LR(0) para la cadena 10**2 $\sim$ 3 que p
 \end{table}
 Así, podemos ver que la cadena es aceptada.
 \item Utiliza la gramática (expresiones booleanas) del ejercicio 7 para construir las tablas de \textbf{SLR, LR(1)} y \textbf{LALR} y parsear las cadenas que se indican en ese ejercicio.
-\item A partir de la siguiente gramática:
-\begin{verbatim}
-  S := S S + | S S * | a
-\end{verbatim}
-Construye las tablas para el LR(1) canónico y LALR.
+    
+    \textbf{Respuesta:}
+
+
+
+Primero, tenemos que la gramática aumentada es la siguiente:
+\begin{enumerate}[label=(\arabic*), start=0]
+    \item $S' \to S\$$
+    \item $S \to S \text{ or } T$
+    \item $S \to T$
+    \item $T \to T \text{ and } F$
+    \item $T \to F$
+    \item $F \to \text{not } F$
+    \item $F \to ( S )$
+    \item $F \to \text{True}$
+    \item $F \to \text{False}$
+\end{enumerate}
+
+Procedemos a sacar los conjuntos \textsc{First} y \textsc{Follow} de la gramática:
+
+\textbf{First:}
+
+$\textsc{First}(S)=\textsc{First}(T)=\textsc{First}(F)=\{\text{not},\ (,\ \text{True},\ \text{False}\}$
+
+\textbf{Follow:}
+\begin{itemize}
+    \item $\textsc{Follow}(S) = \{\$,\ \text{or},\ )\}$
+    \item $\textsc{Follow}(T) = \textsc{Follow}(S) \cup \{\text{and}\} = \{\$,\ \text{or},\ ),\ \text{and}\}$
+    \item $\textsc{Follow}(F) = \textsc{Follow}(T) = \{\$,\ \text{or},\ ),\ \text{and}\}$
+\end{itemize}
+
+Ahora bien, construimos el autómata LR(0) (base de la tabla SLR), después el LR(1) canónico y, uniendo núcleos, el LALR.
+
+\subsection*{Autómata LR(0)}
+
+Partimos de $I_0 = \textsc{Clos}(\{S' \to \cdot S\$\})$ y aplicamos \textsc{Goto} hasta no generar estados nuevos. Resultan 15 estados más el estado de aceptación $I_{acc}$ (las transiciones hacia estados ya existentes se leen en la tabla SLR):
+
+\begin{itemize}
+\item \textbf{$I_0$} $=$ \textsc{Clos}$(\{S' \to \cdot S\$\})$ \\
+\textit{Núcleo:} $S' \to  \cdot S \$$ \\
+\textit{Cierre:} $S \to  \cdot S \text{ or } T$ \quad $S \to  \cdot T$ \quad $T \to  \cdot T \text{ and } F$ \quad $T \to  \cdot F$ \quad $F \to  \cdot \text{ not } F$ \quad $F \to  \cdot ( S )$ \quad $F \to  \cdot \text{ True }$ \quad $F \to  \cdot \text{ False }$
+
+\item \textbf{$I_{1}$} $=$ \textsc{Goto}$(I_{0},\,S)$ \\
+\textit{Núcleo:} $S' \to S \cdot \$$ \quad $S \to S \cdot \text{ or } T$
+
+\item \textbf{$I_{2}$} $=$ \textsc{Goto}$(I_{0},\,T)$ \\
+\textit{Núcleo:} $S \to T \cdot $ \quad $T \to T \cdot \text{ and } F$
+
+\item \textbf{$I_{3}$} $=$ \textsc{Goto}$(I_{0},\,F)$ \\
+\textit{Núcleo:} $T \to F \cdot $
+
+\item \textbf{$I_{4}$} $=$ \textsc{Goto}$(I_{0},\,\text{not})$ \\
+\textit{Núcleo:} $F \to \text{ not } \cdot F$ \\
+\textit{Cierre:} $F \to  \cdot \text{ not } F$ \quad $F \to  \cdot ( S )$ \quad $F \to  \cdot \text{ True }$ \quad $F \to  \cdot \text{ False }$
+
+\item \textbf{$I_{5}$} $=$ \textsc{Goto}$(I_{0},\,()$ \\
+\textit{Núcleo:} $F \to ( \cdot S )$ \\
+\textit{Cierre:} $S \to  \cdot S \text{ or } T$ \quad $S \to  \cdot T$ \quad $T \to  \cdot T \text{ and } F$ \quad $T \to  \cdot F$ \quad $F \to  \cdot \text{ not } F$ \quad $F \to  \cdot ( S )$ \quad $F \to  \cdot \text{ True }$ \quad $F \to  \cdot \text{ False }$
+
+\item \textbf{$I_{6}$} $=$ \textsc{Goto}$(I_{0},\,\text{True})$ \\
+\textit{Núcleo:} $F \to \text{ True } \cdot $
+
+\item \textbf{$I_{7}$} $=$ \textsc{Goto}$(I_{0},\,\text{False})$ \\
+\textit{Núcleo:} $F \to \text{ False } \cdot $
+
+\item \textbf{$I_{8}$} $=$ \textsc{Goto}$(I_{1},\,\text{or})$ \\
+\textit{Núcleo:} $S \to S \text{ or } \cdot T$ \\
+\textit{Cierre:} $T \to  \cdot T \text{ and } F$ \quad $T \to  \cdot F$ \quad $F \to  \cdot \text{ not } F$ \quad $F \to  \cdot ( S )$ \quad $F \to  \cdot \text{ True }$ \quad $F \to  \cdot \text{ False }$
+
+\item \textbf{$I_{9}$} $=$ \textsc{Goto}$(I_{2},\,\text{and})$ \\
+\textit{Núcleo:} $T \to T \text{ and } \cdot F$ \\
+\textit{Cierre:} $F \to  \cdot \text{ not } F$ \quad $F \to  \cdot ( S )$ \quad $F \to  \cdot \text{ True }$ \quad $F \to  \cdot \text{ False }$
+
+\item \textbf{$I_{10}$} $=$ \textsc{Goto}$(I_{4},\,F)$ \\
+\textit{Núcleo:} $F \to \text{ not } F \cdot $
+
+\item \textbf{$I_{11}$} $=$ \textsc{Goto}$(I_{5},\,S)$ \\
+\textit{Núcleo:} $S \to S \cdot \text{ or } T$ \quad $F \to ( S \cdot )$
+
+\item \textbf{$I_{12}$} $=$ \textsc{Goto}$(I_{8},\,T)$ \\
+\textit{Núcleo:} $S \to S \text{ or } T \cdot $ \quad $T \to T \cdot \text{ and } F$
+
+\item \textbf{$I_{13}$} $=$ \textsc{Goto}$(I_{9},\,F)$ \\
+\textit{Núcleo:} $T \to T \text{ and } F \cdot $
+
+\item \textbf{$I_{14}$} $=$ \textsc{Goto}$(I_{11},\,))$ \\
+\textit{Núcleo:} $F \to ( S ) \cdot $
+
+\item \textbf{$I_{acc}$} $=$ \textsc{Goto}$(I_{1},\,\$)$ \\
+\textit{Núcleo:} $S' \to S \$ \cdot $
+\end{itemize}
+
+Una vez que tenemos el autómata LR(0), podemos construir la tabla SLR.
+
+\subsection*{Tabla SLR}
+
+Se coloca \textbf{acc} en $(1,\$)$, pues $S' \to S \cdot \$ \in I_1$.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{
+\begin{tabular}{c|cccccccc|ccc}
+\toprule
+\textbf{Est.} & \multicolumn{8}{c|}{\textbf{Action}} & \multicolumn{3}{c}{\textbf{Goto}} \\
+& \textbf{or} & \textbf{and} & \textbf{not} & \textbf{(} & \textbf{)} & \textbf{True} & \textbf{False} & \textbf{\$} & \textbf{S} & \textbf{T} & \textbf{F} \\
+\midrule
+0 &  &  & s4 & s5 &  & s6 & s7 &  & g1 & g2 & g3 \\
+1 & s8 &  &  &  &  &  &  & acc &  &  &  \\
+2 & r2 & s9 &  &  & r2 &  &  & r2 &  &  &  \\
+3 & r4 & r4 &  &  & r4 &  &  & r4 &  &  &  \\
+4 &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g10 \\
+5 &  &  & s4 & s5 &  & s6 & s7 &  & g11 & g2 & g3 \\
+6 & r7 & r7 &  &  & r7 &  &  & r7 &  &  &  \\
+7 & r8 & r8 &  &  & r8 &  &  & r8 &  &  &  \\
+8 &  &  & s4 & s5 &  & s6 & s7 &  &  & g12 & g3 \\
+9 &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g13 \\
+10 & r5 & r5 &  &  & r5 &  &  & r5 &  &  &  \\
+11 & s8 &  &  &  & s14 &  &  &  &  &  &  \\
+12 & r1 & s9 &  &  & r1 &  &  & r1 &  &  &  \\
+13 & r3 & r3 &  &  & r3 &  &  & r3 &  &  &  \\
+14 & r6 & r6 &  &  & r6 &  &  & r6 &  &  &  \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Ahora bien, procedemos a construir el autómata LR(1) canónico y la tabla LR(1).
+
+\subsection*{Autómata y tabla LR(1) canónicos}
+
+Cada estado LR(1) tiene el núcleo de algún $I_k$; $I_k'$ denota la copia cuyos lookaheads no incluyen $\$$ (contexto dentro de paréntesis). Resultan 28 estados más $I_{acc}$ $= \{[S' \to S\$\cdot,\ \$]\}$. Sus ítems con lookaheads son:
+
+\begin{longtable}{c l l l}
+\toprule
+\textbf{Núcleo} & \textbf{Ítem} & \textbf{Lookaheads en $I_k$} & \textbf{Lookaheads en $I_k'$} \\
+\midrule
+\endhead
+$I_{0}$ & $S' \to  \cdot S \$$ & \$ & --- \\
+ & $S \to  \cdot S \text{ or } T$ & \$/or & --- \\
+ & $S \to  \cdot T$ & \$/or & --- \\
+ & $T \to  \cdot T \text{ and } F$ & \$/or/and & --- \\
+ & $T \to  \cdot F$ & \$/or/and & --- \\
+ & $F \to  \cdot \text{ not } F$ & \$/or/and & --- \\
+ & $F \to  \cdot ( S )$ & \$/or/and & --- \\
+ & $F \to  \cdot \text{ True }$ & \$/or/and & --- \\
+ & $F \to  \cdot \text{ False }$ & \$/or/and & --- \\
+\midrule
+$I_{1}$ & $S' \to S \cdot \$$ & \$ & --- \\
+ & $S \to S \cdot \text{ or } T$ & \$/or & --- \\
+\midrule
+$I_{2}$ & $S \to T \cdot $ & \$/or & or/) \\
+ & $T \to T \cdot \text{ and } F$ & \$/or/and & or/and/) \\
+\midrule
+$I_{3}$ & $T \to F \cdot $ & \$/or/and & or/and/) \\
+\midrule
+$I_{4}$ & $F \to \text{ not } \cdot F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ not } F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot ( S )$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ True }$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ False }$ & \$/or/and & or/and/) \\
+\midrule
+$I_{5}$ & $F \to ( \cdot S )$ & \$/or/and & or/and/) \\
+ & $S \to  \cdot S \text{ or } T$ & or/) & or/) \\
+ & $S \to  \cdot T$ & or/) & or/) \\
+ & $T \to  \cdot T \text{ and } F$ & or/and/) & or/and/) \\
+ & $T \to  \cdot F$ & or/and/) & or/and/) \\
+ & $F \to  \cdot \text{ not } F$ & or/and/) & or/and/) \\
+ & $F \to  \cdot ( S )$ & or/and/) & or/and/) \\
+ & $F \to  \cdot \text{ True }$ & or/and/) & or/and/) \\
+ & $F \to  \cdot \text{ False }$ & or/and/) & or/and/) \\
+\midrule
+$I_{6}$ & $F \to \text{ True } \cdot $ & \$/or/and & or/and/) \\
+\midrule
+$I_{7}$ & $F \to \text{ False } \cdot $ & \$/or/and & or/and/) \\
+\midrule
+$I_{8}$ & $S \to S \text{ or } \cdot T$ & \$/or & or/) \\
+ & $T \to  \cdot T \text{ and } F$ & \$/or/and & or/and/) \\
+ & $T \to  \cdot F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ not } F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot ( S )$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ True }$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ False }$ & \$/or/and & or/and/) \\
+\midrule
+$I_{9}$ & $T \to T \text{ and } \cdot F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ not } F$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot ( S )$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ True }$ & \$/or/and & or/and/) \\
+ & $F \to  \cdot \text{ False }$ & \$/or/and & or/and/) \\
+\midrule
+$I_{10}$ & $F \to \text{ not } F \cdot $ & \$/or/and & or/and/) \\
+\midrule
+$I_{11}$ & $S \to S \cdot \text{ or } T$ & or/) & or/) \\
+ & $F \to ( S \cdot )$ & \$/or/and & or/and/) \\
+\midrule
+$I_{12}$ & $S \to S \text{ or } T \cdot $ & \$/or & or/) \\
+ & $T \to T \cdot \text{ and } F$ & \$/or/and & or/and/) \\
+\midrule
+$I_{13}$ & $T \to T \text{ and } F \cdot $ & \$/or/and & or/and/) \\
+\midrule
+$I_{14}$ & $F \to ( S ) \cdot $ & \$/or/and & or/and/) \\
+\bottomrule
+\end{longtable}
+
+
+\begin{table}[H]
+\centering
+\footnotesize
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{
+\begin{tabular}{c|cccccccc|ccc}
+\toprule
+\textbf{Est.} & \multicolumn{8}{c|}{\textbf{Action}} & \multicolumn{3}{c}{\textbf{Goto}} \\
+& \textbf{or} & \textbf{and} & \textbf{not} & \textbf{(} & \textbf{)} & \textbf{True} & \textbf{False} & \textbf{\$} & \textbf{S} & \textbf{T} & \textbf{F} \\
+\midrule
+$0$ &  &  & s4 & s5 &  & s6 & s7 &  & g1 & g2 & g3 \\
+$1$ & s8 &  &  &  &  &  &  & acc &  &  &  \\
+$2$ & r2 & s9 &  &  &  &  &  & r2 &  &  &  \\
+$2'$ & r2 & s9$'$ &  &  & r2 &  &  &  &  &  &  \\
+$3$ & r4 & r4 &  &  &  &  &  & r4 &  &  &  \\
+$3'$ & r4 & r4 &  &  & r4 &  &  &  &  &  &  \\
+$4$ &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g10 \\
+$4'$ &  &  & s4$'$ & s5$'$ &  & s6$'$ & s7$'$ &  &  &  & g10$'$ \\
+$5$ &  &  & s4$'$ & s5$'$ &  & s6$'$ & s7$'$ &  & g11 & g2$'$ & g3$'$ \\
+$5'$ &  &  & s4$'$ & s5$'$ &  & s6$'$ & s7$'$ &  & g11$'$ & g2$'$ & g3$'$ \\
+$6$ & r7 & r7 &  &  &  &  &  & r7 &  &  &  \\
+$6'$ & r7 & r7 &  &  & r7 &  &  &  &  &  &  \\
+$7$ & r8 & r8 &  &  &  &  &  & r8 &  &  &  \\
+$7'$ & r8 & r8 &  &  & r8 &  &  &  &  &  &  \\
+$8$ &  &  & s4 & s5 &  & s6 & s7 &  &  & g12 & g3 \\
+$8'$ &  &  & s4$'$ & s5$'$ &  & s6$'$ & s7$'$ &  &  & g12$'$ & g3$'$ \\
+$9$ &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g13 \\
+$9'$ &  &  & s4$'$ & s5$'$ &  & s6$'$ & s7$'$ &  &  &  & g13$'$ \\
+$10$ & r5 & r5 &  &  &  &  &  & r5 &  &  &  \\
+$10'$ & r5 & r5 &  &  & r5 &  &  &  &  &  &  \\
+$11$ & s8$'$ &  &  &  & s14 &  &  &  &  &  &  \\
+$11'$ & s8$'$ &  &  &  & s14$'$ &  &  &  &  &  &  \\
+$12$ & r1 & s9 &  &  &  &  &  & r1 &  &  &  \\
+$12'$ & r1 & s9$'$ &  &  & r1 &  &  &  &  &  &  \\
+$13$ & r3 & r3 &  &  &  &  &  & r3 &  &  &  \\
+$13'$ & r3 & r3 &  &  & r3 &  &  &  &  &  &  \\
+$14$ & r6 & r6 &  &  &  &  &  & r6 &  &  &  \\
+$14'$ & r6 & r6 &  &  & r6 &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\subsection*{Autómata y tabla LALR}
+
+Unimos $I_k$ con $I_k'$ ($k=2,\dots,14$), que comparten núcleo, tomando la unión de sus lookaheads. Resultan 15 estados (más $I_{acc}$) y la tabla:
+
+\begin{table}[H]
+\centering
+\footnotesize
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{
+\begin{tabular}{c|cccccccc|ccc}
+\toprule
+\textbf{Est.} & \multicolumn{8}{c|}{\textbf{Action}} & \multicolumn{3}{c}{\textbf{Goto}} \\
+& \textbf{or} & \textbf{and} & \textbf{not} & \textbf{(} & \textbf{)} & \textbf{True} & \textbf{False} & \textbf{\$} & \textbf{S} & \textbf{T} & \textbf{F} \\
+\midrule
+0 &  &  & s4 & s5 &  & s6 & s7 &  & g1 & g2 & g3 \\
+1 & s8 &  &  &  &  &  &  & acc &  &  &  \\
+2 & r2 & s9 &  &  & r2 &  &  & r2 &  &  &  \\
+3 & r4 & r4 &  &  & r4 &  &  & r4 &  &  &  \\
+4 &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g10 \\
+5 &  &  & s4 & s5 &  & s6 & s7 &  & g11 & g2 & g3 \\
+6 & r7 & r7 &  &  & r7 &  &  & r7 &  &  &  \\
+7 & r8 & r8 &  &  & r8 &  &  & r8 &  &  &  \\
+8 &  &  & s4 & s5 &  & s6 & s7 &  &  & g12 & g3 \\
+9 &  &  & s4 & s5 &  & s6 & s7 &  &  &  & g13 \\
+10 & r5 & r5 &  &  & r5 &  &  & r5 &  &  &  \\
+11 & s8 &  &  &  & s14 &  &  &  &  &  &  \\
+12 & r1 & s9 &  &  & r1 &  &  & r1 &  &  &  \\
+13 & r3 & r3 &  &  & r3 &  &  & r3 &  &  &  \\
+14 & r6 & r6 &  &  & r6 &  &  & r6 &  &  &  \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Por último, procedemos a parsear las cadenas que se indicaron en el ejercicio 7.
+
+\subsection*{Parsing de las cadenas}
+
+Dado que la gramática es no ambigua y no hay conflictos en las tablas, tenemos que la secuencia de acciones de parsing es la misma para las tres tablas. Además, como vimos, las tablas SLR y LALR son iguales (pues al unir $I_k$ con $I_k'$, los lookaheads de cada ítem completo coinciden con el \textsc{Follow} de su no terminal). Por tanto, haremos uso del parsing con la tabla LALR.
+
+Tenemos que las cadenas son: a) \texttt{True or not False}, b) \texttt{False and not ( True or False )} y c) \texttt{True or ( False and ( not True and False ) )}.
+
+\textbf{Cadena a) \texttt{True or not False}}
+
+\begingroup\footnotesize
+\begin{longtable}{p{3.6cm}p{4.0cm}p{4.5cm}>{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+\textbf{Pila (Estados)} & \textbf{Símbolos} & \textbf{Input} & \textbf{Acción} \\
+\midrule
+\endhead
+0 & \$ & True or not False \$ & s6 \\
+0 6 & \$ True & or not False \$ & r7 ($F \to \text{ True }$) \\
+0 & \$ F & or not False \$ & g3 \\
+0 3 & \$ F & or not False \$ & r4 ($T \to F$) \\
+0 & \$ T & or not False \$ & g2 \\
+0 2 & \$ T & or not False \$ & r2 ($S \to T$) \\
+0 & \$ S & or not False \$ & g1 \\
+0 1 & \$ S & or not False \$ & s8 \\
+0 1 8 & \$ S or & not False \$ & s4 \\
+0 1 8 4 & \$ S or not & False \$ & s7 \\
+0 1 8 4 7 & \$ S or not False & \$ & r8 ($F \to \text{ False }$) \\
+0 1 8 4 & \$ S or not F & \$ & g10 \\
+0 1 8 4 10 & \$ S or not F & \$ & r5 ($F \to \text{ not } F$) \\
+0 1 8 & \$ S or F & \$ & g3 \\
+0 1 8 3 & \$ S or F & \$ & r4 ($T \to F$) \\
+0 1 8 & \$ S or T & \$ & g12 \\
+0 1 8 12 & \$ S or T & \$ & r1 ($S \to S \text{ or } T$) \\
+0 & \$ S & \$ & g1 \\
+0 1 & \$ S & \$ & \textbf{acc} \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\textbf{Cadena b) \texttt{False and not ( True or False )}}
+
+\begingroup\footnotesize
+\begin{longtable}{p{3.6cm}p{4.0cm}p{4.5cm}>{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+\textbf{Pila (Estados)} & \textbf{Símbolos} & \textbf{Input} & \textbf{Acción} \\
+\midrule
+\endhead
+0 & \$ & False and not ( True or False ) \$ & s7 \\
+0 7 & \$ False & and not ( True or False ) \$ & r8 ($F \to \text{ False }$) \\
+0 & \$ F & and not ( True or False ) \$ & g3 \\
+0 3 & \$ F & and not ( True or False ) \$ & r4 ($T \to F$) \\
+0 & \$ T & and not ( True or False ) \$ & g2 \\
+0 2 & \$ T & and not ( True or False ) \$ & s9 \\
+0 2 9 & \$ T and & not ( True or False ) \$ & s4 \\
+0 2 9 4 & \$ T and not & ( True or False ) \$ & s5 \\
+0 2 9 4 5 & \$ T and not ( & True or False ) \$ & s6 \\
+0 2 9 4 5 6 & \$ T and not ( True & or False ) \$ & r7 ($F \to \text{ True }$) \\
+0 2 9 4 5 & \$ T and not ( F & or False ) \$ & g3 \\
+0 2 9 4 5 3 & \$ T and not ( F & or False ) \$ & r4 ($T \to F$) \\
+0 2 9 4 5 & \$ T and not ( T & or False ) \$ & g2 \\
+0 2 9 4 5 2 & \$ T and not ( T & or False ) \$ & r2 ($S \to T$) \\
+0 2 9 4 5 & \$ T and not ( S & or False ) \$ & g11 \\
+0 2 9 4 5 11 & \$ T and not ( S & or False ) \$ & s8 \\
+0 2 9 4 5 11 8 & \$ T and not ( S or & False ) \$ & s7 \\
+0 2 9 4 5 11 8 7 & \$ T and not ( S or False & ) \$ & r8 ($F \to \text{ False }$) \\
+0 2 9 4 5 11 8 & \$ T and not ( S or F & ) \$ & g3 \\
+0 2 9 4 5 11 8 3 & \$ T and not ( S or F & ) \$ & r4 ($T \to F$) \\
+0 2 9 4 5 11 8 & \$ T and not ( S or T & ) \$ & g12 \\
+0 2 9 4 5 11 8 12 & \$ T and not ( S or T & ) \$ & r1 ($S \to S \text{ or } T$) \\
+0 2 9 4 5 & \$ T and not ( S & ) \$ & g11 \\
+0 2 9 4 5 11 & \$ T and not ( S & ) \$ & s14 \\
+0 2 9 4 5 11 14 & \$ T and not ( S ) & \$ & r6 ($F \to ( S )$) \\
+0 2 9 4 & \$ T and not F & \$ & g10 \\
+0 2 9 4 10 & \$ T and not F & \$ & r5 ($F \to \text{ not } F$) \\
+0 2 9 & \$ T and F & \$ & g13 \\
+0 2 9 13 & \$ T and F & \$ & r3 ($T \to T \text{ and } F$) \\
+0 & \$ T & \$ & g2 \\
+0 2 & \$ T & \$ & r2 ($S \to T$) \\
+0 & \$ S & \$ & g1 \\
+0 1 & \$ S & \$ & \textbf{acc} \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\textbf{Cadena c) \texttt{True or ( False and ( not True and False ) )}}
+
+\begingroup\footnotesize
+\begin{longtable}{p{3.6cm}p{4.0cm}p{4.5cm}>{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+\textbf{Pila (Estados)} & \textbf{Símbolos} & \textbf{Input} & \textbf{Acción} \\
+\midrule
+\endhead
+0 & \$ & True or ( False and ( not True and False ) ) \$ & s6 \\
+0 6 & \$ True & or ( False and ( not True and False ) ) \$ & r7 ($F \to \text{ True }$) \\
+0 & \$ F & or ( False and ( not True and False ) ) \$ & g3 \\
+0 3 & \$ F & or ( False and ( not True and False ) ) \$ & r4 ($T \to F$) \\
+0 & \$ T & or ( False and ( not True and False ) ) \$ & g2 \\
+0 2 & \$ T & or ( False and ( not True and False ) ) \$ & r2 ($S \to T$) \\
+0 & \$ S & or ( False and ( not True and False ) ) \$ & g1 \\
+0 1 & \$ S & or ( False and ( not True and False ) ) \$ & s8 \\
+0 1 8 & \$ S or & ( False and ( not True and False ) ) \$ & s5 \\
+0 1 8 5 & \$ S or ( & False and ( not True and False ) ) \$ & s7 \\
+0 1 8 5 7 & \$ S or ( False & and ( not True and False ) ) \$ & r8 ($F \to \text{ False }$) \\
+0 1 8 5 & \$ S or ( F & and ( not True and False ) ) \$ & g3 \\
+0 1 8 5 3 & \$ S or ( F & and ( not True and False ) ) \$ & r4 ($T \to F$) \\
+0 1 8 5 & \$ S or ( T & and ( not True and False ) ) \$ & g2 \\
+0 1 8 5 2 & \$ S or ( T & and ( not True and False ) ) \$ & s9 \\
+0 1 8 5 2 9 & \$ S or ( T and & ( not True and False ) ) \$ & s5 \\
+0 1 8 5 2 9 5 & \$ S or ( T and ( & not True and False ) ) \$ & s4 \\
+0 1 8 5 2 9 5 4 & \$ S or ( T and ( not & True and False ) ) \$ & s6 \\
+0 1 8 5 2 9 5 4 6 & \$ S or ( T and ( not True & and False ) ) \$ & r7 ($F \to \text{ True }$) \\
+0 1 8 5 2 9 5 4 & \$ S or ( T and ( not F & and False ) ) \$ & g10 \\
+0 1 8 5 2 9 5 4 10 & \$ S or ( T and ( not F & and False ) ) \$ & r5 ($F \to \text{ not } F$) \\
+0 1 8 5 2 9 5 & \$ S or ( T and ( F & and False ) ) \$ & g3 \\
+0 1 8 5 2 9 5 3 & \$ S or ( T and ( F & and False ) ) \$ & r4 ($T \to F$) \\
+0 1 8 5 2 9 5 & \$ S or ( T and ( T & and False ) ) \$ & g2 \\
+0 1 8 5 2 9 5 2 & \$ S or ( T and ( T & and False ) ) \$ & s9 \\
+0 1 8 5 2 9 5 2 9 & \$ S or ( T and ( T and & False ) ) \$ & s7 \\
+0 1 8 5 2 9 5 2 9 7 & \$ S or ( T and ( T and False & ) ) \$ & r8 ($F \to \text{ False }$) \\
+0 1 8 5 2 9 5 2 9 & \$ S or ( T and ( T and F & ) ) \$ & g13 \\
+0 1 8 5 2 9 5 2 9 13 & \$ S or ( T and ( T and F & ) ) \$ & r3 ($T \to T \text{ and } F$) \\
+0 1 8 5 2 9 5 & \$ S or ( T and ( T & ) ) \$ & g2 \\
+0 1 8 5 2 9 5 2 & \$ S or ( T and ( T & ) ) \$ & r2 ($S \to T$) \\
+0 1 8 5 2 9 5 & \$ S or ( T and ( S & ) ) \$ & g11 \\
+0 1 8 5 2 9 5 11 & \$ S or ( T and ( S & ) ) \$ & s14 \\
+0 1 8 5 2 9 5 11 14 & \$ S or ( T and ( S ) & ) \$ & r6 ($F \to ( S )$) \\
+0 1 8 5 2 9 & \$ S or ( T and F & ) \$ & g13 \\
+0 1 8 5 2 9 13 & \$ S or ( T and F & ) \$ & r3 ($T \to T \text{ and } F$) \\
+0 1 8 5 & \$ S or ( T & ) \$ & g2 \\
+0 1 8 5 2 & \$ S or ( T & ) \$ & r2 ($S \to T$) \\
+0 1 8 5 & \$ S or ( S & ) \$ & g11 \\
+0 1 8 5 11 & \$ S or ( S & ) \$ & s14 \\
+0 1 8 5 11 14 & \$ S or ( S ) & \$ & r6 ($F \to ( S )$) \\
+0 1 8 & \$ S or F & \$ & g3 \\
+0 1 8 3 & \$ S or F & \$ & r4 ($T \to F$) \\
+0 1 8 & \$ S or T & \$ & g12 \\
+0 1 8 12 & \$ S or T & \$ & r1 ($S \to S \text{ or } T$) \\
+0 & \$ S & \$ & g1 \\
+0 1 & \$ S & \$ & \textbf{acc} \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+    \item A partir de la siguiente gramática:
+    \begin{verbatim}
+        S := S S + | S S * | a
+    \end{verbatim}
+    Construye las tablas para el LR(1) canónico y LALR.
+
+    \textbf{Respuesta:}
+
+La gramática aumentada es:
+\begin{enumerate}[label=(\arabic*), start=0]
+    \item $S' \to S\$$
+    \item $S \to S\,S\,+$
+    \item $S \to S\,S\,*$
+    \item $S \to a$
+\end{enumerate}
+
+\subsection*{Autómata LR(1) canónico}
+
+Partimos de $I_0=\textsc{Clos}(\{[S'\to\cdot S\$,\ \$]\})$. Los estados resultantes son:
+
+\begin{itemize}
+    \item \textbf{Estado 0:} \\
+    $S' \to \cdot S\$,\ \$$ \quad $S \to \cdot SS+,\ \$/a$ \quad $S \to \cdot SS*,\ \$/a$ \quad $S \to \cdot a,\ \$/a$
+
+    \item \textbf{Estado 1:} $\textsc{Goto}(0,S)$ \\
+    $S' \to S\cdot\$,\ \$$ \quad $S \to S\cdot S+,\ \$/a$ \quad $S \to S\cdot S*,\ \$/a$ \\
+    $S \to \cdot SS+,\ +/*/a$ \quad $S \to \cdot SS*,\ +/*/a$ \quad $S \to \cdot a,\ +/*/a$
+
+    \item \textbf{Estado 2:} $\textsc{Goto}(0,a)$ \\
+    $S \to a\cdot,\ \$/a$
+
+    \item \textbf{Estado 3:} $\textsc{Goto}(1,S)$ \\
+    $S \to SS\cdot +,\ \$/a$ \quad $S \to SS\cdot *,\ \$/a$ \\
+    $S \to S\cdot S+,\ +/*/a$ \quad $S \to S\cdot S*,\ +/*/a$ \\
+    $S \to \cdot SS+,\ +/*/a$ \quad $S \to \cdot SS*,\ +/*/a$ \quad $S \to \cdot a,\ +/*/a$
+
+    \item \textbf{Estado 4:} $\textsc{Goto}(1,a)=\textsc{Goto}(3,a)=\textsc{Goto}(7,a)$ \\
+    $S \to a\cdot,\ +/*/a$
+
+    \item \textbf{Estado 5:} $\textsc{Goto}(3,+)$ \quad $S \to SS+\cdot,\ \$/a$
+
+    \item \textbf{Estado 6:} $\textsc{Goto}(3,*)$ \quad $S \to SS*\cdot,\ \$/a$
+
+    \item \textbf{Estado 7:} $\textsc{Goto}(3,S)=\textsc{Goto}(7,S)$ \\
+    $S \to SS\cdot +,\ +/*/a$ \quad $S \to SS\cdot *,\ +/*/a$ \\
+    $S \to S\cdot S+,\ +/*/a$ \quad $S \to S\cdot S*,\ +/*/a$ \\
+    $S \to \cdot SS+,\ +/*/a$ \quad $S \to \cdot SS*,\ +/*/a$ \quad $S \to \cdot a,\ +/*/a$
+
+    \item \textbf{Estado 8:} $\textsc{Goto}(7,+)$ \quad $S \to SS+\cdot,\ +/*/a$
+
+    \item \textbf{Estado 9:} $\textsc{Goto}(7,*)$ \quad $S \to SS*\cdot,\ +/*/a$
+
+    \item \textbf{Estado $acc$:} $\textsc{Goto}(1,\$)$ \quad $S' \to S\$\cdot,\ \$$ \quad (estado de aceptación)
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        ->, >=Stealth,
+        every state/.style={shape=rectangle, rounded corners, draw, align=left, inner sep=4pt, font=\scriptsize},
+        every edge/.style={draw, font=\footnotesize},
+        auto
+      ]
+      \node[state, initial, initial text=] (0) at (0,0) {
+        \textbf{0} \\
+        $S' \to \cdot S\$,\ \$$ \\
+        $S \to \cdot SS+,\ \$/a$ \\
+        $S \to \cdot SS*,\ \$/a$ \\
+        $S \to \cdot a,\ \$/a$
+      };
+      \node[state] (1) at (6.5,0) {
+        \textbf{1} \\
+        $S' \to S\cdot\$,\ \$$ \\
+        $S \to S\cdot S+,\ \$/a$ \\
+        $S \to S\cdot S*,\ \$/a$ \\
+        $S \to \cdot SS+,\ +/*/a$ \\
+        $S \to \cdot SS*,\ +/*/a$ \\
+        $S \to \cdot a,\ +/*/a$
+      };
+      \node[state] (acc) at (6.5,3.8) {\textbf{acc} \\ $S' \to S\$\cdot,\ \$$};
+      \node[state] (3) at (13.5,0) {
+        \textbf{3} \\
+        $S \to SS\cdot +,\ \$/a$ \\
+        $S \to SS\cdot *,\ \$/a$ \\
+        $S \to S\cdot S+,\ +/*/a$ \\
+        $S \to S\cdot S*,\ +/*/a$ \\
+        $S \to \cdot SS+,\ +/*/a$ \\
+        $S \to \cdot SS*,\ +/*/a$ \\
+        $S \to \cdot a,\ +/*/a$
+      };
+      \node[state] (7) at (21,0) {
+        \textbf{7} \\
+        $S \to SS\cdot +,\ +/*/a$ \\
+        $S \to SS\cdot *,\ +/*/a$ \\
+        $S \to S\cdot S+,\ +/*/a$ \\
+        $S \to S\cdot S*,\ +/*/a$ \\
+        $S \to \cdot SS+,\ +/*/a$ \\
+        $S \to \cdot SS*,\ +/*/a$ \\
+        $S \to \cdot a,\ +/*/a$
+      };
+      \node[state] (2) at (0,-5.5) {\textbf{2} \\ $S \to a\cdot,\ \$/a$};
+      \node[state] (4) at (6.5,-10.5) {\textbf{4} \\ $S \to a\cdot,\ +/*/a$};
+      \node[state] (5) at (11.5,-7) {\textbf{5} \\ $S \to SS+\cdot,\ \$/a$};
+      \node[state] (6) at (15.5,-7) {\textbf{6} \\ $S \to SS*\cdot,\ \$/a$};
+      \node[state] (8) at (19.5,-7) {\textbf{8} \\ $S \to SS+\cdot,\ +/*/a$};
+      \node[state] (9) at (24,-7) {\textbf{9} \\ $S \to SS*\cdot,\ +/*/a$};
+
+      \path
+      (0) edge node {$S$} (1)
+      (0) edge node[left] {$a$} (2)
+      (1) edge node[right] {$\$$} (acc)
+      (1) edge node {$S$} (3)
+      (1) edge node[left] {$a$} (4)
+      (3) edge node {$S$} (7)
+      (3) edge[bend right=12] node[near end,left] {$a$} (4)
+      (3) edge node[left] {$+$} (5)
+      (3) edge node[right] {$*$} (6)
+      (7) edge[loop above] node {$S$} (7)
+      (7) edge[bend left=8] node[pos=0.35,right] {$+$} (8)
+      (7) edge node[right] {$*$} (9)
+      (7) edge[out=-125,in=-5] node[near end,below] {$a$} (4);
+    \end{tikzpicture}%
+  }
+\end{figure}
+
+\subsection*{Tabla LR(1)}
+
+Se coloca \textbf{acc} en $(1,\$)$, pues $S' \to S\cdot\$ \in I_1$.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|cccc|c}
+\toprule
+\textbf{Estado} & \multicolumn{4}{c|}{\textbf{Action}} & \textbf{Goto} \\
+& \textbf{\$} & \textbf{+} & \textbf{*} & \textbf{a} & \textbf{S} \\
+\midrule
+0 & & & & s2 & 1 \\
+1 & acc & & & s4 & 3 \\
+2 & r3 & & & r3 & \\
+3 & & s5 & s6 & s4 & 7 \\
+4 & & r3 & r3 & r3 & \\
+5 & r1 & & & r1 & \\
+6 & r2 & & & r2 & \\
+7 & & s8 & s9 & s4 & 7 \\
+8 & & r1 & r1 & r1 & \\
+9 & & r2 & r2 & r2 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Autómata y tabla LALR}
+
+Unimos los estados con el mismo núcleo, tomando la unión de sus lookaheads:
+\begin{itemize}
+    \item \textbf{2-4:} $S \to a\cdot,\ \$/+/*/a$
+    \item \textbf{3-7:} $S \to SS\cdot +,\ \$/+/*/a$ \quad $S \to SS\cdot *,\ \$/+/*/a$ \quad $S \to S\cdot S+,\ +/*/a$ \quad $S \to S\cdot S*,\ +/*/a$ \quad $S \to \cdot SS+,\ +/*/a$ \quad $S \to \cdot SS*,\ +/*/a$ \quad $S \to \cdot a,\ +/*/a$
+    \item \textbf{5-8:} $S \to SS+\cdot,\ \$/+/*/a$
+    \item \textbf{6-9:} $S \to SS*\cdot,\ \$/+/*/a$
+\end{itemize}
+Los estados $0$, $1$ y $acc$ no se modifican. La tabla LALR es:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|cccc|c}
+\toprule
+\textbf{Estado} & \multicolumn{4}{c|}{\textbf{Action}} & \textbf{Goto} \\
+& \textbf{\$} & \textbf{+} & \textbf{*} & \textbf{a} & \textbf{S} \\
+\midrule
+0 & & & & s(2-4) & 1 \\
+1 & acc & & & s(2-4) & 3-7 \\
+2-4 & r3 & r3 & r3 & r3 & \\
+3-7 & & s(5-8) & s(6-9) & s(2-4) & 3-7 \\
+5-8 & r1 & r1 & r1 & r1 & \\
+6-9 & r2 & r2 & r2 & r2 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \end{enumerate}
 \end{document}
