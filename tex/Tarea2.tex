@@ -13,7 +13,7 @@
 \usepackage{tabularx}
 \usepackage{listings}
 \lstset{mathescape=true,
-    basicstyle=\ttfamily,}
+  basicstyle=\ttfamily,}
 \usetikzlibrary{automata, positioning, arrows.meta}
 % ---- agregado para los ejercicios 1, 2 y 4 ----
 \usepackage{forest}
@@ -85,820 +85,1080 @@
 \end{titlepage}
 
 \begin{enumerate}
-    \item De las gramáticas que se muestran a continuación, reescríbelas siguiendo las indicaciones de asociación y precedencia que se indican para los operadores:
-    \begin{enumerate}[label=(\alph*)]
-        \item La operación :: asocia por la derecha; + y - asocian por la izquierda. El operador :: precede a + y -; + y - tienen la misma precedencia.
-        \begin{verbatim}
-            L := L :: L | L + element | L - element |
-        \end{verbatim}
-        donde element es un terminal (dado por el lexer) y la última regla refiere al elemento vacío.
-        \item $>$ asocia por la derecha; ; asocia por la izquierda; ° asocia por la derecha; $\#$ no asociativo. ; precede a $>$ que precede a $\#$ que precede a °
-        \begin{verbatim}
-            S := S > S | S ; S | S > S | S # S | a | b
-        \end{verbatim}
-        Los terminales son $a$ y $b$ más los operadores indicados:
-    \end{enumerate}
+\item De las gramáticas que se muestran a continuación, reescríbelas siguiendo las indicaciones de asociación y precedencia que se indican para los operadores:
+  \begin{enumerate}[label=(\alph*)]
+  \item La operación :: asocia por la derecha; + y - asocian por la izquierda. El operador :: precede a + y -; + y - tienen la misma precedencia.
+\begin{verbatim}
+  L := L :: L | L + element | L - element |
+\end{verbatim}
+donde element es un terminal (dado por el lexer) y la última regla refiere al elemento vacío.
+\item $>$ asocia por la derecha; ; asocia por la izquierda; ° asocia por la derecha; $\#$ no asociativo. ; precede a $>$ que precede a $\#$ que precede a °
+\begin{verbatim}
+  S := S > S | S ; S | S > S | S # S | a | b
+\end{verbatim}
+Los terminales son $a$ y $b$ más los operadores indicados:
+  \end{enumerate}
+
+  \begin{solucion}
+
+
+    \medskip\noindent\textbf{\underline{Inciso (a)}}
+
+    \[
+    L \to L \occ L \mid L + \tk{element} \mid L - \tk{element} \mid \varepsilon
+    \]
+
+    \textbf{Niveles.} $+$ y $-$ tienen la misma precedencia y asocian por la
+    izquierda; $\occ$ liga más fuerte y asocia por la derecha. Por tanto $+$ y $-$
+    van arriba (mismo nivel) y $\occ$ abajo.
+
+    \textbf{Gramática reescrita:}
+    \[
+    \begin{array}{rcl}
+      L &\to& L + M \mid L - M \mid M \mid \varepsilon \\
+      M &\to& N \occ M \mid N \\
+      N &\to& \tk{element}
+    \end{array}
+    \]
+    ejemplo
+
+    \begin{itemize}[leftmargin=*]
+    \item $L \to L + M$: recursión a la izquierda, así que $+$ y $-$ asocian por
+      la izquierda: $\tk{e} - \tk{e} - \tk{e}$ se agrupa como
+      $(\tk{e} - \tk{e}) - \tk{e}$.
+      
+    \end{itemize}
+
+    \textbf{Ambiguedad.} En la gramática original la cadena
+    $\occ\ \occ$ tiene 2 árboles, y la cadena
+    $+\,\tk{element} \occ -\,\tk{element} \occ +\,\tk{element}$ tiene 7. En la
+    reescrita, toda cadena tiene un único árbol.
+
+
+
+    \medskip\noindent\textbf{\underline{Inciso (b)}}
+
+    La gramática es:
+    \[
+    S \to S \ogt S \mid S \osc S \mid S \odg S \mid S \ohs S \mid \tk{a} \mid \tk{b}
+    \]
+    donde $\odg$ denota el operador ``$^\circ$''.
+
+    \textbf{Niveles.} La cadena de precedencia es
+    ``$\osc$ precede a $\ogt$, que precede a $\ohs$, que precede a $\odg$''. De
+    más flojo (arriba) a más fuerte (abajo):
+
+    \begin{center}
+      \begin{tabular}{c c l l}
+        \toprule
+        Nivel & Operador & Asociatividad & Forma \\
+        \midrule
+        $S$ & $\odg$ & derecha       & $S \to T \odg S \mid T$ \\
+        $T$ & $\ohs$ & no asociativo & $T \to U \ohs U \mid U$ \\
+        $U$ & $\ogt$ & derecha       & $U \to V \ogt U \mid V$ \\
+        $V$ & $\osc$ & izquierda     & $V \to V \osc W \mid W$ \\
+        $W$ & ---    & ---           & $W \to \tk{a} \mid \tk{b}$ \\
+        \bottomrule
+      \end{tabular}
+    \end{center}
+
+    \textbf{Gramática reescrita:}
+    \[
+    \begin{array}{rcl}
+      S &\to& T \odg S \mid T \\
+      T &\to& U \ohs U \mid U \\
+      U &\to& V \ogt U \mid V \\
+      V &\to& V \osc W \mid W \\
+      W &\to& \tk{a} \mid \tk{b}
+    \end{array}
+    \]
+
+    \textbf{Ejemplos de agrupación} :
+    \begin{center}
+      \begin{tabular}{l l c}
+        \toprule
+        Cadena & Agrupación & Árboles en la original \\
+        \midrule
+        $\tk{a} \ogt \tk{a} \ogt \tk{a}$ & $\tk{a} \ogt (\tk{a} \ogt \tk{a})$ & 2 \\
+        $\tk{a} \osc \tk{a} \osc \tk{a}$ & $(\tk{a} \osc \tk{a}) \osc \tk{a}$ & 2 \\
+        $\tk{a} \osc \tk{b} \ogt \tk{a}$ & $(\tk{a} \osc \tk{b}) \ogt \tk{a}$ & 2 \\
+        $\tk{a} \ogt \tk{b} \ohs \tk{a} \odg \tk{b}$ & $((\tk{a} \ogt \tk{b}) \ohs \tk{a}) \odg \tk{b}$ & 5 \\
+        $\tk{a} \ohs \tk{b} \odg \tk{a} \ohs \tk{b}$ & $(\tk{a} \ohs \tk{b}) \odg (\tk{a} \ohs \tk{b})$ & 5 \\
+        $\tk{a} \ohs \tk{b} \ohs \tk{a}$ & \textit{no se deriva} & 2 \\
+        \bottomrule
+      \end{tabular}
+    \end{center}
+  \end{solucion}
+
+\item De la siguiente gramática:
+\begin{verbatim}
+  E := E + E | E - E | E * E | E / E | ( E ) | num
+\end{verbatim}
+donde \texttt{num} es terminal correspondiente a tókens numéricos (flotantes y/o enteros), realiza:
+\begin{enumerate}[label=(\alph*)]
+\item Transforma la gramática a forma normal de Chomsky.
+\item Utiliza el método de parsing CYK para parsear las cadenas: i) `2+4.5*(1+4)'; ii) `2+4.5*1+4'; y iii) `10/5-30'
+\end{enumerate}
 
 \begin{solucion}
+  \[
+  E \to E + E \mid E - E \mid E * E \mid E \,/\, E \mid (\,E\,) \mid \tk{num}
+  \]
 
 
-\medskip\noindent\textbf{\underline{Inciso (a)}}
+  \medskip\noindent\textbf{\underline{Inciso (a): forma normal de Chomsky}}
 
-\[
-L \to L \occ L \mid L + \tk{element} \mid L - \tk{element} \mid \varepsilon
-\]
+  Primero sacamos los terminales de las reglas largas. En una regla de
+  longitud $\geq 2$ no pueden aparecer terminales. Se crea un no terminal para
+  cada uno:
+  \[
+  O_{+} \to +, \quad O_{-} \to -, \quad O_{*} \to *, \quad O_{/} \to /, \quad
+  A \to (, \quad C \to )
+  \]
+  con lo que
+  \[
+  E \to E\,O_{+}\,E \mid E\,O_{-}\,E \mid E\,O_{*}\,E \mid E\,O_{/}\,E \mid A\,E\,C \mid \tk{num}
+  \]
 
-\textbf{Niveles.} $+$ y $-$ tienen la misma precedencia y asocian por la
-izquierda; $\occ$ liga más fuerte y asocia por la derecha. Por tanto $+$ y $-$
-van arriba (mismo nivel) y $\occ$ abajo.
+  Después se aplica la regla de los tres símbolos: cada regla
+  $E \to E\,O_{+}\,E$ se divide en $E \to E\,R_{+}$ y $R_{+} \to O_{+}\,E$, donde
+  $R_{+}$ representa ``el resto de una suma'': el operador seguido del segundo
+  operando. Igual con los demás operadores. Para el paréntesis,
+  $E \to A\,E\,C$ se divide en $E \to A\,X$ y $X \to E\,C$, donde $X$ es ``lo que
+  sigue a un paréntesis que abre''.
 
-\textbf{Gramática reescrita:}
-\[
-\begin{array}{rcl}
-L &\to& L + M \mid L - M \mid M \mid \varepsilon \\
-M &\to& N \occ M \mid N \\
-N &\to& \tk{element}
-\end{array}
-\]
- ejemplo
+  \textbf{Gramática en FNC} (12 no terminales, 17 producciones):
+  \[
+  \begin{array}{rcl}
+    E &\to& E\,R_{+} \mid E\,R_{-} \mid E\,R_{*} \mid E\,R_{/} \mid A\,X \mid \tk{num} \\[2pt]
+    R_{+} &\to& O_{+}\,E \qquad R_{-} \to O_{-}\,E \qquad R_{*} \to O_{*}\,E \qquad R_{/} \to O_{/}\,E \\[2pt]
+    X &\to& E\,C \\[2pt]
+    O_{+} &\to& + \qquad O_{-} \to - \qquad O_{*} \to * \qquad O_{/} \to / \qquad A \to ( \qquad C \to )
+  \end{array}
+  \]
 
-\begin{itemize}[leftmargin=*]
-  \item $L \to L + M$: recursión a la izquierda, así que $+$ y $-$ asocian por
-        la izquierda: $\tk{e} - \tk{e} - \tk{e}$ se agrupa como
-        $(\tk{e} - \tk{e}) - \tk{e}$.
- 
-\end{itemize}
+  \medskip\noindent\textbf{\underline{Inciso (b): parsing CYK}}
 
-\textbf{Ambiguedad.} En la gramática original la cadena
-$\occ\ \occ$ tiene 2 árboles, y la cadena
-$+\,\tk{element} \occ -\,\tk{element} \occ +\,\tk{element}$ tiene 7. En la
-reescrita, toda cadena tiene un único árbol.
+  \textbf{Tokenización.} El enunciado indica que $\tk{num}$ cubre enteros y
+  flotantes, así que \texttt{4.5} es \emph{un solo} token. Las cadenas quedan:
 
-
-
-\medskip\noindent\textbf{\underline{Inciso (b)}}
-
- La gramática es:
-\[
-S \to S \ogt S \mid S \osc S \mid S \odg S \mid S \ohs S \mid \tk{a} \mid \tk{b}
-\]
-donde $\odg$ denota el operador ``$^\circ$''.
-
-\textbf{Niveles.} La cadena de precedencia es
-``$\osc$ precede a $\ogt$, que precede a $\ohs$, que precede a $\odg$''. De
-más flojo (arriba) a más fuerte (abajo):
-
-\begin{center}
-\begin{tabular}{c c l l}
-\toprule
-Nivel & Operador & Asociatividad & Forma \\
-\midrule
-$S$ & $\odg$ & derecha       & $S \to T \odg S \mid T$ \\
-$T$ & $\ohs$ & no asociativo & $T \to U \ohs U \mid U$ \\
-$U$ & $\ogt$ & derecha       & $U \to V \ogt U \mid V$ \\
-$V$ & $\osc$ & izquierda     & $V \to V \osc W \mid W$ \\
-$W$ & ---    & ---           & $W \to \tk{a} \mid \tk{b}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Gramática reescrita:}
-\[
-\begin{array}{rcl}
-S &\to& T \odg S \mid T \\
-T &\to& U \ohs U \mid U \\
-U &\to& V \ogt U \mid V \\
-V &\to& V \osc W \mid W \\
-W &\to& \tk{a} \mid \tk{b}
-\end{array}
-\]
-
-\textbf{Ejemplos de agrupación} :
-\begin{center}
-\begin{tabular}{l l c}
-\toprule
-Cadena & Agrupación & Árboles en la original \\
-\midrule
-$\tk{a} \ogt \tk{a} \ogt \tk{a}$ & $\tk{a} \ogt (\tk{a} \ogt \tk{a})$ & 2 \\
-$\tk{a} \osc \tk{a} \osc \tk{a}$ & $(\tk{a} \osc \tk{a}) \osc \tk{a}$ & 2 \\
-$\tk{a} \osc \tk{b} \ogt \tk{a}$ & $(\tk{a} \osc \tk{b}) \ogt \tk{a}$ & 2 \\
-$\tk{a} \ogt \tk{b} \ohs \tk{a} \odg \tk{b}$ & $((\tk{a} \ogt \tk{b}) \ohs \tk{a}) \odg \tk{b}$ & 5 \\
-$\tk{a} \ohs \tk{b} \odg \tk{a} \ohs \tk{b}$ & $(\tk{a} \ohs \tk{b}) \odg (\tk{a} \ohs \tk{b})$ & 5 \\
-$\tk{a} \ohs \tk{b} \ohs \tk{a}$ & \textit{no se deriva} & 2 \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{solucion}
-
-    \item De la siguiente gramática:
-    \begin{verbatim}
-        E := E + E | E - E | E * E | E / E | ( E ) | num
-    \end{verbatim}
-    donde \texttt{num} es terminal correspondiente a tókens numéricos (flotantes y/o enteros), realiza:
-    \begin{enumerate}[label=(\alph*)]
-        \item Transforma la gramática a forma normal de Chomsky.
-        \item Utiliza el método de parsing CYK para parsear las cadenas: i) `2+4.5*(1+4)'; ii) `2+4.5*1+4'; y iii) `10/5-30'
-    \end{enumerate}
-
-\begin{solucion}
-\[
-E \to E + E \mid E - E \mid E * E \mid E \,/\, E \mid (\,E\,) \mid \tk{num}
-\]
+  \begin{center}
+    \begin{tabular}{c l l c}
+      \toprule
+      & Cadena & Tokens & $n$ \\
+      \midrule
+      i   & \texttt{2+4.5*(1+4)} & $\tk{num} + \tk{num} * ( \tk{num} + \tk{num} )$ & 9 \\
+      ii  & \texttt{2+4.5*1+4}   & $\tk{num} + \tk{num} * \tk{num} + \tk{num}$     & 7 \\
+      iii & \texttt{10/5-30}     & $\tk{num} \,/\, \tk{num} - \tk{num}$           & 5 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
 
 
-\medskip\noindent\textbf{\underline{Inciso (a): forma normal de Chomsky}}
-
-Primero sacamos los terminales de las reglas largas. En una regla de
-longitud $\geq 2$ no pueden aparecer terminales. Se crea un no terminal para
-cada uno:
-\[
-O_{+} \to +, \quad O_{-} \to -, \quad O_{*} \to *, \quad O_{/} \to /, \quad
-A \to (, \quad C \to )
-\]
-con lo que
-\[
-E \to E\,O_{+}\,E \mid E\,O_{-}\,E \mid E\,O_{*}\,E \mid E\,O_{/}\,E \mid A\,E\,C \mid \tk{num}
-\]
-
-Después se aplica la regla de los tres símbolos: cada regla
-$E \to E\,O_{+}\,E$ se divide en $E \to E\,R_{+}$ y $R_{+} \to O_{+}\,E$, donde
-$R_{+}$ representa ``el resto de una suma'': el operador seguido del segundo
-operando. Igual con los demás operadores. Para el paréntesis,
-$E \to A\,E\,C$ se divide en $E \to A\,X$ y $X \to E\,C$, donde $X$ es ``lo que
-sigue a un paréntesis que abre''.
-
-\textbf{Gramática en FNC} (12 no terminales, 17 producciones):
-\[
-\begin{array}{rcl}
-E &\to& E\,R_{+} \mid E\,R_{-} \mid E\,R_{*} \mid E\,R_{/} \mid A\,X \mid \tk{num} \\[2pt]
-R_{+} &\to& O_{+}\,E \qquad R_{-} \to O_{-}\,E \qquad R_{*} \to O_{*}\,E \qquad R_{/} \to O_{/}\,E \\[2pt]
-X &\to& E\,C \\[2pt]
-O_{+} &\to& + \qquad O_{-} \to - \qquad O_{*} \to * \qquad O_{/} \to / \qquad A \to ( \qquad C \to )
-\end{array}
-\]
-
-\medskip\noindent\textbf{\underline{Inciso (b): parsing CYK}}
-
-\textbf{Tokenización.} El enunciado indica que $\tk{num}$ cubre enteros y
-flotantes, así que \texttt{4.5} es \emph{un solo} token. Las cadenas quedan:
-
-\begin{center}
-\begin{tabular}{c l l c}
-\toprule
- & Cadena & Tokens & $n$ \\
-\midrule
-i   & \texttt{2+4.5*(1+4)} & $\tk{num} + \tk{num} * ( \tk{num} + \tk{num} )$ & 9 \\
-ii  & \texttt{2+4.5*1+4}   & $\tk{num} + \tk{num} * \tk{num} + \tk{num}$     & 7 \\
-iii & \texttt{10/5-30}     & $\tk{num} \,/\, \tk{num} - \tk{num}$           & 5 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-
-\medskip\noindent\textbf{Cadena i: \texttt{2+4.5*(1+4)}}
- 
-\textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{A\}$, $T[1,6] = \{E\}$, $T[1,7] = \{O_{+}\}$, $T[1,8] = \{E\}$, $T[1,9] = \{C\}$.
- 
-\textbf{Fila $\ell=2$} (cortes $k=1$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+  \medskip\noindent\textbf{Cadena i: \texttt{2+4.5*(1+4)}}
+  
+  \textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{A\}$, $T[1,6] = \{E\}$, $T[1,7] = \{O_{+}\}$, $T[1,8] = \{E\}$, $T[1,9] = \{C\}$.
+  
+  \textbf{Fila $\ell=2$} (cortes $k=1$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[2,2]$ (\texttt{+ 4.5}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item $T[2,7]$ (\texttt{+ 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item $T[2,8]$ (\texttt{4 )}): $k=1$: $\{E\} \times \{C\}$, regla $X \to E\,C$. $\Rightarrow \{X\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[2,1]$, $T[2,3]$, $T[2,4]$, $T[2,5]$, $T[2,6]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=3$} (cortes $k=1,2$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=3$} (cortes $k=1,2$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[3,1]$ (\texttt{2 + 4.5}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
+    
   \item $T[3,6]$ (\texttt{1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[3,2]$, $T[3,3]$, $T[3,4]$, $T[3,5]$, $T[3,7]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[4,6]$ (\texttt{1 + 4 )}): $k=3$: $\{E\} \times \{C\}$, regla $X \to E\,C$. $\Rightarrow \{X\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[4,1]$, $T[4,2]$, $T[4,3]$, $T[4,4]$, $T[4,5]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[5,5]$ (\texttt{( 1 + 4 )}): $k=1$: $\{A\} \times \{X\}$, regla $E \to A\,X$. $\Rightarrow \{E\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[5,1]$, $T[5,2]$, $T[5,3]$, $T[5,4]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[6,4]$ (\texttt{* ( 1 + 4 )}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[6,1]$, $T[6,2]$, $T[6,3]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[7,3]$ (\texttt{4.5 * ( 1 + 4 )}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[7,1]$, $T[7,2]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=8$} (cortes $k=1,\dots,7$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=8$} (cortes $k=1,\dots,7$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[8,2]$ (\texttt{+ 4.5 * ( 1 + 4 )}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[8,1]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=9$} (cortes $k=1,\dots,8$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=9$} (cortes $k=1,\dots,8$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[9,1]$ (\texttt{2 + 4.5 * ( 1 + 4 )}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
- 
-\end{itemize}
-\begin{center}
-\small
-\begin{tabular}{c|ccccccccc}
-\toprule
-$i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
- & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{(} & \texttt{1} & \texttt{+} & \texttt{4} & \texttt{)} \\
-\midrule
-$\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $A$ & $E$ & $O_{+}$ & $E$ & $C$ \\
-$\ell=2$ & -- & $R_{+}$ & -- & -- & -- & -- & $R_{+}$ & $X$ &  \\
-$\ell=3$ & $E$ & -- & -- & -- & -- & $E$ & -- &  &  \\
-$\ell=4$ & -- & -- & -- & -- & -- & $X$ &  &  &  \\
-$\ell=5$ & -- & -- & -- & -- & $E$ &  &  &  &  \\
-$\ell=6$ & -- & -- & -- & $R_{*}$ &  &  &  &  &  \\
-$\ell=7$ & -- & -- & $E$ &  &  &  &  &  &  \\
-$\ell=8$ & -- & $R_{+}$ &  &  &  &  &  &  &  \\
-$\ell=9$ & \fbox{$E$} &  &  &  &  &  &  &  &  \\
-\bottomrule
-\end{tabular}
-\end{center}
- 
-$E \in T[9,1]$: \textbf{la cadena se acepta.}
- 
-$E$ llega a la celda final por dos cortes: $k=1$
-(\texttt{2} $\mid$ \texttt{+4.5*(1+4)}) y $k=3$
-(\texttt{2+4.5} $\mid$ \texttt{*(1+4)}). El paréntesis interno sólo se puede
-formar de una manera: $X$ = \texttt{1+4)} en $T[4,6]$ y $E$ = \texttt{(1+4)}
-en $T[5,5]$. Por eso la cadena tiene exactamente dos árboles:
- 
+    
+  \end{itemize}
+  \begin{center}
+    \small
+    \begin{tabular}{c|ccccccccc}
+      \toprule
+      $i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+      & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{(} & \texttt{1} & \texttt{+} & \texttt{4} & \texttt{)} \\
+      \midrule
+      $\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $A$ & $E$ & $O_{+}$ & $E$ & $C$ \\
+      $\ell=2$ & -- & $R_{+}$ & -- & -- & -- & -- & $R_{+}$ & $X$ &  \\
+      $\ell=3$ & $E$ & -- & -- & -- & -- & $E$ & -- &  &  \\
+      $\ell=4$ & -- & -- & -- & -- & -- & $X$ &  &  &  \\
+      $\ell=5$ & -- & -- & -- & -- & $E$ &  &  &  &  \\
+      $\ell=6$ & -- & -- & -- & $R_{*}$ &  &  &  &  &  \\
+      $\ell=7$ & -- & -- & $E$ &  &  &  &  &  &  \\
+      $\ell=8$ & -- & $R_{+}$ &  &  &  &  &  &  &  \\
+      $\ell=9$ & \fbox{$E$} &  &  &  &  &  &  &  &  \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  
+  $E \in T[9,1]$: \textbf{la cadena se acepta.}
+  
+  $E$ llega a la celda final por dos cortes: $k=1$
+  (\texttt{2} $\mid$ \texttt{+4.5*(1+4)}) y $k=3$
+  (\texttt{2+4.5} $\mid$ \texttt{*(1+4)}). El paréntesis interno sólo se puede
+  formar de una manera: $X$ = \texttt{1+4)} en $T[4,6]$ y $E$ = \texttt{(1+4)}
+  en $T[5,5]$. Por eso la cadena tiene exactamente dos árboles:
+  
 
- 
-\medskip\noindent\textbf{Cadena ii: \texttt{2+4.5*1+4}}
- 
-\textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{E\}$, $T[1,6] = \{O_{+}\}$, $T[1,7] = \{E\}$.
- 
-\textbf{Fila $\ell=2$} (cortes $k=1$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+  
+  \medskip\noindent\textbf{Cadena ii: \texttt{2+4.5*1+4}}
+  
+  \textbf{Fila $\ell=1$} (reglas $A \to a$): $T[1,1] = \{E\}$, $T[1,2] = \{O_{+}\}$, $T[1,3] = \{E\}$, $T[1,4] = \{O_{*}\}$, $T[1,5] = \{E\}$, $T[1,6] = \{O_{+}\}$, $T[1,7] = \{E\}$.
+  
+  \textbf{Fila $\ell=2$} (cortes $k=1$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[2,2]$ (\texttt{+ 4.5}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item $T[2,4]$ (\texttt{* 1}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
- 
+    
   \item $T[2,6]$ (\texttt{+ 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[2,1]$, $T[2,3]$, $T[2,5]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=3$} (cortes $k=1,2$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=3$} (cortes $k=1,2$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[3,1]$ (\texttt{2 + 4.5}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
+    
   \item $T[3,3]$ (\texttt{4.5 * 1}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
- 
+    
   \item $T[3,5]$ (\texttt{1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[3,2]$, $T[3,4]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=4$} (cortes $k=1,\dots,3$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[4,2]$ (\texttt{+ 4.5 * 1}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item $T[4,4]$ (\texttt{* 1 + 4}): $k=1$: $\{O_{*}\} \times \{E\}$, regla $R_{*} \to O_{*}\,E$. $\Rightarrow \{R_{*}\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[4,1]$, $T[4,3]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=5$} (cortes $k=1,\dots,4$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[5,1]$ (\texttt{2 + 4.5 * 1}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$. $\Rightarrow \{E\}$
- 
+    
   \item $T[5,3]$ (\texttt{4.5 * 1 + 4}): $k=1$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$; $k=3$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[5,2]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=6$} (cortes $k=1,\dots,5$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[6,2]$ (\texttt{+ 4.5 * 1 + 4}): $k=1$: $\{O_{+}\} \times \{E\}$, regla $R_{+} \to O_{+}\,E$. $\Rightarrow \{R_{+}\}$
- 
+    
   \item Vacías ($\varnothing$, ningún corte coincide con una regla): $T[6,1]$.
- 
-\end{itemize}
- 
-\textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
- 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
- 
+    
+  \end{itemize}
+  
+  \textbf{Fila $\ell=7$} (cortes $k=1,\dots,6$):
+  
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
+    
   \item $T[7,1]$ (\texttt{2 + 4.5 * 1 + 4}): $k=1$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$; $k=3$: $\{E\} \times \{R_{*}\}$, regla $E \to E\,R_{*}$; $k=5$: $\{E\} \times \{R_{+}\}$, regla $E \to E\,R_{+}$. $\Rightarrow \{E\}$
- 
-\end{itemize}
-\begin{center}
-\small
-\begin{tabular}{c|ccccccc}
-\toprule
-$i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
- & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{1} & \texttt{+} & \texttt{4} \\
-\midrule
-$\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $E$ & $O_{+}$ & $E$ \\
-$\ell=2$ & -- & $R_{+}$ & -- & $R_{*}$ & -- & $R_{+}$ &  \\
-$\ell=3$ & $E$ & -- & $E$ & -- & $E$ &  &  \\
-$\ell=4$ & -- & $R_{+}$ & -- & $R_{*}$ &  &  &  \\
-$\ell=5$ & $E$ & -- & $E$ &  &  &  &  \\
-$\ell=6$ & -- & $R_{+}$ &  &  &  &  &  \\
-$\ell=7$ & \fbox{$E$} &  &  &  &  &  &  \\
-\bottomrule
-\end{tabular}
-\end{center}
- 
-$E \in T[7,1]$: \textbf{la cadena se acepta.}
- 
+    
+  \end{itemize}
+  \begin{center}
+    \small
+    \begin{tabular}{c|ccccccc}
+      \toprule
+      $i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+      & \texttt{2} & \texttt{+} & \texttt{4.5} & \texttt{*} & \texttt{1} & \texttt{+} & \texttt{4} \\
+      \midrule
+      $\ell=1$ & $E$ & $O_{+}$ & $E$ & $O_{*}$ & $E$ & $O_{+}$ & $E$ \\
+      $\ell=2$ & -- & $R_{+}$ & -- & $R_{*}$ & -- & $R_{+}$ &  \\
+      $\ell=3$ & $E$ & -- & $E$ & -- & $E$ &  &  \\
+      $\ell=4$ & -- & $R_{+}$ & -- & $R_{*}$ &  &  &  \\
+      $\ell=5$ & $E$ & -- & $E$ &  &  &  &  \\
+      $\ell=6$ & -- & $R_{+}$ &  &  &  &  &  \\
+      $\ell=7$ & \fbox{$E$} &  &  &  &  &  &  \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  
+  $E \in T[7,1]$: \textbf{la cadena se acepta.}
+  
 
- 
-\medskip\noindent\textbf{Cadena iii: \texttt{10/5-30} }
- 
-\textbf{Fila $\ell=1$.} $T[1,1] = \{E\}$, $T[1,2] = \{O_{/}\}$,
-$T[1,3] = \{E\}$, $T[1,4] = \{O_{-}\}$, $T[1,5] = \{E\}$.
- 
-\textbf{Fila $\ell=2$} (un solo corte, $k=1$):
-\begin{itemize}[leftmargin=*,itemsep=0pt]
+  
+  \medskip\noindent\textbf{Cadena iii: \texttt{10/5-30} }
+  
+  \textbf{Fila $\ell=1$.} $T[1,1] = \{E\}$, $T[1,2] = \{O_{/}\}$,
+  $T[1,3] = \{E\}$, $T[1,4] = \{O_{-}\}$, $T[1,5] = \{E\}$.
+  
+  \textbf{Fila $\ell=2$} (un solo corte, $k=1$):
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
   \item $T[2,1]$ (\texttt{10 /}): $\{E\} \times \{O_{/}\}$. No hay regla
-        $A \to E\,O_{/}$. $\Rightarrow \varnothing$
+    $A \to E\,O_{/}$. $\Rightarrow \varnothing$
   \item $T[2,2]$ (\texttt{/ 5}): $\{O_{/}\} \times \{E\}$. Regla
-        $R_{/} \to O_{/}\,E$. $\Rightarrow \{R_{/}\}$
+    $R_{/} \to O_{/}\,E$. $\Rightarrow \{R_{/}\}$
   \item $T[2,3]$ (\texttt{5 -}): $\{E\} \times \{O_{-}\}$. $\Rightarrow \varnothing$
   \item $T[2,4]$ (\texttt{- 30}): $\{O_{-}\} \times \{E\}$. Regla
-        $R_{-} \to O_{-}\,E$. $\Rightarrow \{R_{-}\}$
-\end{itemize}
- 
-\textbf{Fila $\ell=3$} (cortes $k = 1, 2$):
-\begin{itemize}[leftmargin=*,itemsep=0pt]
+    $R_{-} \to O_{-}\,E$. $\Rightarrow \{R_{-}\}$
+  \end{itemize}
+  
+  \textbf{Fila $\ell=3$} (cortes $k = 1, 2$):
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
   \item $T[3,1]$ (\texttt{10 / 5}): $k=1$: $T[1,1] \times T[2,2] = \{E\} \times \{R_{/}\}$,
-        regla $E \to E\,R_{/}$. $k=2$: $T[2,1] = \varnothing$. $\Rightarrow \{E\}$
+    regla $E \to E\,R_{/}$. $k=2$: $T[2,1] = \varnothing$. $\Rightarrow \{E\}$
   \item $T[3,2]$ (\texttt{/ 5 -}): $k=1$: $T[2,3] = \varnothing$.
-        $k=2$: $\{R_{/}\} \times \{O_{-}\}$, sin regla. $\Rightarrow \varnothing$
+    $k=2$: $\{R_{/}\} \times \{O_{-}\}$, sin regla. $\Rightarrow \varnothing$
   \item $T[3,3]$ (\texttt{5 - 30}): $k=1$: $\{E\} \times \{R_{-}\}$, regla
-        $E \to E\,R_{-}$. $\Rightarrow \{E\}$
-\end{itemize}
- 
-\textbf{Fila $\ell=4$} (cortes $k = 1, 2, 3$):
-\begin{itemize}[leftmargin=*,itemsep=0pt]
+    $E \to E\,R_{-}$. $\Rightarrow \{E\}$
+  \end{itemize}
+  
+  \textbf{Fila $\ell=4$} (cortes $k = 1, 2, 3$):
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
   \item $T[4,1]$ (\texttt{10 / 5 -}): $k=1$: $T[3,2] = \varnothing$.
-        $k=2$: $T[2,1] = \varnothing$. $k=3$: $\{E\} \times \{O_{-}\}$, sin regla.
-        $\Rightarrow \varnothing$
+    $k=2$: $T[2,1] = \varnothing$. $k=3$: $\{E\} \times \{O_{-}\}$, sin regla.
+    $\Rightarrow \varnothing$
   \item $T[4,2]$ (\texttt{/ 5 - 30}): $k=1$: $\{O_{/}\} \times T[3,3] = \{O_{/}\} \times \{E\}$,
-        regla $R_{/} \to O_{/}\,E$. $k=2$: $\{R_{/}\} \times \{R_{-}\}$, sin regla.
-        $k=3$: $T[3,2] = \varnothing$. $\Rightarrow \{R_{/}\}$
-\end{itemize}
- 
-\textbf{Fila $\ell=5$} (la cadena completa):
-\begin{itemize}[leftmargin=*,itemsep=0pt]
+    regla $R_{/} \to O_{/}\,E$. $k=2$: $\{R_{/}\} \times \{R_{-}\}$, sin regla.
+    $k=3$: $T[3,2] = \varnothing$. $\Rightarrow \{R_{/}\}$
+  \end{itemize}
+  
+  \textbf{Fila $\ell=5$} (la cadena completa):
+  \begin{itemize}[leftmargin=*,itemsep=0pt]
   \item $k=1$: $T[1,1] \times T[4,2] = \{E\} \times \{R_{/}\}$, regla
-        $E \to E\,R_{/}$. \quad Aporta $E$.
+    $E \to E\,R_{/}$. \quad Aporta $E$.
   \item $k=2$: $T[2,1] = \varnothing$.
   \item $k=3$: $T[3,1] \times T[2,4] = \{E\} \times \{R_{-}\}$, regla
-        $E \to E\,R_{-}$. \quad Aporta $E$.
+    $E \to E\,R_{-}$. \quad Aporta $E$.
   \item $k=4$: $T[4,1] = \varnothing$.
-\end{itemize}
-$\Rightarrow T[5,1] = \{E\}$. \textbf{La cadena se acepta.}
-\begin{center}
-\small
-\begin{tabular}{c|ccccc}
-\toprule
-$i$ & 1 & 2 & 3 & 4 & 5 \\
- & \texttt{10} & \texttt{/} & \texttt{5} & \texttt{-} & \texttt{30} \\
-\midrule
-$\ell=1$ & $E$ & $O_{/}$ & $E$ & $O_{-}$ & $E$ \\
-$\ell=2$ & -- & $R_{/}$ & -- & $R_{-}$ &  \\
-$\ell=3$ & $E$ & -- & $E$ &  &  \\
-$\ell=4$ & -- & $R_{/}$ &  &  &  \\
-$\ell=5$ & \fbox{$E$} &  &  &  &  \\
-\bottomrule
-\end{tabular}
-\end{center}
+  \end{itemize}
+  $\Rightarrow T[5,1] = \{E\}$. \textbf{La cadena se acepta.}
+  \begin{center}
+    \small
+    \begin{tabular}{c|ccccc}
+      \toprule
+      $i$ & 1 & 2 & 3 & 4 & 5 \\
+      & \texttt{10} & \texttt{/} & \texttt{5} & \texttt{-} & \texttt{30} \\
+      \midrule
+      $\ell=1$ & $E$ & $O_{/}$ & $E$ & $O_{-}$ & $E$ \\
+      $\ell=2$ & -- & $R_{/}$ & -- & $R_{-}$ &  \\
+      $\ell=3$ & $E$ & -- & $E$ &  &  \\
+      $\ell=4$ & -- & $R_{/}$ &  &  &  \\
+      $\ell=5$ & \fbox{$E$} &  &  &  &  \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
 \end{solucion}
 
-    \item De la siguiente gramática:
-    \begin{verbatim}
-        S := a S b | a b | 
-    \end{verbatim}
-    donde $a$ y $b$ son los terminales y el último elemento corresponde a la cadena vacía $\epsilon$. Realiza:
-    \begin{enumerate}[label=(\alph*)]
-        \item Transforma la gramática a forma normal de Chomsky.
-        \item Utiliza el método de parsing CYK para parsear las cadenas: i) `aabb'; ii) `aaaabbb'; y iii) `aaabbb'
-    \end{enumerate}
-    \item Dada la producción $X \rightarrow \alpha Y \beta$, demostrar que si \textsc{Null}$(\beta)$, entonces \textsc{Follow}$(X)$ $\subseteq$ \textsc{Follow}$(Y)$.
+\item De la siguiente gramática:
+\begin{verbatim}
+  S := a S b | a b | 
+\end{verbatim}
+donde $a$ y $b$ son los terminales y el último elemento corresponde a la cadena vacía $\epsilon$. Realiza:
+\begin{enumerate}[label=(\alph*)]
+\item Transforma la gramática a forma normal de Chomsky.\\
+  Para transformar a forma nomral de Chomsky, creamos nuevas producciones:
+\begin{verbatim}
+  S := ASB | AB |
+  B := b
+  A := a
+\end{verbatim}
+Sin embargo, sabemos que para que esté en FNC, cada producción de no terminales tiene que tener dos terminales. Para esto, introducimos un nuevo no terminal C de la siguente forma:
+\begin{verbatim}
+  S := AC | AB |
+  C := SB
+  B := b
+  A := a
+\end{verbatim}
+Ahora, como S produce epsilon y aparece del lado derecho en algunas producciones, introducimos $S_0$ que contiene todas las producciones de S, más la producción vacía. Y quitamos la producción vacía de S.
+\begin{verbatim}
+  S_0 := AC | AB |
+  S := AC | AB
+  C := SB
+  B := b
+  A := a
+\end{verbatim}
+\item Utiliza el método de parsing CYK para parsear las cadenas: i) `aabb'; ii) `aaaabbb'; y iii) `aaabbb'
 
-\begin{solucion}
-\begin{lema}
-Si $\beta \deriva \varepsilon$, entonces para cualesquiera cadenas $\gamma$ y
-$\delta$ se cumple $\gamma\,\beta\,\delta \deriva \gamma\,\delta$.
-\end{lema}
+  Para parsear las cadenas aaabb, construimos la tabla CYK
+  Para la primera diagonal, es trivial para los tres casos, ya que los únicos no terminales que producen 'a' y 'b' son A y B respectivamente.
+  \newpage
+  Para 'aabb'
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{ccccc}
+      \toprule
+      $i \backslash j$ & \textbf{0 ($a$)} & \textbf{1 ($a$)} & \textbf{2 ($b$)} & \textbf{3 ($b$)} \\
+      \midrule
+      \textbf{a} & $\{A\}$ & $\emptyset$ & $\emptyset$ & $\{S, S_0\}$ \\
+      \textbf{a} & — & $\{A\}$ & $\{S, S_0\}$ & $\{C\}$ \\
+      \textbf{b} & — & — & $\{B\}$ & $\emptyset$ \\
+      \textbf{b} & — & — & — & $\{B\}$ \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  En la segunda diagonal, primera entrada, se trata de la cadena 'aa', que se da por AA, no está en las producciones.
+  En la seguda entrada, tenemos 'ab' dada por AB que es producida por S y S0
+  En la tercera entrada, con bb, está dada por BB, pero no se encuentra del lado derecho de ninguna regla.\\
 
-\begin{proof}
-En una gramática libre de contexto cada no terminal se reescribe sin importar
-lo que tenga alrededor. Los mismos pasos que llevan $\beta$ a $\varepsilon$
-pueden aplicarse dentro de $\gamma\,\beta\,\delta$ sin tocar $\gamma$ ni
-$\delta$.
-\end{proof}
+  En la tercera diagonal, primera entrada, se forman AS y AS0, pero estas no están presentes en las reglas. La otra combinación no es posible porque T[aa] = $\emptyset$.
+  En la segunda entrada, con la subcadena 'abb', la primera partición no es posible, para la segunda, se forma SB y SB0, la primera de estas es dada por la regla C.\\
 
-\begin{prop}
-Sea $X \to \alpha\, Y\, \beta$ una producción. Si $\Null(\beta)$, entonces
-$\Follow(X) \subseteq \Follow(Y)$.
-\end{prop}
+  En la última fila (quinta), cadena 'aabb', la primera partición en dos de la cadena: 'a, abb' Donde T[a]={A} con índice (0,0) y T[abb]= C con índice (1, 3). Al concatenarla, nos da AC que está dada por S y S0.\\
 
-\begin{proof}
-Sea $t \in \Follow(X)$. Por definición existen $\gamma, \delta$ tales que
+  Con esto es suficiente para determinar que la cadena \textbf{pertenece} a la gramática. Ya que el símbolo inicial S0 de la gramática está en la única celda de la diagonal que se encuentra más arriba.\\\\
+
+  \textit{A continuación, para más simplicidad explicaremos en la mayoría de las veces cuando se encuentra que un no terminal pertenece a una entrada de la tabala. Se omitirán los casos en los que las concatenaciones obtenidas no están en ninguna producción del lado derecho de alguna gramática o que la concatenación no se puede concretar (En el caso en que alguna entrada de la tabla sea vacía)}
+  \newpage
+  Para 'aaaabbb'
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{cccccccc}
+      \toprule
+      $i \backslash j$ & \textbf{0 ($a$)} & \textbf{1 ($a$)} & \textbf{2 ($a$)} & \textbf{3 ($a$)} & \textbf{4 ($b$)} & \textbf{5 ($b$)} & \textbf{6 ($b$)} \\
+      \midrule
+      \textbf{0} & $\{A\}$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+      \textbf{1} & — & $\{A\}$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$& $\{S, S_0\}$\\
+      \textbf{2} & — & — & $\{A\}$ & $\emptyset$ & $\emptyset$& $\{S, S_0\}$& $\{C\}$\\
+      \textbf{3} & — & — & — & $\{A\}$ & $\{S, S_0\}$& $\{C\}$ & $\emptyset$ \\
+      \textbf{4} & — & — & — & — & $\{B\}$ & $\emptyset$ & $\emptyset$ \\
+      \textbf{5} & — & — & — & — & — & $\{B\}$ & $\emptyset$ \\
+      \textbf{6} & — & — & — & — & — & — & $\{B\}$ \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  En la segunda diagonal (longitud 2), las celdas $(0,1)$, $(1,2)$ y $(2,3)$ corresponden a subcadenas \$aa\$, dadas por la combinación $AA$, la cual no existe en las reglas. La celda $(3,4)$ corresponde a $ab$, cuya combinación \$AB\$ es producida por $S$ y $S_0$. Las celdas $(4,5)$ y $(5,6)$ corresponden a $bb$, dadas por $BB$, sin presencia en las reglas.\\
+
+  En la tercera diagonal (longitud 3), únicamente la celda $(3,5)$ para la subcadena $abb$ produce derivación válida al tomar la partición $T[ab] \times T[b]$ de los índices $(3,4)$ y $(5,5)$, formando $SB$, que da el no terminal $C$. Las demás celdas con $aaa$ o $bbb$ resultan en conjuntos vacíos.\\
+
+  En la cuarta diagonal (longitud 4), la celda $(2,5)$ para $aabb$ se resuelve mediante la partición $T[a] \times T[abb]$ (índices $(2,2)$ y $(3,5)$), concatenando $A$ con $C$, lo cual da $\{S, S_0\}$.\\
+
+  En la quinta diagonal (longitud 5), la celda $(2,6)$ para $aabbb$ evalúa $T[aabb] \times T[b]$ (índices $(2,5)$ y $(6,6)$), concatenando $\{S, S_0\}$ con $B$, obteniendo $SB$, producida por $C$.\\
+
+  En la sexta diagonal (longitud 6), la celda $(1,6)$ para $aaabbb$ toma la partición $T[a] \times T[aabbb]$ (índices $(1,1)$ y $(2,6)$), obteniendo $AC$, dada por $S$ y $S_0$.\\
+
+  En la última diagonal (séptima, celda $(0,6)$), correspondiente a la cadena completa $aaaabbb$, se evalúan todas las particiones posibles desde el punto de corte $k=0$ hasta $k=5$. La única partición con posibilidad teórica $T[a] \times T[aaabbb]$ (índices $(0,0)$ y $(1,6)$) combina $\{A\}$ con $\{S, S_0\}$, generando $AS$ y $AS_0$, combinaciones que no forman el lado derecho de ninguna regla en $R$. Las demás particiones involucran celdas vacías.\\
+
+  Por lo tanto, la celda $(0,6)$ resulta en $\emptyset$. Dado que ni el símbolo inicial $S_0$ ni $S$ pertenecen a $T[0,6]$, se determina que la cadena \textbf{no pertenece} a la gramática.
+  
+  \newpage
+  
+  Para 'aaabbb'
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{ccccccc}
+      \toprule
+      $i \backslash j$ & \textbf{0 ($a$)} & \textbf{1 ($a$)} & \textbf{2 ($a$)} & \textbf{3 ($b$)} & \textbf{4 ($b$)} & \textbf{5 ($b$)} \\
+      \midrule
+      \textbf{0} & $\{A\}$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\{S, S_0\}$\\
+      \textbf{1} & — & $\{A\}$ & $\emptyset$ & $\emptyset$ & $\{S, S_0\}$& $\{C\}$ \\
+      \textbf{2} & — & — & $\{A\}$ & $\{S, S_0\}$& $\{C\}$ & $\emptyset$ \\
+      \textbf{3} & — & — & — & $\{B\}$ & $\emptyset$ & $\emptyset$ \\
+      \textbf{4} & — & — & — & — & $\{B\}$ & $\emptyset$ \\
+      \textbf{5} & — & — & — & — & — & $\{B\}$ \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  En la segunda diagonal (subcadenas de longitud 2), las entradas $(0,1)$ y $(1,2)$ corresponden a la subcadena $aa$, dada por la combinación $AA$, la cual no aparece en las producciones.
+  La entrada $(2,3)$ corresponde a $ab$, dada por $AB$, producida por $S$ y $S_0$. Las siguientes dos entradas, corresponden a $bb$, dada por $BB$, que tampoco se encuentra del lado derecho de ninguna regla.\\
+
+  En la tercera diagonal (subcadenas de longitud 3), la entrada $(1,3)$ corresponde a $aab$; sus particiones no generan producciones válidas. En la entrada $(2,4)$ con la subcadena $abb$, la primera partición no es posible, pero para la segunda se evalúa $T[ab] \times T[b]$, formando $SB$ y $S'B$, donde la primera es generada por la regla $C \to SB$.\\
+
+  En la cuarta diagonal (longitud 4), la entrada $(1,4)$ corresponde a $aabb$. La partición útil evalúa $T[a] \times T[abb]$, donde $T[a] = \{A\}$ (índice $(1,1)$) y $T[abb] = \{C\}$ (índice $(2,4)$). Al concatenar se obtiene $AC$, producida por las reglas $S$ y $S_0$.\\
+
+  En la quinta diagonal (longitud 5), la entrada $(1,5)$ corresponde a $aabbb$. La partición $T[aabb] \times T[b]$ combina $\{S, S'\}$ (índice $(1,4)$) y $\{B\}$ (índice $(5,5)$), generando $SB$ y $S'B$, donde la primera es dada por la regla $C \to SB$.\\
+
+  En la última diagonal (sexta, celda $(0,5)$), correspondiente a la cadena completa $aaabbb$, la partición de la cadena en $a$ y $aabbb$ toma $T[a] = \{A\}$ en el índice $(0,0)$ y $T[aabbb] = \{C\}$ en el índice $(1,5)$. Su concatenación resulta en $AC$, la cual está dada por las reglas $S$ y $S'$.Con esto es suficiente para determinar que la cadena pertenece a la gramática, ya que el símbolo inicial $S'$ (y $S$) se encuentra en la celda $(0,5)$ ubicada en el vértice superior de la matriz.\\
+
+\end{enumerate}
+\item Dada la producción $X \rightarrow \alpha Y \beta$, demostrar que si \textsc{Null}$(\beta)$, entonces \textsc{Follow}$(X)$ $\subseteq$ \textsc{Follow}$(Y)$.
+
+  \begin{solucion}
+    \begin{lema}
+      Si $\beta \deriva \varepsilon$, entonces para cualesquiera cadenas $\gamma$ y
+      $\delta$ se cumple $\gamma\,\beta\,\delta \deriva \gamma\,\delta$.
+    \end{lema}
+
+    \begin{proof}
+      En una gramática libre de contexto cada no terminal se reescribe sin importar
+      lo que tenga alrededor. Los mismos pasos que llevan $\beta$ a $\varepsilon$
+      pueden aplicarse dentro de $\gamma\,\beta\,\delta$ sin tocar $\gamma$ ni
+      $\delta$.
+    \end{proof}
+
+    \begin{prop}
+      Sea $X \to \alpha\, Y\, \beta$ una producción. Si $\Null(\beta)$, entonces
+      $\Follow(X) \subseteq \Follow(Y)$.
+    \end{prop}
+
+    \begin{proof}
+      Sea $t \in \Follow(X)$. Por definición existen $\gamma, \delta$ tales que
+      \[
+      S\,\$ \deriva \gamma\, X\, t\, \delta. \tag{1}
+      \]
+      Aplicando la producción $X \to \alpha\, Y\, \beta$:
+      \[
+      \gamma\, X\, t\, \delta \Rightarrow \gamma\, \alpha\, Y\, \beta\, t\, \delta. \tag{2}
+      \]
+      Como $\Null(\beta)$, por el lema (con contexto izquierdo $\gamma\alpha Y$ y
+      contexto derecho $t\delta$):
+      \[
+      \gamma\, \alpha\, Y\, \beta\, t\, \delta \deriva \gamma\, \alpha\, Y\, t\, \delta. \tag{3}
+      \]
+      Encadenando (1), (2) y (3):
+      \[
+      S\,\$ \deriva (\gamma\alpha)\, Y\, t\, \delta.
+      \]
+      Así, $t$ aparece inmediatamente a la derecha de $Y$ en una forma sentencial,
+      y por definición $t \in \Follow(Y)$. Como $t$ era un elemento arbitrario de
+      $\Follow(X)$, se concluye $\Follow(X) \subseteq \Follow(Y)$.
+    \end{proof}
+  \end{solucion}
+
+\item Calcula las funciones \textsc{Null}, \textbf{First} y \textbf{Follow} de la siguiente gramática (considera finales a if, then, else, id y =):
+\begin{verbatim}
+  S := S2 ; S | S2
+  S2 := Matched | Unmatched
+  Matched := if E then Matched else Matched | id = E |
+  Unmatched := if E then Matched else Unmatched | if E then S2
+  E := id
+\end{verbatim}
+Nótese que Matched puede producir la cadena vacía
+
+
+\textbf{Cálculo de Null:}
 \[
-S\,\$ \deriva \gamma\, X\, t\, \delta. \tag{1}
+Null(S) = Null(S_2;S) \vee Null(S_2)
 \]
-Aplicando la producción $X \to \alpha\, Y\, \beta$:
 \[
-\gamma\, X\, t\, \delta \Rightarrow \gamma\, \alpha\, Y\, \beta\, t\, \delta. \tag{2}
+Null(S_2) = Null(Matched) \vee Null(Unmatched)
 \]
-Como $\Null(\beta)$, por el lema (con contexto izquierdo $\gamma\alpha Y$ y
-contexto derecho $t\delta$):
 \[
-\gamma\, \alpha\, Y\, \beta\, t\, \delta \deriva \gamma\, \alpha\, Y\, t\, \delta. \tag{3}
-\]
-Encadenando (1), (2) y (3):
-\[
-S\,\$ \deriva (\gamma\alpha)\, Y\, t\, \delta.
-\]
-Así, $t$ aparece inmediatamente a la derecha de $Y$ en una forma sentencial,
-y por definición $t \in \Follow(Y)$. Como $t$ era un elemento arbitrario de
-$\Follow(X)$, se concluye $\Follow(X) \subseteq \Follow(Y)$.
-\end{proof}
-\end{solucion}
+Null(Matched) = True
+\] Ya que directamente tiene una producción nula. (La última)
 
-    \item Calcula las funciones \textsc{Null}, \textbf{First} y \textbf{Follow} de la siguiente gramática (considera finales a if, then, else, id y =):
-    \begin{verbatim}
-        S := S2 ; S | S2
-        S2 := Matched | Unmatched
-        Matched := if E then Matched else Matched | id = E |
-        Unmatched := if E then Matched else Unmatched | if E then S2
-        E := id
-    \end{verbatim}
-    Nótese que Matched puede derivar en la cadena vacía.
-    \item Calcula \textsc{Null, First} y \textsc{Follow} de la siguiente gramática, con terminales 0, 1 y 2:
-    \begin{verbatim}
-        S := X S 0 |
-        X := 1 X 2 | S S
-    \end{verbatim}
-    \item De la siguiente gramática:
-    \begin{verbatim}
-        S := S or T | T
-        T := T and F | F
-        F := not F | ( S ) | True | False
-    \end{verbatim}
-    \begin{enumerate}[label=(\alph*)]
-        \item Elimina la recursión izquierda.
-        
-        La gramática resultante es:
-        \begin{lstlisting}
+\[
+Null(Unmatched) = False
+\] Porque en ambas producciones de Unmatched, se contienen símbolos terminales. \textit{if} al principio de ambas producciones
+
+\[Null(E) = False\]
+
+\textit{Segunda iteración:}
+Como Null de Matched es True, tenemos que también $Null(S_2) = True$ y por esto último, también $Null(S) = True$
+
+Por lo que tenemos:
+\[Null(S) = True\]
+\[Null(S_2) = True\]
+\[Null(Matched) = True\]
+\[Null(Unmatched) = False\]
+\[Null(E) = False\]
+\textbf{Calculamos first de S: en ambos casos su first es el first de S2, como es anulable, tenemos:}
+\[
+First(S) = First(S_2) \cup \{;\}
+\]
+\[
+First(S_2) = First(Matched) \cup First(Unmatched)
+\]
+Luego calculamos First de Matched y unmatched:
+\[
+First(Matched) = \{if, id\}
+\]
+Ya que en este caso, todas las producciones de Matched empiezan con símbolos terminales. (if y id)
+\[
+First(Unmatched) = \{if\}
+\]
+Ahora, el first de E
+\[
+First(E) = \{id\}
+\]
+Así, pudimos obtener los conjuntos first de $S$ y $S_2$
+\[
+First(S) = First(S_2) = \{if, id\}
+\]
+\[
+First(S_2) = \{if, id\}
+\]
+\[
+First(S) = \{if, id, ;\}
+\]
+\textbf{Ahora, procedemos a calcular el conjunto Follow de cada uno.Para esto, recordemos que tenemos que agregar un nuevo símbolo no terminal $S'$ y una regla $S' \rightarrow S\$$}
+
+\[Follow(S') = \varnothing\] ya que este símbolo no aparece en la parte derecha de ninguna producción
+
+\[Follow(S) = \{\$\}\]
+
+\[Follow(S_2) = \{;\}\cup Follow(S) \cup Follow(Unmatched)\] ya que S2 es el último símbolo en algunas reglas de S y Unmatched
+
+\[Follow(Matched) = Follow(S_2) \cup \{else\}\] ya que Matched es el último símbolo en una de las producciones de S2
+
+\[Follow(Unmatched) = Follow(S_2)\] Como $Follow(S_2) \subseteq Follow(Unmatched)$ y $Follow(Unmatched) \subseteq Follow(S_2)$, se tiene que $Follow(S_2) = Follow(Unmatched)$
+
+\[Follow(E) = Follow(Matched) \cup \{then\}\]
+
+\textit{Segunda iteración}
+
+\[Follow(S_2) = \{\$, ;\}\] ya que el follow de unmatched es el follow de S2, por lo cuál no aporta nuevos símbolos
+
+\[Follow(Matched) = \{\$, ;, else\}\]
+
+\[Follow(Unmatched) = \{\$, ;\}\]
+
+\[Follow(E) = \{\$, ;, else, then\}\]
+
+Los conjuntos ya no crecen más.
+
+\item Calcula \textsc{Null, First} y \textsc{Follow} de la siguiente gramática, con terminales 0, 1 y 2:
+\begin{verbatim}
+  S := X S 0 |
+  X := 1 X 2 | S S
+\end{verbatim}
+
+\textbf{Calculamos los conjuntos Null:}
+\[
+Null(S) = True
+\]
+ya que una producción es vacía
+
+\[
+Null(X) = Null(1X2) \vee Null(SS)
+\]
+Pero
+\[
+Null(SS) = Null(S) \wedge Null(S) = True
+\]
+Por lo que tenemos que
+\[
+Null(X) = True
+\]
+Los dos símbolos no terminales son anulables.
+
+\textbf{Calculamos los conjuntos First:}
+\[
+First(S) = First(X) \cup First(S) \cup First(0)
+\]
+En este caso ya que S y X son anulables
+
+\[
+First(X) = \{1\} \cup First(S) \cup First(S)
+\]
+Como ambos first se contienen, se tiene que el first de ambos, es el mismo conjunto
+
+\textit{Segunda iteración:}
+\[
+First(S) = \{1, 0\}
+\]
+\[
+First(X) = \{1, 0\}
+\]
+\textbf{Calculamos los conjuntos Follow. Para esto, es necesario agregar un nuevo símbolo no terminal S' y agregar la producción S'->S\$}
+\[
+Follow(S') = \varnothing
+\]
+\[
+Follow(S) = \{0, \$\} \cup First(S) \cup Follow(X)
+\]
+El first de S porque en la segunda producción de X, tenemos SS
+
+\[
+Follow(X) = First(S) \cup First(0) \cup First(2)
+\]
+Sustituyendo First(S)
+\[
+Follow(X) = \{0, 1, 2\}
+\]
+
+\textit{Segunda iteración}
+\[
+Follow(S) = \{0, 1, 2, \$ \}
+\]
+\[
+Follow(X) = \{0, 1, 2\}
+\]
+
+Los conjuntos ya no cambian.
+\item De la siguiente gramática:
+\begin{verbatim}
+  S := S or T | T
+  T := T and F | F
+  F := not F | ( S ) | True | False
+\end{verbatim}
+\begin{enumerate}[label=(\alph*)]
+\item Elimina la recursión izquierda.
+  
+  La gramática resultante es:
+  \begin{lstlisting}
     S := T S'
     S' := or T S' | $\epsilon$
     T := F T'
     T' := and F T' | $\epsilon$
     F := not F | ( S ) | True | False
-        \end{lstlisting}
-        \item Construye la tabla para parsing LL(1).
-        
-        La función \textsc{Null} queda de la siguiente manera:
-        \begin{lstlisting}
+  \end{lstlisting}
+\item Construye la tabla para parsing LL(1).
+  
+  La función \textsc{Null} queda de la siguiente manera:
+  \begin{lstlisting}
     Null(S) = False
     Null(S') = True
     Null(T) = False
     Null(T') = True
     Null(F) = False
-        \end{lstlisting}
-        La función \textsc{First} queda de la siguiente manera:
-        \begin{lstlisting}
+  \end{lstlisting}
+  La función \textsc{First} queda de la siguiente manera:
+  \begin{lstlisting}
     First(S) = {not, (, True, False}
     First(S') = {or, $\epsilon$}
     First(T) = {not, (, True, False}
     First(T') = {and, $\epsilon$}
     First(F) = {not, (, True, False}
-        \end{lstlisting}
-        La función \textsc{Follow} queda de la siguiente manera:
-        \begin{verbatim}
-     Follow(S) = {), $}
-     Follow(S') = {), $}
-     Follow(T) = {or, ), $}
-     Follow(T') = {or, ), $}
-     Follow(F) = {and, or, ), $}
-        \end{verbatim}
-        Con esto la tabla de parsing LL(1) queda de la siguiente manera:
-        \begin{table}[H]
-            \centering
-            \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|X|X|X|}
-                \hline
-                            & \textbf{or}   & \textbf{and}   & \textbf{not} & \textbf{(} & \textbf{)}    & \textbf{True} & \textbf{False} & \textbf{\$}   \\ \hline
-                \textbf{S}  & -             & -              & S := T S'    & S := T S'  & -             & S := T S'     & S := T S'      & -             \\ \hline
-                \textbf{S'} & S' := or T S' & -              & -            & -          & S' := $\epsilon$ & -             & -              & S' := $\epsilon$ \\ \hline
-                \textbf{T}  & -             & -              & T := F T'    & T := F T'  & -             & T := F T'     & T := F T'      & -             \\ \hline
-                \textbf{T'} & T' := $\epsilon$ & T' := and F T' & -            & -          & T' := $\epsilon$ & -             & -              & T' := $\epsilon$ \\ \hline
-                \textbf{F}  & -             & -              & F := not F   & F := ( S ) & -             & F := True     & F := False     & -             \\ \hline
-            \end{tabularx}
-        \end{table}
-        \item Usa el parser LL(1) para parsear las siguientes expresiones: a) \textbf{\texttt{True or not False}}; b) \textbf{\texttt{False and not (True or False)}}; y c) \textbf{\texttt{True or (False and (not True and False))}}.
-        \begin{enumerate}[label=(\alph*)]
-            \item La cadena \texttt{True or not False} es aceptada por el parser LL(1).
-            
-            La tabla de parseo para la cadena es la siguiente:
-            \begin{table}[H]
-                \centering
-                \begin{tabular}{|c|c|c|}
-                    \hline
-                                & \textbf{Pila} & \textbf{Input}       \\ \hline
-                    \textbf{1-}  & \$S           & True or not False \$ \\ \hline
-                    \textbf{2-}  & \$S' T        & True or not False \$ \\ \hline
-                    \textbf{3-}  & \$S' T' F     & True or not False \$ \\ \hline
-                    \textbf{4-}  & \$S' T' True  & True or not False \$ \\ \hline
-                    \textbf{5-}  & \$S' T'       & or not False \$      \\ \hline
-                    \textbf{6-}  & \$S'          & or not False \$      \\ \hline
-                    \textbf{7-}  & \$S' T or     & or not False \$      \\ \hline
-                    \textbf{8-}  & \$S' T        & not False \$         \\ \hline
-                    \textbf{9-}  & \$S' T' F     & not False \$         \\ \hline
-                    \textbf{10-} & \$S' T' F not & not False \$         \\ \hline
-                    \textbf{11-} & \$S' T' F     & False \$             \\ \hline
-                    \textbf{12-} & \$S' T' False & False \$             \\ \hline
-                    \textbf{13-} & \$S' T'       & \$                   \\ \hline
-                    \textbf{14-} & \$S'          & \$                   \\ \hline
-                    \textbf{15-} & \$            & \$                   \\ \hline
-                \end{tabular}
-            \end{table}
-            \item La cadena \texttt{False and not (True or False)} es aceptada por el parser LL(1).
-            
-            La tabla de parseo para la cadena es la siguiente:
-            \begin{table}[H]
-                \centering
-                \begin{tabular}{|c|c|c|}
-                    \hline
-                                & \textbf{Pila}         & \textbf{Input}                   \\ \hline
-                    \textbf{1-}  & \$S                   & False and not (True or False) \$ \\ \hline
-                    \textbf{2-}  & \$S' T                & False and not (True or False) \$ \\ \hline
-                    \textbf{3-}  & \$S' T' F             & False and not (True or False) \$ \\ \hline
-                    \textbf{4-}  & \$S' T' False         & False and not (True or False) \$ \\ \hline
-                    \textbf{5-}  & \$S' T'               & and not (True or False) \$       \\ \hline
-                    \textbf{6-}  & \$S' T' F and         & and not (True or False) \$       \\ \hline
-                    \textbf{7-}  & \$S' T' F             & not (True or False) \$           \\ \hline
-                    \textbf{8-}  & \$S' T' F not         & not (True or False) \$           \\ \hline
-                    \textbf{9-}  & \$S' T' F             & (True or False) \$               \\ \hline
-                    \textbf{10-} & \$S' T' ) S (         & (True or False) \$               \\ \hline
-                    \textbf{11-} & \$S' T' ) S           & True or False) \$                \\ \hline
-                    \textbf{12-} & \$S' T' ) S' T        & True or False) \$                \\ \hline
-                    \textbf{13-} & \$S' T' ) S' T' F     & True or False) \$                \\ \hline
-                    \textbf{14-} & \$S' T' ) S' T' True  & True or False) \$                \\ \hline
-                    \textbf{15-} & \$S' T' ) S' T'       & or False) \$                     \\ \hline
-                    \textbf{16-} & \$S' T' ) S'          & or False) \$                     \\ \hline
-                    \textbf{17-} & \$S' T' ) S' T or     & or False) \$                     \\ \hline
-                    \textbf{18-} & \$S' T' ) S' T        & False) \$                        \\ \hline
-                    \textbf{19-} & \$S' T' ) S' T' F     & False) \$                        \\ \hline
-                    \textbf{20-} & \$S' T' ) S' T' False & False) \$                        \\ \hline
-                    \textbf{21-} & \$S' T' ) S' T'       & ) \$                             \\ \hline
-                    \textbf{22-} & \$S' T' ) S'          & ) \$                             \\ \hline
-                    \textbf{23-} & \$S' T' )             & ) \$                             \\ \hline
-                    \textbf{24-} & \$S' T'               & \$                               \\ \hline
-                    \textbf{25-} & \$S'                  & \$                               \\ \hline
-                    \textbf{26-} & \$                    & \$                               \\ \hline
-                \end{tabular}
-            \end{table}
-            \item La cadena \texttt{True or (False and (not True and False))} es aceptada por el parser LL(1).
-            
-            La tabla de parseo para la cadena es la siguiente:
-            \begin{table}[H]
-                \centering
-                \begin{tabular}{|c|c|c|}
-                    \hline
-                                & \textbf{Pila}                 & \textbf{Input}                              \\ \hline
-                    \textbf{1-}  & \$S                           & True or (False and (not True and False)) \$ \\ \hline
-                    \textbf{2-}  & \$S' T                        & True or (False and (not True and False)) \$ \\ \hline
-                    \textbf{3-}  & \$S' T' F                     & True or (False and (not True and False)) \$ \\ \hline
-                    \textbf{4-}  & \$S' T' True                  & True or (False and (not True and False)) \$ \\ \hline
-                    \textbf{5-}  & \$S' T'                       & or (False and (not True and False)) \$      \\ \hline
-                    \textbf{6-}  & \$S'                          & or (False and (not True and False)) \$      \\ \hline
-                    \textbf{7-}  & \$S' T or                     & or (False and (not True and False)) \$      \\ \hline
-                    \textbf{8-}  & \$S' T                        & (False and (not True and False)) \$         \\ \hline
-                    \textbf{9-}  & \$S' T' F                     & (False and (not True and False)) \$         \\ \hline
-                    \textbf{10-} & \$S' T' ) S (                 & (False and (not True and False)) \$         \\ \hline
-                    \textbf{11-} & \$S' T' ) S                   & False and (not True and False)) \$          \\ \hline
-                    \textbf{12-} & \$S' T' ) S' T                & False and (not True and False)) \$          \\ \hline
-                    \textbf{13-} & \$S' T' ) S' T' F             & False and (not True and False)) \$          \\ \hline
-                    \textbf{14-} & \$S' T' ) S' T' False         & False and (not True and False)) \$          \\ \hline
-                    \textbf{15-} & \$S' T' ) S' T'               & and (not True and False)) \$                \\ \hline
-                    \textbf{16-} & \$S' T' ) S' T' F and         & and (not True and False)) \$                \\ \hline
-                    \textbf{17-} & \$S' T' ) S' T' F             & (not True and False)) \$                    \\ \hline
-                    \textbf{18-} & \$S' T' ) S' T' ) S (         & (not True and False)) \$                    \\ \hline
-                    \textbf{19-} & \$S' T' ) S' T' ) S           & not True and False)) \$                     \\ \hline
-                    \textbf{20-} & \$S' T' ) S' T' ) S' T        & not True and False)) \$                     \\ \hline
-                    \textbf{21-} & \$S' T' ) S' T' ) S' T' F     & not True and False)) \$                     \\ \hline
-                    \textbf{22-} & \$S' T' ) S' T' ) S' T' F not & not True and False)) \$                     \\ \hline
-                    \textbf{23-} & \$S' T' ) S' T' ) S' T' F     & True and False)) \$                         \\ \hline
-                    \textbf{24-} & \$S' T' ) S' T' ) S' T' True  & True and False)) \$                         \\ \hline
-                    \textbf{25-} & \$S' T' ) S' T' ) S' T'       & and False)) \$                              \\ \hline
-                    \textbf{26-} & \$S' T' ) S' T' ) S' T' F and & and False)) \$                              \\ \hline
-                    \textbf{27-} & \$S' T' ) S' T' ) S' T' F     & False)) \$                                  \\ \hline
-                    \textbf{28-} & \$S' T' ) S' T' ) S' T' False & False)) \$                                  \\ \hline
-                    \textbf{29-} & \$S' T' ) S' T' ) S' T'       & )) \$                                       \\ \hline
-                    \textbf{30-} & \$S' T' ) S' T' ) S'          & )) \$                                       \\ \hline
-                    \textbf{31-} & \$S' T' ) S' T' )             & )) \$                                       \\ \hline
-                    \textbf{32-} & \$S' T' ) S' T'               & ) \$                                        \\ \hline
-                    \textbf{33-} & \$S' T' ) S'                  & ) \$                                        \\ \hline
-                    \textbf{34-} & \$S' T' )                     & ) \$                                        \\ \hline
-                    \textbf{35-} & \$S' T'                       & \$                                          \\ \hline
-                    \textbf{36-} & \$S'                          & \$                                          \\ \hline
-                    \textbf{37-} & \$                            & \$                                          \\ \hline
-                \end{tabular}
-            \end{table}
-        \end{enumerate}
-    \end{enumerate}
-    \item Construye el autómata LR(0) para la siguiente gramática:
-    \begin{verbatim}
-        E := E ~ E | E ** E | int
-    \end{verbatim}
-    Donde \texttt{int} corresponde a un entero del lexer. Utiliza las siguientes reglas de precedencia:
-    \begin{itemize}
-        \item ** precede a $\sim$
-        \item ** asocia por la izquierda y $\sim$ por la derecha.
-    \end{itemize}
-    Para obtener un parsing para la cadena 10**2 $\sim$ 3
-
-    Empezamos con nuestra gramática y añadimos un símbolo inicial \texttt{E'}:
-    \begin{verbatim}
-        E' := E
-        E := E ~ E | E ** E | int
-    \end{verbatim}
-    Ahora si empezamos a calcular los estados del autómata:
-
-    $I_0 = Closure([E' \rightarrow .E]) = \{ [E' \rightarrow .E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
-    $I_1 =$ \texttt{Goto}($I_0, E$) = $Closure([E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
-    $I_2 =$ \texttt{Goto}($I_0, int$) = $Closure([E \rightarrow int.]) = \{ [E \rightarrow int.] \} $\\
-    $I_3 =$ \texttt{Goto}($I_1, \sim$) = $Closure([E \rightarrow E \sim . E]) = \{ [E \rightarrow E \sim . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
-    $I_4 =$ \texttt{Goto}($I_1, **$) = $Closure([E \rightarrow E ** . E]) = \{ [E \rightarrow E ** . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
-    $I_5 =$ \texttt{Goto}($I_3, E$) = $Closure([E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
-    \texttt{Goto}($I_3, int$) = $Closure([E \rightarrow int.]) = I_2$\\
-    $I_6 =$ \texttt{Goto}($I_4, E$) = $Closure([E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
-    \texttt{Goto}($I_4, int$) = $Closure([E \rightarrow int.]) = I_2$\\
-    \texttt{Goto}($I_5, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
-    \texttt{Goto}($I_5, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
-    \texttt{Goto}($I_6, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
-    \texttt{Goto}($I_6, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
-    La automáta resultante es la siguiente:
-    \begin{center}
-        \begin{tikzpicture}[> = {Stealth[scale=1.2]},
-            shorten > = 1pt,
-            auto,
-            semithick,
-            initial text = {}]
-            \node[state, initial] (I0) at (0, 0) {$I_0$};
-            \node[state, accepting] (I1) at (3.5, 0) {$I_1$};
-            
-            % Rama superior
-            \node[state] (I3) at (7, 3) {$I_3$};
-            \node[state] (I5) at (12, 3) {$I_5$};
-            
-            % Rama inferior
-            \node[state] (I4) at (7, -3) {$I_4$};
-            \node[state] (I6) at (12, -3) {$I_6$};
-            
-            \node[state] (I2) at (10, -6.5) {$I_2$};
-
-            \path[->, every node/.style={fill=white, inner sep=2pt, font=\small}]
-                
-                % Desde I0
-                (I0) edge node {$E$} (I1)
-                (I0) edge [out=-70, in=180] node [swap, pos=0.15] {$int$} (I2)
-                
-                % Desde I1 
-                (I1) edge node [pos=0.4] {$\sim$} (I3)
-                (I1) edge node [swap, pos=0.4] {$**$} (I4)
-                
-                % Desde I3
-                (I3) edge [bend left=15] node {$E$} (I5)
-                (I3) edge node [pos=0.15, swap] {$int$} (I2)
-                
-                % Desde I4
-                (I4) edge [bend left=15] node {$E$} (I6)
-                (I4) edge node [pos=0.25, swap] {$int$} (I2)
-                
-                % Desde I5
-                (I5) edge [bend left=15] node {$\sim$} (I3)
-                (I5) edge node [pos=0.2, swap] {$**$} (I4)
-                
-                % Desde I6
-                (I6) edge node [pos=0.2] {$\sim$} (I3)
-                (I6) edge [bend left=15] node {$**$} (I4);
-        \end{tikzpicture}
-    \end{center}
-    Ahora calculamos el \textsc{Follow} de la gramática:
-    \begin{verbatim}
-        Follow(E) = {**, ~, $}
-    \end{verbatim}
-    Con esto podemos construir la tabla SLR, primero enumeramos las producciones de la gramática:
-    \begin{enumerate}[label=(\arabic*), start=0]
-        \item $E' \rightarrow E$
-        \item $E \rightarrow E \sim E$
-        \item $E \rightarrow E ** E$
-        \item $E \rightarrow int$
-    \end{enumerate}
-    Ahora si construimos la tabla SLR tomando en cuenta la precedencia y asociatividad de los operadores:
+  \end{lstlisting}
+  La función \textsc{Follow} queda de la siguiente manera:
+\begin{verbatim}
+  Follow(S) = {), $}
+  Follow(S') = {), $}
+  Follow(T) = {or, ), $}
+  Follow(T') = {or, ), $}
+  Follow(F) = {and, or, ), $}
+\end{verbatim}
+Con esto la tabla de parsing LL(1) queda de la siguiente manera:
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|X|X|X|}
+    \hline
+    & \textbf{or}   & \textbf{and}   & \textbf{not} & \textbf{(} & \textbf{)}    & \textbf{True} & \textbf{False} & \textbf{\$}   \\ \hline
+    \textbf{S}  & -             & -              & S := T S'    & S := T S'  & -             & S := T S'     & S := T S'      & -             \\ \hline
+    \textbf{S'} & S' := or T S' & -              & -            & -          & S' := $\epsilon$ & -             & -              & S' := $\epsilon$ \\ \hline
+    \textbf{T}  & -             & -              & T := F T'    & T := F T'  & -             & T := F T'     & T := F T'      & -             \\ \hline
+    \textbf{T'} & T' := $\epsilon$ & T' := and F T' & -            & -          & T' := $\epsilon$ & -             & -              & T' := $\epsilon$ \\ \hline
+    \textbf{F}  & -             & -              & F := not F   & F := ( S ) & -             & F := True     & F := False     & -             \\ \hline
+  \end{tabularx}
+\end{table}
+\item Usa el parser LL(1) para parsear las siguientes expresiones: a) \textbf{\texttt{True or not False}}; b) \textbf{\texttt{False and not (True or False)}}; y c) \textbf{\texttt{True or (False and (not True and False))}}.
+  \begin{enumerate}[label=(\alph*)]
+  \item La cadena \texttt{True or not False} es aceptada por el parser LL(1).
+    
+    La tabla de parseo para la cadena es la siguiente:
     \begin{table}[H]
-        \centering
-        \begin{tabular}{|c|c|c|c|c|c|}
-            \hline
-            \textbf{Estado} & $\bm{\sim}$ & $\bm{**}$ & \textbf{int} & \textbf{\$} & $\bm{E}$ \\ \hline
-            $\bm{I_0}$ & - & - & s2 & - & 1 \\ \hline
-            $\bm{I_1}$ & s3 & s4 & - & acc & - \\ \hline
-            $\bm{I_2}$ & r3 & r3 & - & r3 & - \\ \hline
-            $\bm{I_3}$ & - & - & s2 & - & 5 \\ \hline
-            $\bm{I_4}$ & - & - & s2 & - & 6 \\ \hline
-            $\bm{I_5}$ & s3 & s4 & - & r1 & - \\ \hline
-            $\bm{I_6}$ & r2 & r2 & - & r2 & - \\ \hline
-        \end{tabular}
+      \centering
+      \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Pila} & \textbf{Input}       \\ \hline
+        \textbf{1-}  & \$S           & True or not False \$ \\ \hline
+        \textbf{2-}  & \$S' T        & True or not False \$ \\ \hline
+        \textbf{3-}  & \$S' T' F     & True or not False \$ \\ \hline
+        \textbf{4-}  & \$S' T' True  & True or not False \$ \\ \hline
+        \textbf{5-}  & \$S' T'       & or not False \$      \\ \hline
+        \textbf{6-}  & \$S'          & or not False \$      \\ \hline
+        \textbf{7-}  & \$S' T or     & or not False \$      \\ \hline
+        \textbf{8-}  & \$S' T        & not False \$         \\ \hline
+        \textbf{9-}  & \$S' T' F     & not False \$         \\ \hline
+        \textbf{10-} & \$S' T' F not & not False \$         \\ \hline
+        \textbf{11-} & \$S' T' F     & False \$             \\ \hline
+        \textbf{12-} & \$S' T' False & False \$             \\ \hline
+        \textbf{13-} & \$S' T'       & \$                   \\ \hline
+        \textbf{14-} & \$S'          & \$                   \\ \hline
+        \textbf{15-} & \$            & \$                   \\ \hline
+      \end{tabular}
     \end{table}
-    Ahora seguimos con la tabla de parsing LR(0) para la cadena 10**2 $\sim$ 3 que para el lexer es int ** int $\sim$ int:
+  \item La cadena \texttt{False and not (True or False)} es aceptada por el parser LL(1).
+    
+    La tabla de parseo para la cadena es la siguiente:
     \begin{table}[H]
-        \centering
-        \begin{tabular}{|c|c|c|c|}
-            \hline
-            Estados          & \textbf{Símbolos} & \textbf{Input}           & \textbf{Acción} \\ \hline
-            \textbf{0}       & \$                & int ** int $\sim$ int \$ & s2              \\ \hline
-            \textbf{0 2}     & \$ int            & ** int $\sim$ int \$     & r3              \\ \hline
-            \textbf{0}       & \$ E              & ** int $\sim$ int \$     & g1              \\ \hline
-            \textbf{0 1}     & \$ E              & ** int $\sim$ int \$     & s4              \\ \hline
-            \textbf{0 1 4}   & \$ E **           & int $\sim$ int \$        & s2              \\ \hline
-            \textbf{0 1 4 2} & \$ E ** int       & $\sim$ int \$            & r3              \\ \hline
-            \textbf{0 1 4}   & \$ E ** E         & $\sim$ int \$            & g6              \\ \hline
-            \textbf{0 1 4 6} & \$ E ** E         & $\sim$ int \$            & r2              \\ \hline
-            \textbf{0}       & \$ E              & $\sim$ int \$            & g1              \\ \hline
-            \textbf{0 1}     & \$ E              & $\sim$ int \$            & s3              \\ \hline
-            \textbf{0 1 3}   & \$ E $\sim$       & int \$                   & s2              \\ \hline
-            \textbf{0 1 3 2} & \$ E $\sim$ int   & \$                       & r3              \\ \hline
-            \textbf{0 1 3}   & \$ E $\sim$ E     & \$                       & g5              \\ \hline
-            \textbf{0 1 3 5} & \$ E $\sim$ E     & \$                       & r1              \\ \hline
-            \textbf{0}       & \$ E              & \$                       & g1              \\ \hline
-            \textbf{0 1}     & \$ E              & \$                       & acc             \\ \hline
-        \end{tabular}
+      \centering
+      \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Pila}         & \textbf{Input}                   \\ \hline
+        \textbf{1-}  & \$S                   & False and not (True or False) \$ \\ \hline
+        \textbf{2-}  & \$S' T                & False and not (True or False) \$ \\ \hline
+        \textbf{3-}  & \$S' T' F             & False and not (True or False) \$ \\ \hline
+        \textbf{4-}  & \$S' T' False         & False and not (True or False) \$ \\ \hline
+        \textbf{5-}  & \$S' T'               & and not (True or False) \$       \\ \hline
+        \textbf{6-}  & \$S' T' F and         & and not (True or False) \$       \\ \hline
+        \textbf{7-}  & \$S' T' F             & not (True or False) \$           \\ \hline
+        \textbf{8-}  & \$S' T' F not         & not (True or False) \$           \\ \hline
+        \textbf{9-}  & \$S' T' F             & (True or False) \$               \\ \hline
+        \textbf{10-} & \$S' T' ) S (         & (True or False) \$               \\ \hline
+        \textbf{11-} & \$S' T' ) S           & True or False) \$                \\ \hline
+        \textbf{12-} & \$S' T' ) S' T        & True or False) \$                \\ \hline
+        \textbf{13-} & \$S' T' ) S' T' F     & True or False) \$                \\ \hline
+        \textbf{14-} & \$S' T' ) S' T' True  & True or False) \$                \\ \hline
+        \textbf{15-} & \$S' T' ) S' T'       & or False) \$                     \\ \hline
+        \textbf{16-} & \$S' T' ) S'          & or False) \$                     \\ \hline
+        \textbf{17-} & \$S' T' ) S' T or     & or False) \$                     \\ \hline
+        \textbf{18-} & \$S' T' ) S' T        & False) \$                        \\ \hline
+        \textbf{19-} & \$S' T' ) S' T' F     & False) \$                        \\ \hline
+        \textbf{20-} & \$S' T' ) S' T' False & False) \$                        \\ \hline
+        \textbf{21-} & \$S' T' ) S' T'       & ) \$                             \\ \hline
+        \textbf{22-} & \$S' T' ) S'          & ) \$                             \\ \hline
+        \textbf{23-} & \$S' T' )             & ) \$                             \\ \hline
+        \textbf{24-} & \$S' T'               & \$                               \\ \hline
+        \textbf{25-} & \$S'                  & \$                               \\ \hline
+        \textbf{26-} & \$                    & \$                               \\ \hline
+      \end{tabular}
     \end{table}
-    Así, podemos ver que la cadena es aceptada.
-    \item Utiliza la gramática (expresiones booleanas) del ejercicio 7 para construir las tablas de \textbf{SLR, LR(1)} y \textbf{LALR} y parsear las cadenas que se indican en ese ejercicio.
-    \item A partir de la siguiente gramática:
-    \begin{verbatim}
-        S := S S + | S S * | a
-    \end{verbatim}
-    Construye las tablas para el LR(1) canónico y LALR.
+  \item La cadena \texttt{True or (False and (not True and False))} es aceptada por el parser LL(1).
+    
+    La tabla de parseo para la cadena es la siguiente:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Pila}                 & \textbf{Input}                              \\ \hline
+        \textbf{1-}  & \$S                           & True or (False and (not True and False)) \$ \\ \hline
+        \textbf{2-}  & \$S' T                        & True or (False and (not True and False)) \$ \\ \hline
+        \textbf{3-}  & \$S' T' F                     & True or (False and (not True and False)) \$ \\ \hline
+        \textbf{4-}  & \$S' T' True                  & True or (False and (not True and False)) \$ \\ \hline
+        \textbf{5-}  & \$S' T'                       & or (False and (not True and False)) \$      \\ \hline
+        \textbf{6-}  & \$S'                          & or (False and (not True and False)) \$      \\ \hline
+        \textbf{7-}  & \$S' T or                     & or (False and (not True and False)) \$      \\ \hline
+        \textbf{8-}  & \$S' T                        & (False and (not True and False)) \$         \\ \hline
+        \textbf{9-}  & \$S' T' F                     & (False and (not True and False)) \$         \\ \hline
+        \textbf{10-} & \$S' T' ) S (                 & (False and (not True and False)) \$         \\ \hline
+        \textbf{11-} & \$S' T' ) S                   & False and (not True and False)) \$          \\ \hline
+        \textbf{12-} & \$S' T' ) S' T                & False and (not True and False)) \$          \\ \hline
+        \textbf{13-} & \$S' T' ) S' T' F             & False and (not True and False)) \$          \\ \hline
+        \textbf{14-} & \$S' T' ) S' T' False         & False and (not True and False)) \$          \\ \hline
+        \textbf{15-} & \$S' T' ) S' T'               & and (not True and False)) \$                \\ \hline
+        \textbf{16-} & \$S' T' ) S' T' F and         & and (not True and False)) \$                \\ \hline
+        \textbf{17-} & \$S' T' ) S' T' F             & (not True and False)) \$                    \\ \hline
+        \textbf{18-} & \$S' T' ) S' T' ) S (         & (not True and False)) \$                    \\ \hline
+        \textbf{19-} & \$S' T' ) S' T' ) S           & not True and False)) \$                     \\ \hline
+        \textbf{20-} & \$S' T' ) S' T' ) S' T        & not True and False)) \$                     \\ \hline
+        \textbf{21-} & \$S' T' ) S' T' ) S' T' F     & not True and False)) \$                     \\ \hline
+        \textbf{22-} & \$S' T' ) S' T' ) S' T' F not & not True and False)) \$                     \\ \hline
+        \textbf{23-} & \$S' T' ) S' T' ) S' T' F     & True and False)) \$                         \\ \hline
+        \textbf{24-} & \$S' T' ) S' T' ) S' T' True  & True and False)) \$                         \\ \hline
+        \textbf{25-} & \$S' T' ) S' T' ) S' T'       & and False)) \$                              \\ \hline
+        \textbf{26-} & \$S' T' ) S' T' ) S' T' F and & and False)) \$                              \\ \hline
+        \textbf{27-} & \$S' T' ) S' T' ) S' T' F     & False)) \$                                  \\ \hline
+        \textbf{28-} & \$S' T' ) S' T' ) S' T' False & False)) \$                                  \\ \hline
+        \textbf{29-} & \$S' T' ) S' T' ) S' T'       & )) \$                                       \\ \hline
+        \textbf{30-} & \$S' T' ) S' T' ) S'          & )) \$                                       \\ \hline
+        \textbf{31-} & \$S' T' ) S' T' )             & )) \$                                       \\ \hline
+        \textbf{32-} & \$S' T' ) S' T'               & ) \$                                        \\ \hline
+        \textbf{33-} & \$S' T' ) S'                  & ) \$                                        \\ \hline
+        \textbf{34-} & \$S' T' )                     & ) \$                                        \\ \hline
+        \textbf{35-} & \$S' T'                       & \$                                          \\ \hline
+        \textbf{36-} & \$S'                          & \$                                          \\ \hline
+        \textbf{37-} & \$                            & \$                                          \\ \hline
+      \end{tabular}
+    \end{table}
+  \end{enumerate}
+\end{enumerate}
+\item Construye el autómata LR(0) para la siguiente gramática:
+\begin{verbatim}
+  E := E ~ E | E ** E | int
+\end{verbatim}
+Donde \texttt{int} corresponde a un entero del lexer. Utiliza las siguientes reglas de precedencia:
+\begin{itemize}
+\item ** precede a $\sim$
+\item ** asocia por la izquierda y $\sim$ por la derecha.
+\end{itemize}
+Para obtener un parsing para la cadena 10**2 $\sim$ 3
+
+Empezamos con nuestra gramática y añadimos un símbolo inicial \texttt{E'}:
+\begin{verbatim}
+  E' := E
+  E := E ~ E | E ** E | int
+\end{verbatim}
+Ahora si empezamos a calcular los estados del autómata:
+
+$I_0 = Closure([E' \rightarrow .E]) = \{ [E' \rightarrow .E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+$I_1 =$ \texttt{Goto}($I_0, E$) = $Closure([E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E' \rightarrow E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+$I_2 =$ \texttt{Goto}($I_0, int$) = $Closure([E \rightarrow int.]) = \{ [E \rightarrow int.] \} $\\
+$I_3 =$ \texttt{Goto}($I_1, \sim$) = $Closure([E \rightarrow E \sim . E]) = \{ [E \rightarrow E \sim . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+$I_4 =$ \texttt{Goto}($I_1, **$) = $Closure([E \rightarrow E ** . E]) = \{ [E \rightarrow E ** . E], [E \rightarrow .E \sim E], [E \rightarrow .E ** E], [E \rightarrow .int] \} $\\
+$I_5 =$ \texttt{Goto}($I_3, E$) = $Closure([E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E \sim E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+\texttt{Goto}($I_3, int$) = $Closure([E \rightarrow int.]) = I_2$\\
+$I_6 =$ \texttt{Goto}($I_4, E$) = $Closure([E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E]) = \{ [E \rightarrow E ** E.], [E \rightarrow E. \sim E], [E \rightarrow E. ** E] \} $\\
+\texttt{Goto}($I_4, int$) = $Closure([E \rightarrow int.]) = I_2$\\
+\texttt{Goto}($I_5, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
+\texttt{Goto}($I_5, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
+\texttt{Goto}($I_6, \sim$) = $Closure([E \rightarrow E \sim .E]) = I_3$\\
+\texttt{Goto}($I_6, **$) = $Closure([E \rightarrow E ** .E]) = I_4$\\
+La automáta resultante es la siguiente:
+\begin{center}
+  \begin{tikzpicture}[> = {Stealth[scale=1.2]},
+      shorten > = 1pt,
+      auto,
+      semithick,
+      initial text = {}]
+    \node[state, initial] (I0) at (0, 0) {$I_0$};
+    \node[state, accepting] (I1) at (3.5, 0) {$I_1$};
+    
+    % Rama superior
+    \node[state] (I3) at (7, 3) {$I_3$};
+    \node[state] (I5) at (12, 3) {$I_5$};
+    
+    % Rama inferior
+    \node[state] (I4) at (7, -3) {$I_4$};
+    \node[state] (I6) at (12, -3) {$I_6$};
+    
+    \node[state] (I2) at (10, -6.5) {$I_2$};
+
+    \path[->, every node/.style={fill=white, inner sep=2pt, font=\small}]
+    
+    % Desde I0
+    (I0) edge node {$E$} (I1)
+    (I0) edge [out=-70, in=180] node [swap, pos=0.15] {$int$} (I2)
+    
+    % Desde I1 
+    (I1) edge node [pos=0.4] {$\sim$} (I3)
+    (I1) edge node [swap, pos=0.4] {$**$} (I4)
+    
+    % Desde I3
+    (I3) edge [bend left=15] node {$E$} (I5)
+    (I3) edge node [pos=0.15, swap] {$int$} (I2)
+    
+    % Desde I4
+    (I4) edge [bend left=15] node {$E$} (I6)
+    (I4) edge node [pos=0.25, swap] {$int$} (I2)
+    
+    % Desde I5
+    (I5) edge [bend left=15] node {$\sim$} (I3)
+    (I5) edge node [pos=0.2, swap] {$**$} (I4)
+    
+    % Desde I6
+    (I6) edge node [pos=0.2] {$\sim$} (I3)
+    (I6) edge [bend left=15] node {$**$} (I4);
+  \end{tikzpicture}
+\end{center}
+Ahora calculamos el \textsc{Follow} de la gramática:
+\begin{verbatim}
+  Follow(E) = {**, ~, $}
+\end{verbatim}
+Con esto podemos construir la tabla SLR, primero enumeramos las producciones de la gramática:
+\begin{enumerate}[label=(\arabic*), start=0]
+\item $E' \rightarrow E$
+\item $E \rightarrow E \sim E$
+\item $E \rightarrow E ** E$
+\item $E \rightarrow int$
+\end{enumerate}
+Ahora si construimos la tabla SLR tomando en cuenta la precedencia y asociatividad de los operadores:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{Estado} & $\bm{\sim}$ & $\bm{**}$ & \textbf{int} & \textbf{\$} & $\bm{E}$ \\ \hline
+    $\bm{I_0}$ & - & - & s2 & - & 1 \\ \hline
+    $\bm{I_1}$ & s3 & s4 & - & acc & - \\ \hline
+    $\bm{I_2}$ & r3 & r3 & - & r3 & - \\ \hline
+    $\bm{I_3}$ & - & - & s2 & - & 5 \\ \hline
+    $\bm{I_4}$ & - & - & s2 & - & 6 \\ \hline
+    $\bm{I_5}$ & s3 & s4 & - & r1 & - \\ \hline
+    $\bm{I_6}$ & r2 & r2 & - & r2 & - \\ \hline
+  \end{tabular}
+\end{table}
+Ahora seguimos con la tabla de parsing LR(0) para la cadena 10**2 $\sim$ 3 que para el lexer es int ** int $\sim$ int:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    Estados          & \textbf{Símbolos} & \textbf{Input}           & \textbf{Acción} \\ \hline
+    \textbf{0}       & \$                & int ** int $\sim$ int \$ & s2              \\ \hline
+    \textbf{0 2}     & \$ int            & ** int $\sim$ int \$     & r3              \\ \hline
+    \textbf{0}       & \$ E              & ** int $\sim$ int \$     & g1              \\ \hline
+    \textbf{0 1}     & \$ E              & ** int $\sim$ int \$     & s4              \\ \hline
+    \textbf{0 1 4}   & \$ E **           & int $\sim$ int \$        & s2              \\ \hline
+    \textbf{0 1 4 2} & \$ E ** int       & $\sim$ int \$            & r3              \\ \hline
+    \textbf{0 1 4}   & \$ E ** E         & $\sim$ int \$            & g6              \\ \hline
+    \textbf{0 1 4 6} & \$ E ** E         & $\sim$ int \$            & r2              \\ \hline
+    \textbf{0}       & \$ E              & $\sim$ int \$            & g1              \\ \hline
+    \textbf{0 1}     & \$ E              & $\sim$ int \$            & s3              \\ \hline
+    \textbf{0 1 3}   & \$ E $\sim$       & int \$                   & s2              \\ \hline
+    \textbf{0 1 3 2} & \$ E $\sim$ int   & \$                       & r3              \\ \hline
+    \textbf{0 1 3}   & \$ E $\sim$ E     & \$                       & g5              \\ \hline
+    \textbf{0 1 3 5} & \$ E $\sim$ E     & \$                       & r1              \\ \hline
+    \textbf{0}       & \$ E              & \$                       & g1              \\ \hline
+    \textbf{0 1}     & \$ E              & \$                       & acc             \\ \hline
+  \end{tabular}
+\end{table}
+Así, podemos ver que la cadena es aceptada.
+\item Utiliza la gramática (expresiones booleanas) del ejercicio 7 para construir las tablas de \textbf{SLR, LR(1)} y \textbf{LALR} y parsear las cadenas que se indican en ese ejercicio.
+\item A partir de la siguiente gramática:
+\begin{verbatim}
+  S := S S + | S S * | a
+\end{verbatim}
+Construye las tablas para el LR(1) canónico y LALR.
 \end{enumerate}
 \end{document}
